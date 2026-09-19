@@ -454,7 +454,7 @@
 }
 
 .draw__title {
-  transition: opacity 300ms ease;
+  transition: opacity 320ms var(--ease-out), transform 320ms var(--ease-out);
   font-family: var(--font-display);
   font-size: 30px;
   font-weight: 400;
@@ -466,6 +466,7 @@
 /* The picked card rises into the title's space, so the title steps aside. */
 .draw.has-pick .draw__title {
   opacity: 0;
+  transform: translateY(-8px);
 }
 
 /*
@@ -500,7 +501,7 @@
   transform: rotate(var(--angle));
   transition: transform 200ms ease;
   /* Pile, riffle, riffle, spread — a small cascade from card to card. */
-  animation: deck-intro 1800ms cubic-bezier(0.35, 0.1, 0.25, 1) calc(var(--i) * 30ms) both;
+  animation: deck-intro 1800ms var(--ease-in-out) calc(var(--i) * 30ms) both;
 }
 
 .draw__deck.is-ready:not(.has-pick) .draw__card:hover,
@@ -538,6 +539,14 @@
     opacity: 1;
     transform: rotate(var(--angle));
   }
+}
+
+/* The lift layer scales around the card's own centre, not the fan's pivot. */
+.draw__lift {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-origin: 50% 50%;
 }
 
 .draw__inner {
@@ -603,37 +612,56 @@
 }
 
 /*
- * The pick, 1.7s in all (CARD_MS): the card straightens out of the fan and
- * lifts, flips to show the category, holds a beat, then dissolves upward as
- * the topic takes its place. The rest of the deck drops away.
+ * The pick, 1.7s in all (CARD_MS), in three layers that each do one thing:
+ *   the button swings back along the fan's arc to upright (0–450ms);
+ *   the lift layer rises and grows around its own centre (0–480ms), holds,
+ *   then opens out and fades as the topic takes its place (1360–1700ms);
+ *   the inner layer flips to the category (440–960ms).
+ * The rest of the deck falls away from the picked card outward.
  */
 .draw__card.is-picked {
   z-index: 1;
-  animation: card-pick 1700ms cubic-bezier(0.3, 0.7, 0.3, 1) forwards;
+  animation: card-straighten 450ms var(--ease-out) forwards;
+}
+
+.draw__card.is-picked .draw__lift {
+  animation: card-lift 1700ms linear forwards;
 }
 
 .draw__card.is-picked .draw__inner {
-  animation: card-flip 520ms 480ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: card-flip 520ms var(--ease-in-out) 440ms forwards;
 }
 
 .draw__card.is-other {
-  animation: card-away 360ms ease-in calc(var(--i) * 20ms) forwards;
+  animation: card-away 420ms var(--ease-in-out) calc(var(--gap-from-pick, 0) * 30ms) forwards;
 }
 
-@keyframes card-pick {
-  0% {
+@keyframes card-straighten {
+  from {
     transform: rotate(var(--angle));
   }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+/* Linear overall so each stop is on the clock; each leg eases on its own. */
+@keyframes card-lift {
+  0% {
+    transform: none;
+    animation-timing-function: var(--ease-out);
+  }
   28% {
-    transform: translateY(-20px) scale(1.3);
+    transform: translateY(-18px) scale(1.22);
   }
   80% {
     opacity: 1;
-    transform: translateY(-20px) scale(1.3);
+    transform: translateY(-18px) scale(1.22);
+    animation-timing-function: var(--ease-in-out);
   }
   100% {
     opacity: 0;
-    transform: translateY(-44px) scale(1.5);
+    transform: translateY(-26px) scale(1.38);
   }
 }
 
@@ -650,24 +678,24 @@
   }
   to {
     opacity: 0;
-    transform: rotate(var(--angle)) translateY(48px) scale(0.94);
+    transform: rotate(var(--angle)) translateY(44px) scale(0.95);
   }
 }
 
 /*
- * The topic's entrance after a draw: it rises into place, a short sage rule
- * sweeps in beneath it and fades, and the ring follows. Once per draw — the
- * animations run when the prep screen mounts, never on later re-renders.
+ * The prep screen's arrival after a draw, one beat after another on the same
+ * curve: the topic rises into place, the sage rule sweeps in beneath it, the
+ * ring fades up, then the hint and the actions. Runs once, on mount.
  */
 .prep__topic {
   position: relative;
 }
 
-.prep--drawn .prep__topic {
-  animation: topic-arrive 560ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+.round--drawn .prep__topic {
+  animation: arrive 520ms var(--ease-out) both;
 }
 
-.prep--drawn .prep__topic::after {
+.round--drawn .prep__topic::after {
   content: '';
   position: absolute;
   left: 50%;
@@ -677,17 +705,32 @@
   border-radius: var(--radius-pill);
   background: var(--accent);
   transform: translateX(-50%) scaleX(0);
-  animation: topic-rule 1800ms 200ms ease forwards;
+  animation: topic-rule 1800ms var(--ease-out) 160ms forwards;
 }
 
-.prep--drawn .prep__timer {
-  animation: fade-in 500ms 250ms ease both;
+.round--drawn .prep__timer {
+  animation: arrive 480ms var(--ease-out) 140ms both;
 }
 
-@keyframes topic-arrive {
+.round--drawn .prep__hint-toggle,
+.round--drawn .prep .hint {
+  animation: arrive 480ms var(--ease-out) 240ms both;
+}
+
+.round--drawn .prep__bottom,
+.round--drawn .prep__actions {
+  animation: arrive 480ms var(--ease-out) 320ms both;
+}
+
+/* On phones the actions sit inside the bottom block; animate that once. */
+.round--drawn .prep__bottom .prep__actions {
+  animation: none;
+}
+
+@keyframes arrive {
   from {
     opacity: 0;
-    transform: translateY(16px) scale(0.96);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
@@ -711,6 +754,11 @@
     transform: translateX(-50%) scaleX(1);
     opacity: 0;
   }
+}
+
+/* The pill's text cross-fades when it changes, e.g. "Surprise me" → the category. */
+.round__pill-text {
+  animation: fade-in 320ms var(--ease-out) both;
 }
 
 @keyframes fade-in {
@@ -739,4 +787,11 @@
   .draw__difficulty {
     font-size: 14px;
   }
+}
+
+.speaking__rec-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: var(--radius-pill);
+  background: #B4664F;
 }

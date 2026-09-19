@@ -1,29 +1,18 @@
 /*
- * The smallest record Home needs to tell first run from returning and to
- * write its activity line. Phase 2 replaces this with the full Session store.
+ * Home's view of past rounds: first run versus returning, the activity line
+ * and the History row. Reads the Session store, plus the bare records kept
+ * for rounds finished before sessions existed, so nothing already done is
+ * forgotten.
  */
 
 import { countWord, capitalise } from './format';
+import { loadLegacyRounds, loadSessions } from './sessions';
 
 export type FinishedRound = { at: number; spokenSeconds: number };
 
-const KEY = 'standup.rounds';
-const LIMIT = 500;
-
 export function loadRounds(): FinishedRound[] {
-  try {
-    return JSON.parse(localStorage.getItem(KEY) || '[]') as FinishedRound[];
-  } catch {
-    return [];
-  }
-}
-
-export function recordRound(round: FinishedRound): void {
-  try {
-    localStorage.setItem(KEY, JSON.stringify([...loadRounds(), round].slice(-LIMIT)));
-  } catch {
-    // Best-effort, as with all storage here.
-  }
+  const sessions = loadSessions().map((s) => ({ at: Date.parse(s.startedAt), spokenSeconds: s.spokenSeconds }));
+  return [...loadLegacyRounds(), ...sessions].sort((a, b) => a.at - b.at);
 }
 
 const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];

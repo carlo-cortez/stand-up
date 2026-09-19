@@ -17,8 +17,10 @@ const STAGGER_MS = 30;
 /**
  * A deck to draw the topic from. Every card holds the same, already chosen
  * topic — the pick is a ritual, not a choice. The deck arrives as a pile,
- * shuffles, and spreads into a fan like a hand of cards; the picked card then
- * straightens, lifts and flips to show the category while the rest fall away.
+ * shuffles, and spreads into a fan like a hand of cards. The picked card then
+ * swings back along the fan's arc to the centre (the button's rotation), lifts
+ * and grows around its own centre (.draw__lift) and flips (.draw__inner), while
+ * the rest fall away.
  * All of the motion is CSS; the only state here is when the spread is ready
  * to be tapped.
  */
@@ -41,6 +43,7 @@ export function CardDraw({ count, picked, face, onPick }: Props) {
           '--fan': i - middle, // −3 … 3 across seven cards
           '--side': i % 2 === 0 ? -1 : 1, // which half of the riffle this card falls in
           '--pile-r': `${((i * 37) % 7) - 3}deg`, // a pile, not a perfect stack
+          '--gap-from-pick': picked === null ? 0 : Math.abs(i - picked), // the deck falls away outward
         } as CSSProperties;
         return (
           <button
@@ -52,16 +55,18 @@ export function CardDraw({ count, picked, face, onPick }: Props) {
             disabled={!ready || picked !== null}
             aria-label={`Card ${i + 1} of ${count}`}
           >
-            <span className="draw__inner">
-              <span className="draw__back" aria-hidden="true">
-                <svg width="26" height="26" viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="1.4">
-                  <path d="M14 3 C15.2 10 18 12.8 25 14 C18 15.2 15.2 18 14 25 C12.8 18 10 15.2 3 14 C10 12.8 12.8 10 14 3 Z" />
-                </svg>
-              </span>
-              <span className="draw__face" aria-hidden="true">
-                <span className="draw__dot" />
-                <span className="draw__category">{face.category}</span>
-                <span className="draw__difficulty">{face.difficulty}</span>
+            <span className="draw__lift">
+              <span className="draw__inner">
+                <span className="draw__back" aria-hidden="true">
+                  <svg width="26" height="26" viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="1.4">
+                    <path d="M14 3 C15.2 10 18 12.8 25 14 C18 15.2 15.2 18 14 25 C12.8 18 10 15.2 3 14 C10 12.8 12.8 10 14 3 Z" />
+                  </svg>
+                </span>
+                <span className="draw__face" aria-hidden="true">
+                  <span className="draw__dot" />
+                  <span className="draw__category">{face.category}</span>
+                  <span className="draw__difficulty">{face.difficulty}</span>
+                </span>
               </span>
             </span>
           </button>

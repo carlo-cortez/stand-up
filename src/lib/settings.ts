@@ -4,25 +4,30 @@ export type PrepSeconds = 15 | 30 | 60;
 export type TargetSeconds = 60 | 120 | 180;
 export type Theme = 'system' | 'light' | 'dark';
 
-/** The subset of handoff §6 Settings that Phase 1 uses. */
+/** Handoff §6 Settings. */
 export type Settings = {
   category: Category | 'surprise';
   difficulty: Difficulty;
   prepSeconds: PrepSeconds;
   targetSeconds: TargetSeconds;
+  recordAudio: boolean;
+  /** Set when getUserMedia was refused; cleared when a request succeeds. */
+  micBlocked: boolean;
   /** null until the user first opens or hides it; then their choice sticks. */
   showStructureHint: boolean | null;
   theme: Theme;
 };
 
 /** The round-shaping part of Settings — what "Same as last time" repeats. */
-export type RoundSettings = Pick<Settings, 'category' | 'difficulty' | 'prepSeconds' | 'targetSeconds'>;
+export type RoundSettings = Pick<Settings, 'category' | 'difficulty' | 'prepSeconds' | 'targetSeconds' | 'recordAudio'>;
 
 export const DEFAULT_SETTINGS: Settings = {
   category: 'surprise',
   difficulty: 'medium',
   prepSeconds: 30,
   targetSeconds: 120,
+  recordAudio: true,
+  micBlocked: false,
   showStructureHint: null,
   theme: 'system',
 };
@@ -70,11 +75,14 @@ export function roundSettingsOf(s: Settings): RoundSettings {
     difficulty: s.difficulty,
     prepSeconds: s.prepSeconds,
     targetSeconds: s.targetSeconds,
+    recordAudio: s.recordAudio,
   };
 }
 
 export function loadLastRoundSettings(): RoundSettings | null {
-  return read<RoundSettings | null>(KEYS.lastRound, null);
+  const saved = read<RoundSettings | null>(KEYS.lastRound, null);
+  // Rounds saved before recording existed carry no recordAudio.
+  return saved && { ...saved, recordAudio: saved.recordAudio ?? DEFAULT_SETTINGS.recordAudio };
 }
 
 export function saveLastRoundSettings(s: RoundSettings): void {

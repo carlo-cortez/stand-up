@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { BackIcon } from '../components/Icon';
 import './Setup.css';
 
-/** Phase 2 routes exist so links resolve; the screens themselves don't yet. */
+/** Routes whose screens aren't built yet exist so links resolve. */
 export default function Placeholder({ title }: { title: string }) {
   return (
     <div className="screen setup">
@@ -14,7 +14,7 @@ export default function Placeholder({ title }: { title: string }) {
           <h1 className="setup__title">{title}</h1>
           <span className="setup__spacer" aria-hidden="true" />
         </header>
-        <p className="placeholder__text">Not on yet. This arrives with recording, in the next phase.</p>
+        <p className="placeholder__text">Not on yet. Your rounds will be listed here soon — each one is already being kept.</p>
       </div>
     </div>
   );

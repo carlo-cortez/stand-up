@@ -8,7 +8,9 @@ import { ChevronDownIcon, CloseIcon, MicOffIcon } from '../components/Icon';
 import { ProgressBar } from '../components/ProgressBar';
 import { Sheet } from '../components/Sheet';
 import { TimingChip } from '../components/TimingChip';
-import { recordRound } from '../lib/activity';
+import { saveRecording } from '../lib/audioStore';
+import { checkMic, startRecording, type Recording } from '../lib/recorder';
+import { addSession, sessionFor, type Session } from '../lib/sessions';
 import { announce } from '../lib/announce';
 import { countdown, mmss, plusMmss } from '../lib/format';
 import {
@@ -34,7 +36,7 @@ import { useDesktop, useReducedMotion } from '../lib/useMediaQuery';
 import { clockNow, timingLight, useRoundTimer } from '../lib/useRoundTimer';
 import './Round.css';
 
-type Start = { round: LiveRound; resumed: boolean } | { interrupted: true };
+type Start = { round: LiveRound; resumed: boolean } | { interrupted: LiveRound };
 
 /*
  * The topic reveal: the user draws a card. The draw itself is untimed; once a
@@ -57,7 +59,7 @@ function revealDelay(ms: number): number {
 function resolveStart(intent: RoundIntent | null): Start {
   const persisted = loadLiveRound();
   if (persisted && (!intent || persisted.startId === intent.startId)) {
-    return isResumable(persisted) ? { round: persisted, resumed: true } : { interrupted: true };
+    return isResumable(persisted) ? { round: persisted, resumed: true } : { interrupted: persisted };
   }
 
   const { startId, settings, topicId } = intent ?? newIntent(roundSettingsOf(loadSettings()));
@@ -81,9 +83,22 @@ export default function Round() {
   const navigate = useNavigate();
   const [start] = useState(() => resolveStart((location.state as RoundIntent | null) ?? null));
 
+  // Handoff §9: a round interrupted for more than five seconds is not resumed.
+  // If it had reached Speaking, what was captured is kept and shown on Review
+  // (without audio — a MediaRecorder does not survive a reload); otherwise
+  // Home says so in one quiet line.
   useEffect(() => {
-    if ('interrupted' in start) {
-      clearLiveRound();
+    if (!('interrupted' in start)) return;
+    const live = start.interrupted;
+    clearLiveRound();
+    if (live.phase === 'speaking') {
+      const spoken = Math.max(0, (live.heartbeatAt - live.phaseStartedAt) / 1000);
+      const session = sessionFor(live, spoken, {
+        audioNote: live.settings.recordAudio === false ? undefined : 'interrupted',
+      });
+      addSession(session);
+      navigate('/round/review', { replace: true, state: { sessionId: session.id } });
+    } else {
       setFlash('That round got interrupted.');
       navigate('/', { replace: true });
     }
@@ -108,6 +123,57 @@ function LiveRoundScreen({ initial, resumed }: { initial: LiveRound; resumed: bo
   const { prepSeconds, targetSeconds } = round.settings;
 
   const now = useRoundTimer(true, () => saveLiveRound(roundRef.current));
+
+  // ---- Recording (handoff §4.4). Speaking only, never prep.
+  const wantsAudio = round.settings.recordAudio !== false;
+  // A refresh loses the recorder; a round resumed mid-Speaking goes on unrecorded.
+  const resumedIntoSpeaking = resumed && initial.phase === 'speaking';
+  const recording = useRef<Recording | null>(null);
+  const [recordingOn, setRecordingOn] = useState(false);
+  const audioIncomplete = useRef(resumedIntoSpeaking && wantsAudio);
+
+  // Ask for the mic as the round begins, so the prompt never lands mid-sentence.
+  useEffect(() => {
+    if (wantsAudio && !resumed) void checkMic();
+    // Once per round.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (round.phase !== 'speaking' || !wantsAudio || resumedIntoSpeaking) return;
+    let cancelled = false;
+    void startRecording().then((result) => {
+      if (typeof result === 'string') return; // blocked or unavailable: the round goes on
+      if (cancelled) return result.discard();
+      recording.current = result;
+      setRecordingOn(true);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [round.phase, wantsAudio, resumedIntoSpeaking]);
+
+  // A phone may suspend the recorder when the user switches apps. Mark the
+  // round rather than quietly producing a truncated file (handoff §9).
+  useEffect(() => {
+    const onVisibility = () => {
+      if (recording.current && !recording.current.isHealthy()) {
+        audioIncomplete.current = true;
+        setRecordingOn(false);
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => document.removeEventListener('visibilitychange', onVisibility);
+  }, []);
+
+  // Leaving by any route other than Finish throws the audio away.
+  const finished = useRef(false);
+  useEffect(
+    () => () => {
+      if (!finished.current) recording.current?.discard();
+    },
+    [],
+  );
 
   // ---- Persistence: on entry to prep, on entry to speaking, on a new topic.
   useEffect(() => {
@@ -176,6 +242,7 @@ function LiveRoundScreen({ initial, resumed }: { initial: LiveRound; resumed: bo
 
   const leave = () => {
     leaving.current = true;
+    recording.current?.discard();
     clearLiveRound();
     setCloseAsked(false);
     if (blocker.state === 'blocked') blocker.proceed();
@@ -213,13 +280,29 @@ function LiveRoundScreen({ initial, resumed }: { initial: LiveRound; resumed: bo
     setRound((r) => ({ ...r, phase: 'prep', phaseStartedAt: clockNow() + revealDelay(CARD_MS) }));
   };
 
-  const finish = () => {
+  const finish = async () => {
+    if (finished.current) return;
+    finished.current = true;
     leaving.current = true;
-    recordRound({ at: Date.now(), spokenSeconds: Math.round(elapsed) });
+    const spoken = elapsed;
+    const id = crypto.randomUUID();
+
+    let recordingId: string | undefined;
+    let audioNote: Session['audioNote'];
+    const blob = (await recording.current?.stop()) ?? null;
+    if (blob) {
+      const saved = await saveRecording(id, blob);
+      if (saved === 'no-room') audioNote = 'no-room';
+      else recordingId = id;
+    }
+    if (recordingId && audioIncomplete.current) audioNote = 'incomplete';
+    if (!blob && wantsAudio && audioIncomplete.current) audioNote = 'interrupted';
+
+    addSession(sessionFor(round, spoken, { id, recordingId, audioNote }));
     saveLastRoundSettings(round.settings);
     clearLiveRound();
     announce('Round finished');
-    navigate('/', { replace: true });
+    navigate('/round/review', { replace: true, state: { sessionId: id } });
   };
 
   // Space and Enter finish the round, bound only while Speaking is mounted.
@@ -258,7 +341,7 @@ function LiveRoundScreen({ initial, resumed }: { initial: LiveRound; resumed: bo
           Leave
         </Button>
         {/* Focus lands on the safe choice, never the destructive one. */}
-        <Button variant="secondary" onClick={keepGoing} autoFocus>
+        <Button variant="secondary" onClick={keepGoing} data-autofocus>
           Keep going
         </Button>
       </div>
@@ -269,7 +352,10 @@ function LiveRoundScreen({ initial, resumed }: { initial: LiveRound; resumed: bo
     <header className="round__header">
       <span className="round__pill">
         <span className="round__dot" aria-hidden="true" />
-        {meta}
+        {/* Keyed so "Surprise me" cross-fades into the category that came up. */}
+        <span key={meta} className="round__pill-text">
+          {meta}
+        </span>
       </span>
       {desktop && <span className="wordmark round__wordmark">Stand Up</span>}
       <button type="button" className="icon-button" aria-label="End practice session" onClick={() => setCloseAsked(true)}>
@@ -333,11 +419,11 @@ function LiveRoundScreen({ initial, resumed }: { initial: LiveRound; resumed: bo
     const caption = <p className="prep__caption">Speaking starts on its own when prep runs out.</p>;
 
     return (
-      <div className="screen round round--prep">
+      <div className={`screen round round--prep${picked !== null ? ' round--drawn' : ''}`}>
         <div className="screen__column">
           {header(topicMeta)}
 
-          <main className={`prep${hintOpen ? ' prep--hint' : ''}${picked !== null ? ' prep--drawn' : ''}`}>
+          <main className={`prep${hintOpen ? ' prep--hint' : ''}`}>
             <div className="prep__centre">
               <div className="prep__timer">
                 <CountdownRing
@@ -382,10 +468,18 @@ function LiveRoundScreen({ initial, resumed }: { initial: LiveRound; resumed: bo
     <div className="screen round round--speaking" data-light={light}>
       <div className="screen__column">
         <header className="round__header">
-          <span className="speaking__recording">
-            <MicOffIcon />
-            Recording off
-          </span>
+          {recordingOn ? (
+            <span className="speaking__recording">
+              {/* A clay dot, and it does not blink (handoff §4.4). */}
+              <span className="speaking__rec-dot" aria-hidden="true" />
+              Recording
+            </span>
+          ) : (
+            <span className="speaking__recording">
+              <MicOffIcon />
+              Recording off
+            </span>
+          )}
           {desktop && <span className="wordmark round__wordmark">Stand Up</span>}
           <span className="speaking__meta">
             {meta}

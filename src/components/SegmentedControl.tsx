@@ -4,10 +4,12 @@ type Props<T extends string | number> = {
   legend: string;
   name: string;
   options: Option<T>[];
-  value: T;
+  /** Undefined when nothing is chosen yet, e.g. a rating not given. */
+  value: T | undefined;
   onChange: (value: T) => void;
-  /** "segments" share the row equally; "pills" wrap, for the category list. */
-  layout?: 'segments' | 'pills';
+  /** "segments" share the row equally; "pills" wrap, for the category list;
+   *  "ratings" are the tighter 1–5 rows on Review, under a field-style legend. */
+  layout?: 'segments' | 'pills' | 'ratings';
 };
 
 /**
@@ -24,7 +26,7 @@ export function SegmentedControl<T extends string | number>({
 }: Props<T>) {
   return (
     <fieldset className="segmented">
-      <legend className="section-label">{legend}</legend>
+      <legend className={layout === 'ratings' ? 'segmented__legend' : 'section-label'}>{legend}</legend>
       <div className={`segmented__options segmented__options--${layout}`}>
         {options.map((option) => (
           <label key={String(option.value)} className="segmented__option">

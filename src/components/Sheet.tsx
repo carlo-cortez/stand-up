@@ -11,6 +11,7 @@ type Props = {
  * Bottom sheet for destructive confirmations (handoff §3), built on a modal
  * <dialog>: the page behind goes inert so focus is trapped, Escape fires
  * `cancel`, and the browser returns focus to the triggering control on close.
+ * Mark the safe action with data-autofocus; it takes focus when the sheet opens.
  */
 export function Sheet({ open, title, children, onCancel }: Props) {
   const ref = useRef<HTMLDialogElement>(null);
@@ -18,7 +19,12 @@ export function Sheet({ open, title, children, onCancel }: Props) {
   useEffect(() => {
     const dialog = ref.current;
     if (!dialog) return;
-    if (open && !dialog.open) dialog.showModal();
+    if (open && !dialog.open) {
+      dialog.showModal();
+      // The dialog stays mounted while closed, so React's autoFocus has long
+      // since fired; the safe choice is focused here, on every open.
+      dialog.querySelector<HTMLElement>('[data-autofocus]')?.focus();
+    }
     if (!open && dialog.open) dialog.close();
   }, [open]);
 

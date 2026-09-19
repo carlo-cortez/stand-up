@@ -97,3 +97,72 @@
   line-height: 1.45;
   color: var(--text-muted);
 }
+
+/* The blocked-mic card: warm, not alarming — it is not the user's fault. */
+.setup__blocked {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px;
+  border: 1px solid #E6DCD2;
+  border-radius: 18px;
+  background: #FBF5F1;
+}
+
+.setup__blocked-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #4C3B33;
+}
+
+.setup__blocked-text {
+  font-size: 15px;
+  line-height: 1.45;
+  color: #5C463C;
+}
+
+.setup__blocked-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.setup__ask {
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid #DDCBC0;
+  border-radius: var(--radius-sm);
+  background: #FFFFFF;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--danger-text);
+}
+
+.setup__how {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+:root[data-theme='dark'] .setup__blocked {
+  border-color: #3D2A24;
+  background: #231A17;
+}
+
+:root[data-theme='dark'] .setup__blocked-title {
+  color: #F0C8BA;
+}
+
+:root[data-theme='dark'] .setup__blocked-text {
+  color: #DCC5BC;
+}
+
+:root[data-theme='dark'] .setup__ask {
+  border-color: #3D2A24;
+  background: var(--surface);
+}

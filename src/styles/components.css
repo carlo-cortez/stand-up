@@ -406,3 +406,169 @@
   gap: 10px;
   margin-top: 4px;
 }
+
+/* Ratings: 1–5 on Review, 44px tall, a field label rather than a section label. */
+.segmented__legend {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.segmented > legend.segmented__legend {
+  margin-bottom: 8px;
+}
+
+.segmented__options--ratings .segmented__option {
+  flex: 1 1 0;
+  min-height: 44px;
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+}
+
+/* ---------- Toggle ---------- */
+
+.toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  min-height: 68px;
+  padding: 14px 18px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.toggle.is-disabled {
+  border-color: var(--border-muted);
+  background: var(--surface-muted);
+  cursor: default;
+}
+
+.toggle__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.toggle__label {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.toggle__description {
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--text-muted);
+}
+
+.toggle.is-disabled .toggle__label {
+  color: var(--text-muted);
+}
+
+.toggle__switch {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  width: 52px;
+  height: 32px;
+  padding: 0 4px;
+  border-radius: var(--radius-pill);
+  background: var(--ring-track);
+  transition: background-color 200ms var(--ease-out);
+}
+
+.toggle__switch.is-on {
+  background: var(--accent);
+}
+
+.toggle__knob {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-pill);
+  background: #FFFFFF;
+  transition: transform 200ms var(--ease-out);
+}
+
+.toggle__switch.is-on .toggle__knob {
+  transform: translateX(20px);
+}
+
+.toggle:has(input:focus-visible) {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 2px;
+}
+
+/* ---------- Audio player ---------- */
+
+.player {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.player__play {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  fill: var(--on-accent-strong);
+}
+
+.player__track {
+  position: relative;
+  flex-grow: 1;
+  height: 34px;
+}
+
+.player__wave {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.player__wave > span {
+  flex: 1 1 0;
+  min-height: 4px;
+  border-radius: 2px;
+  background: var(--ring-track);
+  transition: background-color 120ms linear;
+}
+
+.player__wave > span.is-played {
+  background: var(--accent);
+}
+
+/* The real control, invisible over the waveform: pointer and arrow keys. */
+.player__scrub {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.player__track:has(.player__scrub:focus-visible) {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+.player__time {
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
