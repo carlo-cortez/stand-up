@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Speaking — wrapping up</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=Newsreader:opsz,wght@6..72,400;6..72,500&amp;display=swap">
+<style>
+body { margin: 0; font-family: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif; background: #FAF3E4; }
+a { color: #3F5A48; } a:hover { color: #2C4033; }
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #FAF3E4; padding: 60px 24px 28px; display: flex; flex-direction: column; gap: 18px;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+    <div style="display: flex; align-items: center; gap: 8px; padding: 8px 13px; border: 1px solid #E5DCC2; border-radius: 999px; background: #FDFBF4;">
+      <span style="width: 9px; height: 9px; border-radius: 999px; background: #B4664F;"></span>
+      <span style="font-size: 13px; font-weight: 600; color: #4A4636;">Recording</span>
+    </div>
+    <span style="font-size: 13px; font-weight: 600; color: #55503E;">Target 2:00</span>
+  </div>
+
+  <p style="margin: 0; font-family: 'Newsreader', Georgia, serif; font-size: 19px; font-weight: 400; line-height: 1.32; text-align: center; text-wrap: pretty; color: #55503E;">What's a small thing that instantly makes your day better?</p>
+
+  <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 26px;">
+
+    <div style="display: flex; align-items: center; gap: 9px; height: 40px; padding: 0 16px; border-radius: 999px; background: #F4E6C6;">
+      <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 1.5 L13 12.2 L1 12.2 Z" fill="#8A6A1E"></path></svg>
+      <span style="font-size: 14px; font-weight: 700; letter-spacing: 0.02em; color: #5E4A17;">Start wrapping up</span>
+    </div>
+
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+      <span style="font-size: 108px; font-weight: 600; line-height: 1; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; color: #2B2618;">0:18</span>
+      <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #6A6350;">Left to speak</span>
+    </div>
+
+    <div style="width: 100%; height: 8px; border-radius: 999px; background: #EDE2C8; display: flex;">
+      <div style="width: 85%; height: 8px; border-radius: 999px; background: {{accent}};"></div>
+    </div>
+
+  </div>
+
+  <button type="button" style="min-height: 60px; border: none; border-radius: 18px; background: #3F5A48; color: #FAF8F3; font-family: inherit; font-size: 18px; font-weight: 600; letter-spacing: 0.01em; cursor: pointer;">Finish</button>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#C2A24A","options":["#C2A24A","#D0B061","#AE8F3B","#DCC17E"]},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { accent: this.props.accent ?? '#C2A24A' };
+  }
+}
+</script>
+</body>
+</html>

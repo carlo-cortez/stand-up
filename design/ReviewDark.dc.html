@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Review — dark mode</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=Newsreader:opsz,wght@6..72,400;6..72,500&amp;display=swap">
+<style>
+body { margin: 0; font-family: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif; background: #151A16; }
+a { color: #A8C6AF; } a:hover { color: #C4DBC9; }
+</style>
+</helmet>
+<div style="width: 390px; height: 900px; box-sizing: border-box; background: #151A16; padding: 60px 24px 28px; display: flex; flex-direction: column; gap: 18px;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+    <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #A2AFA4;">Round 3 · today</span>
+    <button type="button" aria-label="Close review" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border: none; background: transparent; border-radius: 999px; cursor: pointer;">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#C3CDC4" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M5 5 L15 15"></path><path d="M15 5 L5 15"></path></svg>
+    </button>
+  </div>
+
+  <h1 style="margin: 0; font-family: 'Newsreader', Georgia, serif; font-size: 30px; font-weight: 400; line-height: 1.2; letter-spacing: -0.01em; color: #EDF0E8;">Nice — that's the hard part done.</h1>
+
+  <div style="box-sizing: border-box; border: 1px solid #2E382F; background: #1D241E; border-radius: 20px; padding: 18px; display: flex; flex-direction: column; gap: 16px;">
+    <p style="margin: 0; font-family: 'Newsreader', Georgia, serif; font-size: 19px; line-height: 1.3; color: #C3CDC4; text-wrap: pretty;">What's a small thing that instantly makes your day better?</p>
+    <div style="display: flex; gap: 10px;">
+      <div style="flex-grow: 1; background: #232C24; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 2px;">
+        <span style="font-size: 22px; font-weight: 600; font-variant-numeric: tabular-nums; color: #EDF0E8;">2:20</span>
+        <span style="font-size: 12px; font-weight: 600; color: #A2AFA4;">Spoken</span>
+      </div>
+      <div style="flex-grow: 1; background: #232C24; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 2px;">
+        <span style="font-size: 22px; font-weight: 600; font-variant-numeric: tabular-nums; color: #EDF0E8;">2:00</span>
+        <span style="font-size: 12px; font-weight: 600; color: #A2AFA4;">Target</span>
+      </div>
+      <div style="flex-grow: 1; background: #232C24; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 2px;">
+        <span style="font-size: 22px; font-weight: 600; font-variant-numeric: tabular-nums; color: #EDF0E8;">+0:20</span>
+        <span style="font-size: 12px; font-weight: 600; color: #A2AFA4;">Over</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="box-sizing: border-box; border: 1px solid #2E382F; background: #1D241E; border-radius: 20px; padding: 16px 18px; display: flex; flex-direction: column; gap: 12px;">
+    <div style="display: flex; align-items: center; gap: 14px;">
+      <button type="button" aria-label="Play recording" style="flex-shrink: 0; width: 48px; height: 48px; border: none; border-radius: 999px; background: {{accent}}; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+        <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M5 3.5 L14 9 L5 14.5 Z" fill="#15201A"></path></svg>
+      </button>
+      <svg width="170" height="34" viewBox="0 0 170 34" aria-hidden="true" style="flex-grow: 1;">
+        <rect x="0" y="13" width="3" height="8" rx="1.5" fill="#46584A"></rect><rect x="8" y="9" width="3" height="16" rx="1.5" fill="#46584A"></rect><rect x="16" y="5" width="3" height="24" rx="1.5" fill="#46584A"></rect><rect x="24" y="11" width="3" height="12" rx="1.5" fill="#46584A"></rect><rect x="32" y="3" width="3" height="28" rx="1.5" fill="#46584A"></rect><rect x="40" y="10" width="3" height="14" rx="1.5" fill="#46584A"></rect><rect x="48" y="7" width="3" height="20" rx="1.5" fill="#46584A"></rect><rect x="56" y="12" width="3" height="10" rx="1.5" fill="#46584A"></rect><rect x="64" y="6" width="3" height="22" rx="1.5" fill="#46584A"></rect><rect x="72" y="14" width="3" height="6" rx="1.5" fill="#46584A"></rect><rect x="80" y="8" width="3" height="18" rx="1.5" fill="#46584A"></rect><rect x="88" y="4" width="3" height="26" rx="1.5" fill="#46584A"></rect><rect x="96" y="11" width="3" height="12" rx="1.5" fill="#46584A"></rect><rect x="104" y="9" width="3" height="16" rx="1.5" fill="#46584A"></rect><rect x="112" y="13" width="3" height="8" rx="1.5" fill="#46584A"></rect><rect x="120" y="6" width="3" height="22" rx="1.5" fill="#46584A"></rect><rect x="128" y="10" width="3" height="14" rx="1.5" fill="#46584A"></rect><rect x="136" y="12" width="3" height="10" rx="1.5" fill="#46584A"></rect><rect x="144" y="8" width="3" height="18" rx="1.5" fill="#46584A"></rect><rect x="152" y="14" width="3" height="6" rx="1.5" fill="#46584A"></rect><rect x="160" y="11" width="3" height="12" rx="1.5" fill="#46584A"></rect>
+      </svg>
+      <span style="flex-shrink: 0; font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; color: #A2AFA4;">2:20</span>
+    </div>
+    <button type="button" style="align-self: flex-start; min-height: 44px; padding: 0 2px; border: none; background: transparent; font-family: inherit; font-size: 14px; font-weight: 600; color: #D9A18C; cursor: pointer;">Delete recording</button>
+  </div>
+
+  <div style="box-sizing: border-box; border: 1px solid #2E382F; background: #1D241E; border-radius: 20px; padding: 18px; display: flex; flex-direction: column; gap: 14px;">
+    <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #A2AFA4;">How did it feel?</span>
+    <fieldset style="margin: 0; padding: 0; border: none; display: flex; flex-direction: column; gap: 8px;">
+      <legend style="padding: 0; font-size: 15px; font-weight: 600; color: #EDF0E8;">Structure</legend>
+      <div style="display: flex; gap: 8px;">
+        <label style="position: relative; flex-grow: 1; min-height: 44px; display: flex; align-items: center; justify-content: center; border: 1px solid #2E382F; border-radius: 12px; font-size: 15px; font-weight: 600; color: #C3CDC4; cursor: pointer;"><input type="radio" name="structure-dark" value="1" style="position: absolute; width: 1px; height: 1px; opacity: 0;">1</label>
+        <label style="position: relative; flex-grow: 1; min-height: 44px; display: flex; align-items: center; justify-content: center; border: 1px solid #2E382F; border-radius: 12px; font-size: 15px; font-weight: 600; color: #C3CDC4; cursor: pointer;"><input type="radio" name="structure-dark" value="2" style="position: absolute; width: 1px; height: 1px; opacity: 0;">2</label>
+        <label style="position: relative; flex-grow: 1; min-height: 44px; display: flex; align-items: center; justify-content: center; border: 1px solid #2E382F; border-radius: 12px; font-size: 15px; font-weight: 600; color: #C3CDC4; cursor: pointer;"><input type="radio" name="structure-dark" value="3" style="position: absolute; width: 1px; height: 1px; opacity: 0;">3</label>
+        <label style="position: relative; flex-grow: 1; min-height: 44px; display: flex; align-items: center; justify-content: center; border: 1px solid #A8C6AF; background: #A8C6AF; border-radius: 12px; font-size: 15px; font-weight: 600; color: #15201A; cursor: pointer;"><input type="radio" name="structure-dark" value="4" checked style="position: absolute; width: 1px; height: 1px; opacity: 0;">4</label>
+        <label style="position: relative; flex-grow: 1; min-height: 44px; display: flex; align-items: center; justify-content: center; border: 1px solid #2E382F; border-radius: 12px; font-size: 15px; font-weight: 600; color: #C3CDC4; cursor: pointer;"><input type="radio" name="structure-dark" value="5" style="position: absolute; width: 1px; height: 1px; opacity: 0;">5</label>
+      </div>
+    </fieldset>
+    <fieldset style="margin: 0; padding: 0; border: none; display: flex; flex-direction: column; gap: 8px;">
+      <legend style="padding: 0; font-size: 15px; font-weight: 600; color: #EDF0E8;">Clarity</legend>
+      <div style="display: flex; gap: 8px;">
+        <label style="position: relative; flex-grow: 1; min-height: 44px; display: flex; align-items: center; justify-content: center; border: 1px solid #2E382F; border-radius: 12px; font-size: 15px; font-weight: 600; color: #C3CDC4; cursor: pointer;"><input type="radio" name="clarity-dark" value="1" style="position: absolute; width: 1px; height: 1px; opacity: 0;">1</label>
+        <label style="position: relative; flex-grow: 1; min-height: 44px; display: flex; align-items: center; justify-content: center; border: 1px solid #2E382F; border-radius: 12px; font-size: 15px; font-weight: 600; color: #C3CDC4; cursor: pointer;"><input type="radio" name="clarity-dark" value="2" style="position: absolute; width: 1px; height: 1px; opacity: 0;">2</label>
+        <label style="position: relative; flex-grow: 1; min-height: 44px; display: flex; align-items: center; justify-content: center; border: 1px solid #A8C6AF; background: #A8C6AF; border-radius: 12px; font-size: 15px; font-weight: 600; color: #15201A; cursor: pointer;"><input type="radio" name="clarity-dark" value="3" checked style="position: absolute; width: 1px; height: 1px; opacity: 0;">3</label>
+        <label style="position: relative; flex-grow: 1; min-height: 44px; display: flex; align-items: center; justify-content: center; border: 1px solid #2E382F; border-radius: 12px; font-size: 15px; font-weight: 600; color: #C3CDC4; cursor: pointer;"><input type="radio" name="clarity-dark" value="4" style="position: absolute; width: 1px; height: 1px; opacity: 0;">4</label>
+        <label style="position: relative; flex-grow: 1; min-height: 44px; display: flex; align-items: center; justify-content: center; border: 1px solid #2E382F; border-radius: 12px; font-size: 15px; font-weight: 600; color: #C3CDC4; cursor: pointer;"><input type="radio" name="clarity-dark" value="5" style="position: absolute; width: 1px; height: 1px; opacity: 0;">5</label>
+      </div>
+    </fieldset>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 10px; margin-top: auto;">
+    <button type="button" style="min-height: 56px; border: none; border-radius: 16px; background: #A8C6AF; color: #15201A; font-family: inherit; font-size: 17px; font-weight: 600; cursor: pointer;">Next topic</button>
+    <button type="button" style="min-height: 52px; border: 1px solid #2E382F; border-radius: 16px; background: #1D241E; font-family: inherit; font-size: 16px; font-weight: 600; color: #A8C6AF; cursor: pointer;">Save and go home</button>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#90B198","options":["#90B198","#A8C6AF","#7C9A83","#B9D2BE"]},"$preview":{"width":390,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { accent: this.props.accent ?? '#90B198' };
+  }
+}
+</script>
+</body>
+</html>

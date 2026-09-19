@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Home — desktop</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=Newsreader:opsz,wght@6..72,400;6..72,500&amp;display=swap">
+<style>
+body { margin: 0; font-family: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif; background: #FAF8F3; }
+a { color: #3F5A48; } a:hover { color: #2C4033; }
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; background: #FAF8F3; padding: 40px 56px 48px; display: flex; flex-direction: column; gap: 40px;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; gap: 24px;">
+    <span style="font-family: 'Newsreader', Georgia, serif; font-size: 22px; font-weight: 500; color: #22302A;">Stand Up</span>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <a href="History.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 12px; font-size: 15px; font-weight: 600; text-decoration: none;">History</a>
+      <button type="button" aria-label="Settings" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border: none; background: transparent; border-radius: 999px; cursor: pointer;">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#41504A" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="2.6"></circle><path d="M10 3 L10 4.6"></path><path d="M10 15.4 L10 17"></path><path d="M3 10 L4.6 10"></path><path d="M15.4 10 L17 10"></path><path d="M5 5 L6.2 6.2"></path><path d="M13.8 13.8 L15 15"></path><path d="M15 5 L13.8 6.2"></path><path d="M6.2 13.8 L5 15"></path></svg>
+      </button>
+    </div>
+  </div>
+
+  <div style="flex-grow: 1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px; align-items: center;">
+
+    <div style="display: flex; flex-direction: column; gap: 28px;">
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <h1 style="margin: 0; font-family: 'Newsreader', Georgia, serif; font-size: 76px; font-weight: 400; line-height: 1.02; letter-spacing: -0.03em; color: #22302A;">The floor is yours.</h1>
+        <p style="margin: 0; max-width: 460px; font-size: 18px; line-height: 1.5; color: #5A6960;">Three rounds this week. Tuesday was your longest yet — 2 minutes 41 on whether the book is always better than the movie.</p>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px; max-width: 460px;">
+        <button type="button" style="min-height: 72px; border: none; border-radius: 20px; background: #3F5A48; color: #FAF8F3; font-family: inherit; font-size: 21px; font-weight: 600; cursor: pointer;">Start practicing</button>
+        <button type="button" style="min-height: 52px; border: 1px solid #DFE3D8; border-radius: 16px; background: #FFFFFF; font-family: inherit; font-size: 15px; font-weight: 600; color: #3F5A48; cursor: pointer;">Same as last time · Surprise me, 30s, 2 min</button>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+
+      <div style="box-sizing: border-box; border: 1px solid #DFE3D8; background: #FFFFFF; border-radius: 22px; padding: 28px; display: flex; flex-direction: column; gap: 16px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="width: 8px; height: 8px; border-radius: 999px; background: {{accent}};"></span>
+          <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #5A6960;">Topic of the day</span>
+        </div>
+        <p style="margin: 0; font-family: 'Newsreader', Georgia, serif; font-size: 30px; line-height: 1.25; color: #22302A; text-wrap: pretty;">Sell me this pen, but it's the last pen on Earth.</p>
+        <a href="Main.dc.html" style="align-self: flex-start; display: flex; align-items: center; gap: 6px; min-height: 44px; font-size: 16px; font-weight: 600; text-decoration: none;">
+          Take this one
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#3F5A48" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 L10.5 8 L6 12.5"></path></svg>
+        </a>
+      </div>
+
+      <a href="History.dc.html" style="box-sizing: border-box; border: 1px solid #DFE3D8; background: #FFFFFF; border-radius: 22px; padding: 24px 28px; display: flex; align-items: center; justify-content: space-between; gap: 24px; text-decoration: none;">
+        <span style="display: flex; flex-direction: column; gap: 4px;">
+          <span style="font-size: 17px; font-weight: 600; color: #22302A;">12 rounds so far</span>
+          <span style="font-size: 14px; color: #5A6960;">Last one Tuesday · ratings up from 3.1 to 3.6</span>
+        </span>
+        <svg width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="#3F5A48" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 L10.5 8 L6 12.5"></path></svg>
+      </a>
+
+    </div>
+
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#6E8C74","options":["#6E8C74","#7C9A83","#5B7A63","#8AA582"]},"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { accent: this.props.accent ?? '#6E8C74' };
+  }
+}
+</script>
+</body>
+</html>

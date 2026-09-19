@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Speaking — overtime</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=Newsreader:opsz,wght@6..72,400;6..72,500&amp;display=swap">
+<style>
+body { margin: 0; font-family: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif; background: #F9EDE8; }
+a { color: #3F5A48; } a:hover { color: #2C4033; }
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F9EDE8; padding: 60px 24px 28px; display: flex; flex-direction: column; gap: 18px;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+    <div style="display: flex; align-items: center; gap: 8px; padding: 8px 13px; border: 1px solid #EBD6CC; border-radius: 999px; background: #FDF7F4;">
+      <span style="width: 9px; height: 9px; border-radius: 999px; background: #B4664F;"></span>
+      <span style="font-size: 13px; font-weight: 600; color: #4C3B33;">Recording</span>
+    </div>
+    <span style="font-size: 13px; font-weight: 600; color: #57443B;">Target 2:00 · spoke 2:20</span>
+  </div>
+
+  <p style="margin: 0; font-family: 'Newsreader', Georgia, serif; font-size: 19px; font-weight: 400; line-height: 1.32; text-align: center; text-wrap: pretty; color: #57443B;">What's a small thing that instantly makes your day better?</p>
+
+  <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 26px;">
+
+    <div style="display: flex; align-items: center; gap: 9px; height: 40px; padding: 0 16px; border-radius: 999px; background: #F3DCD3;">
+      <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><rect x="1.5" y="1.5" width="11" height="11" rx="2.5" fill="#9A4F36"></rect></svg>
+      <span style="font-size: 14px; font-weight: 700; letter-spacing: 0.02em; color: #6E3826;">Past your target</span>
+    </div>
+
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+      <span style="font-size: 108px; font-weight: 600; line-height: 1; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; color: #2F231D;">+0:20</span>
+      <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #6B554B;">Still going</span>
+    </div>
+
+    <div style="width: 100%; height: 8px; border-radius: 999px; background: #EFDCD4; display: flex;">
+      <div style="width: 100%; height: 8px; border-radius: 999px; background: {{accent}};"></div>
+    </div>
+
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <button type="button" style="min-height: 60px; border: none; border-radius: 18px; background: #3F5A48; color: #FAF8F3; font-family: inherit; font-size: 18px; font-weight: 600; letter-spacing: 0.01em; cursor: pointer;">Finish</button>
+    <p style="margin: 0; text-align: center; font-size: 13px; line-height: 1.35; color: #6B554B;">No rush. Land your last point, then finish.</p>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#B4664F","options":["#B4664F","#C3775F","#9E5641","#CE8F79"]},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { accent: this.props.accent ?? '#B4664F' };
+  }
+}
+</script>
+</body>
+</html>

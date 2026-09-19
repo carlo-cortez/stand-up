@@ -1,0 +1,507 @@
+/* ---------- Shared chrome: deliberately thin (handoff §4.3) ---------- */
+
+.round__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.round__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--text-secondary);
+}
+
+.round__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+}
+
+.round__wordmark {
+  font-size: 20px;
+  color: var(--text-secondary);
+}
+
+/* ---------- Prep ---------- */
+
+.round--prep .screen__column {
+  gap: 8px;
+}
+
+.prep {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.prep__centre {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+.prep--hint .prep__centre {
+  gap: 22px;
+}
+
+.prep__topic {
+  font-family: var(--font-display);
+  font-size: 34px;
+  font-weight: 400;
+  line-height: 1.22;
+  letter-spacing: -0.01em;
+  text-align: center;
+  text-wrap: pretty;
+}
+
+/* The topic gives up 4px so the buttons below stay where they were. */
+.prep--hint .prep__topic {
+  font-size: 30px;
+}
+
+.prep__bottom,
+.prep__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.prep__caption {
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--text-muted);
+}
+
+.hint {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 18px 18px;
+}
+
+.hint__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.hint__hide {
+  font-size: 14px;
+}
+
+.hint__steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hint__steps li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.hint__letter {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
+  background: var(--accent-wash);
+  color: var(--accent-wash-text);
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hint__text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.hint__name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.hint__desc {
+  font-size: 14px;
+  line-height: 1.35;
+  color: var(--text-muted);
+}
+
+/* ---------- Speaking: the timer is the only large element ---------- */
+
+.round--speaking[data-light='on'] {
+  --light-tint: var(--light-on-tint);
+  --light-bar: var(--light-on-bar);
+  --light-track: var(--light-on-track);
+  --light-chip: var(--light-on-chip);
+  --light-shape: var(--light-on-shape);
+  --light-chip-text: var(--light-on-chip-text);
+  --light-pill-bg: var(--light-on-pill-bg);
+  --light-pill-border: var(--light-on-pill-border);
+  --light-pill-text: var(--light-on-pill-text);
+  --light-meta: var(--light-on-meta);
+  --light-timer: var(--light-on-timer);
+  --light-label: var(--light-on-label);
+}
+
+.round--speaking[data-light='wrap'] {
+  --light-tint: var(--light-wrap-tint);
+  --light-bar: var(--light-wrap-bar);
+  --light-track: var(--light-wrap-track);
+  --light-chip: var(--light-wrap-chip);
+  --light-shape: var(--light-wrap-shape);
+  --light-chip-text: var(--light-wrap-chip-text);
+  --light-pill-bg: var(--light-wrap-pill-bg);
+  --light-pill-border: var(--light-wrap-pill-border);
+  --light-pill-text: var(--light-wrap-pill-text);
+  --light-meta: var(--light-wrap-meta);
+  --light-timer: var(--light-wrap-timer);
+  --light-label: var(--light-wrap-label);
+}
+
+.round--speaking[data-light='over'] {
+  --light-tint: var(--light-over-tint);
+  --light-bar: var(--light-over-bar);
+  --light-track: var(--light-over-track);
+  --light-chip: var(--light-over-chip);
+  --light-shape: var(--light-over-shape);
+  --light-chip-text: var(--light-over-chip-text);
+  --light-pill-bg: var(--light-over-pill-bg);
+  --light-pill-border: var(--light-over-pill-border);
+  --light-pill-text: var(--light-over-pill-text);
+  --light-meta: var(--light-over-meta);
+  --light-timer: var(--light-over-timer);
+  --light-label: var(--light-over-label);
+}
+
+/* Tints cross-fade; reduced motion cuts instantly (base.css). Never flash. */
+.round--speaking {
+  background: var(--light-tint);
+  transition: background-color var(--tint-fade) ease;
+}
+
+.round--speaking .screen__column {
+  gap: 18px;
+}
+
+.speaking__recording {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 13px;
+  border: 1px solid var(--light-pill-border);
+  border-radius: var(--radius-pill);
+  background: var(--light-pill-bg);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--light-pill-text);
+  transition: background-color var(--tint-fade) ease, border-color var(--tint-fade) ease;
+}
+
+.speaking__meta {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--light-meta);
+  text-align: right;
+}
+
+.speaking {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.speaking__topic {
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.32;
+  text-align: center;
+  text-wrap: pretty;
+  color: var(--light-meta);
+}
+
+.speaking__centre {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 26px;
+}
+
+.speaking__clock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.speaking__time {
+  font-size: 108px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--light-timer);
+}
+
+.speaking__label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--light-label);
+}
+
+.speaking__footer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.speaking__hint {
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--light-label);
+}
+
+/* ---------- Tablet band: still read from arm's length ---------- */
+
+@media (min-width: 900px) and (max-width: 1179.98px) {
+  .speaking__time {
+    font-size: 150px;
+  }
+}
+
+/* ---------- Desktop ---------- */
+
+@media (min-width: 1180px) {
+  .round .screen__column {
+    gap: 32px;
+  }
+
+  .round__pill {
+    font-size: 14px;
+  }
+
+  /* Prep: centre column plus a 340px hint card to its right. */
+  .prep {
+    gap: 72px;
+  }
+
+  .prep__centre,
+  .prep--hint .prep__centre {
+    max-width: 760px;
+    gap: 36px;
+  }
+
+  .prep__topic,
+  .prep--hint .prep__topic {
+    font-size: 52px;
+    line-height: 1.18;
+    letter-spacing: -0.02em;
+  }
+
+  .prep__actions {
+    flex-direction: row;
+    gap: 12px;
+  }
+
+  .prep__start {
+    min-width: 240px;
+  }
+
+  .prep__skip {
+    min-height: 60px;
+    padding: 0 22px;
+    border-radius: 18px;
+  }
+
+  .prep__caption {
+    font-size: 14px;
+  }
+
+  .hint {
+    flex-shrink: 0;
+    width: 340px;
+    padding: 24px;
+    gap: 16px;
+  }
+
+  .hint__steps {
+    gap: 16px;
+  }
+
+  .hint__letter {
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+    font-size: 15px;
+  }
+
+  .hint__text {
+    gap: 2px;
+  }
+
+  .hint__name {
+    font-size: 16px;
+  }
+
+  .hint__desc {
+    font-size: 15px;
+    line-height: 1.4;
+  }
+
+  /* Speaking */
+  .round--speaking {
+    padding-bottom: 56px;
+  }
+
+  .speaking__recording,
+  .speaking__meta {
+    font-size: 14px;
+  }
+
+  .speaking {
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+  }
+
+  .speaking__topic {
+    max-width: 820px;
+    font-size: 34px;
+    line-height: 1.25;
+    color: var(--light-pill-text);
+  }
+
+  .speaking__centre {
+    flex-grow: 0;
+    gap: 40px;
+  }
+
+  .speaking__clock {
+    gap: 10px;
+  }
+
+  .speaking__time {
+    font-size: 208px;
+    line-height: 0.95;
+    letter-spacing: -0.05em;
+  }
+
+  .speaking__label {
+    font-size: 14px;
+    letter-spacing: 0.18em;
+  }
+
+  .speaking__footer {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .speaking__finish {
+    min-width: 260px;
+    min-height: 64px;
+    font-size: 19px;
+  }
+
+  .speaking__hint {
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+}
+
+/* ---------- Topic reveal ---------- */
+
+.prep__timer {
+  transition: opacity 300ms ease;
+}
+
+.prep__timer.is-waiting,
+.prep__actions[inert],
+.prep__bottom[inert] {
+  opacity: 0.4;
+}
+
+/* On phones the actions sit inside the dimmed bottom block; dim once. */
+.prep__bottom .prep__actions[inert] {
+  opacity: 1;
+}
+
+.prep__topic {
+  position: relative;
+  width: 100%;
+}
+
+.round--prep .prep__topic-text[aria-hidden='true'] {
+  visibility: hidden;
+}
+
+/* The shuffle sits over the real topic's box, centred in it. */
+.reveal {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  text-align: center;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.reveal__text {
+  text-wrap: pretty;
+}
+
+.reveal__text.is-landed {
+  color: var(--text);
+  animation: reveal-land 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes reveal-land {
+  from {
+    opacity: 0.55;
+    transform: translateY(6px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

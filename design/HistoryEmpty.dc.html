@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>History — empty</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=Newsreader:opsz,wght@6..72,400;6..72,500&amp;display=swap">
+<style>
+body { margin: 0; font-family: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif; background: #FAF8F3; }
+a { color: #3F5A48; } a:hover { color: #2C4033; }
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #FAF8F3; padding: 60px 24px 28px; display: flex; flex-direction: column; gap: 20px;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+    <button type="button" aria-label="Back to home" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border: none; background: transparent; border-radius: 999px; cursor: pointer;">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#41504A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4 L6 10 L12 16"></path></svg>
+    </button>
+    <span style="font-size: 16px; font-weight: 600; color: #22302A;">History</span>
+    <span style="width: 44px;"></span>
+  </div>
+
+  <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; text-align: center;">
+
+    <svg width="96" height="96" viewBox="0 0 96 96" fill="none" aria-hidden="true">
+      <circle cx="48" cy="48" r="38" stroke="#E0E6D6" stroke-width="2" stroke-dasharray="6 8"></circle>
+      <rect x="41" y="28" width="14" height="24" rx="7" stroke="{{accent}}" stroke-width="2.5"></rect>
+      <path d="M35 47 A13 13 0 0 0 61 47" stroke="{{accent}}" stroke-width="2.5" stroke-linecap="round"></path>
+      <path d="M48 60 L48 68" stroke="{{accent}}" stroke-width="2.5" stroke-linecap="round"></path>
+    </svg>
+
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <h1 style="margin: 0; font-family: 'Newsreader', Georgia, serif; font-size: 28px; font-weight: 400; line-height: 1.25; color: #22302A;">Nothing here yet.</h1>
+      <p style="margin: 0; font-size: 16px; line-height: 1.5; color: #5A6960; text-wrap: pretty;">Once you've spoken a round, it lands here — the topic, how long you went, and how you rated yourself. Three minutes from now you'll have one.</p>
+    </div>
+
+  </div>
+
+  <button type="button" style="min-height: 60px; border: none; border-radius: 18px; background: #3F5A48; color: #FAF8F3; font-family: inherit; font-size: 18px; font-weight: 600; cursor: pointer;">Start practicing</button>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#6E8C74","options":["#6E8C74","#7C9A83","#5B7A63","#8AA582"]},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { accent: this.props.accent ?? '#6E8C74' };
+  }
+}
+</script>
+</body>
+</html>

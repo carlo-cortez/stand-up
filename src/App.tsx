@@ -1,0 +1,22 @@
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import Home from './routes/Home';
+import Placeholder from './routes/Placeholder';
+import Round from './routes/Round';
+import Settings from './routes/Settings';
+import Setup from './routes/Setup';
+
+// Routes only — handoff §9. Prep and Speaking share /round on purpose.
+const router = createBrowserRouter([
+  { path: '/', element: <Home /> },
+  { path: '/setup', element: <Setup /> },
+  { path: '/round', element: <Round /> },
+  { path: '/round/review', element: <Placeholder title="Review" /> },
+  { path: '/history', element: <Placeholder title="History" /> },
+  { path: '/history/:sessionId', element: <Placeholder title="Review" /> },
+  { path: '/settings', element: <Settings /> },
+  { path: '*', element: <Home /> },
+]);
+
+export default function App() {
+  return <RouterProvider router={router} />;
+}

@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Prep — structure hint open</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=Newsreader:opsz,wght@6..72,400;6..72,500&amp;display=swap">
+<style>
+body { margin: 0; font-family: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif; background: #FAF8F3; }
+a { color: #3F5A48; } a:hover { color: #2C4033; }
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #FAF8F3; padding: 60px 24px 28px; display: flex; flex-direction: column; gap: 8px;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+    <div style="display: flex; align-items: center; gap: 8px; padding: 9px 14px; border: 1px solid #DFE3D8; border-radius: 999px; background: #FFFFFF;">
+      <span style="width: 8px; height: 8px; border-radius: 999px; background: {{accent}};"></span>
+      <span style="font-size: 13px; font-weight: 600; letter-spacing: 0.01em; color: #41504A;">Tech · Hard</span>
+    </div>
+    <button type="button" aria-label="End practice session" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border: none; background: transparent; border-radius: 999px; cursor: pointer;">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#41504A" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M5 5 L15 15"></path><path d="M15 5 L5 15"></path></svg>
+    </button>
+  </div>
+
+  <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px;">
+
+    <div style="position: relative; width: 112px; height: 112px;">
+      <svg width="112" height="112" viewBox="0 0 132 132" style="display: block; transform: rotate(-90deg);" aria-hidden="true">
+        <circle cx="66" cy="66" r="58" fill="none" stroke="#E4E7DD" stroke-width="8"></circle>
+        <circle cx="66" cy="66" r="58" fill="none" stroke="{{accent}}" stroke-width="8" stroke-linecap="round" stroke-dasharray="364.42" stroke-dashoffset="145.77"></circle>
+      </svg>
+      <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;">
+        <span style="font-size: 36px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; color: #22302A;">18</span>
+        <span style="font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #5A6960;">Prep</span>
+      </div>
+    </div>
+
+    <p style="margin: 0; font-family: 'Newsreader', Georgia, serif; font-size: 30px; font-weight: 400; line-height: 1.22; letter-spacing: -0.01em; text-align: center; text-wrap: pretty; color: #22302A;">Should AI be allowed to make hiring decisions?</p>
+
+    <div style="width: 100%; box-sizing: border-box; border: 1px solid #DFE3D8; background: #FFFFFF; border-radius: 20px; padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #5A6960;">Structure hint</span>
+        <button type="button" style="min-height: 44px; padding: 0 2px; border: none; background: transparent; font-family: inherit; font-size: 14px; font-weight: 600; color: #3F5A48; cursor: pointer;">Hide</button>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+
+        <div style="display: flex; align-items: flex-start; gap: 12px;">
+          <span style="flex-shrink: 0; width: 28px; height: 28px; border-radius: 9px; background: #EAEFE5; color: #35503E; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center;">P</span>
+          <div style="display: flex; flex-direction: column; gap: 1px;">
+            <span style="font-size: 15px; font-weight: 600; color: #22302A;">Point</span>
+            <span style="font-size: 14px; line-height: 1.35; color: #5A6960;">Answer in one sentence.</span>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: flex-start; gap: 12px;">
+          <span style="flex-shrink: 0; width: 28px; height: 28px; border-radius: 9px; background: #EAEFE5; color: #35503E; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center;">R</span>
+          <div style="display: flex; flex-direction: column; gap: 1px;">
+            <span style="font-size: 15px; font-weight: 600; color: #22302A;">Reason</span>
+            <span style="font-size: 14px; line-height: 1.35; color: #5A6960;">Why you land there.</span>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: flex-start; gap: 12px;">
+          <span style="flex-shrink: 0; width: 28px; height: 28px; border-radius: 9px; background: #EAEFE5; color: #35503E; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center;">E</span>
+          <div style="display: flex; flex-direction: column; gap: 1px;">
+            <span style="font-size: 15px; font-weight: 600; color: #22302A;">Example</span>
+            <span style="font-size: 14px; line-height: 1.35; color: #5A6960;">One story, case, or number.</span>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: flex-start; gap: 12px;">
+          <span style="flex-shrink: 0; width: 28px; height: 28px; border-radius: 9px; background: #EAEFE5; color: #35503E; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center;">P</span>
+          <div style="display: flex; flex-direction: column; gap: 1px;">
+            <span style="font-size: 15px; font-weight: 600; color: #22302A;">Point</span>
+            <span style="font-size: 14px; line-height: 1.35; color: #5A6960;">Say it again, shorter.</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <button type="button" style="min-height: 56px; border: none; border-radius: 16px; background: #3F5A48; color: #FAF8F3; font-family: inherit; font-size: 17px; font-weight: 600; letter-spacing: 0.01em; cursor: pointer;">Start now</button>
+    <button type="button" style="min-height: 44px; border: none; background: transparent; font-family: inherit; font-size: 15px; font-weight: 600; color: #3F5A48; cursor: pointer;">Skip this topic · 1 left</button>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#6E8C74","options":["#6E8C74","#7C9A83","#5B7A63","#8AA582"]},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { accent: this.props.accent ?? '#6E8C74' };
+  }
+}
+</script>
+</body>
+</html>

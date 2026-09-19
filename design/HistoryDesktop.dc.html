@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>History — desktop</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=Newsreader:opsz,wght@6..72,400;6..72,500&amp;display=swap">
+<style>
+body { margin: 0; font-family: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif; background: #FAF8F3; }
+a { color: #3F5A48; } a:hover { color: #2C4033; }
+</style>
+</helmet>
+<div style="width: 1440px; height: 980px; box-sizing: border-box; background: #FAF8F3; padding: 40px 56px 48px; display: flex; flex-direction: column; gap: 28px;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; gap: 24px;">
+    <button type="button" aria-label="Back to home" style="display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 12px 0 8px; border: none; background: transparent; border-radius: 12px; font-family: inherit; font-size: 15px; font-weight: 600; color: #3F5A48; cursor: pointer;">
+      <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="#3F5A48" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4 L6 10 L12 16"></path></svg>
+      Home
+    </button>
+    <span style="font-family: 'Newsreader', Georgia, serif; font-size: 20px; font-weight: 500; color: #41504A;">Stand Up</span>
+    <button type="button" style="min-height: 44px; padding: 0 14px; border: none; background: transparent; font-family: inherit; font-size: 14px; font-weight: 600; color: #8A4A33; cursor: pointer;">Delete all recordings</button>
+  </div>
+
+  <div style="flex-grow: 1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px;">
+
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+
+      <h1 style="margin: 0; font-family: 'Newsreader', Georgia, serif; font-size: 40px; font-weight: 400; line-height: 1.15; letter-spacing: -0.02em; color: #22302A;">History</h1>
+
+      <div style="box-sizing: border-box; border: 1px solid #DFE3D8; background: #FFFFFF; border-radius: 22px; padding: 24px; display: flex; flex-direction: column; gap: 20px;">
+        <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
+          <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #5A6960;">Last four weeks</span>
+          <span style="font-size: 14px; font-weight: 600; color: #5A6960;">12 rounds</span>
+        </div>
+        <div style="display: flex; align-items: flex-end; gap: 16px; height: 110px;">
+          <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 10px;">
+            <span style="width: 100%; height: 36px; border-radius: 10px 10px 0 0; background: #DCE5D6;"></span>
+            <span style="font-size: 13px; font-weight: 600; color: #5A6960;">2</span>
+          </div>
+          <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 10px;">
+            <span style="width: 100%; height: 58px; border-radius: 10px 10px 0 0; background: #C5D4BE;"></span>
+            <span style="font-size: 13px; font-weight: 600; color: #5A6960;">3</span>
+          </div>
+          <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 10px;">
+            <span style="width: 100%; height: 42px; border-radius: 10px 10px 0 0; background: #DCE5D6;"></span>
+            <span style="font-size: 13px; font-weight: 600; color: #5A6960;">2</span>
+          </div>
+          <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 10px;">
+            <span style="width: 100%; height: 82px; border-radius: 10px 10px 0 0; background: {{accent}};"></span>
+            <span style="font-size: 13px; font-weight: 700; color: #35503E;">5</span>
+          </div>
+        </div>
+        <p style="margin: 0; font-size: 15px; line-height: 1.5; color: #5A6960;">Your self-ratings have crept up from 3.1 to 3.6, and this is your busiest week so far.</p>
+      </div>
+
+      <div style="box-sizing: border-box; border: 1px solid #DFE3D8; background: #FFFFFF; border-radius: 22px; padding: 24px; display: flex; flex-direction: column; gap: 14px;">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #5A6960;">Where the time goes</span>
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+          <span style="font-size: 15px; color: #41504A;">Interview Questions</span>
+          <span style="font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; color: #22302A;">5</span>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+          <span style="font-size: 15px; color: #41504A;">General</span>
+          <span style="font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; color: #22302A;">3</span>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+          <span style="font-size: 15px; color: #41504A;">Wildcard</span>
+          <span style="font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; color: #22302A;">2</span>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+          <span style="font-size: 15px; color: #41504A;">Tech</span>
+          <span style="font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; color: #22302A;">2</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="grid-column: span 2; display: flex; flex-direction: column; gap: 14px;">
+
+      <a href="Review.dc.html" style="box-sizing: border-box; display: flex; align-items: center; gap: 24px; padding: 20px 24px; border: 1px solid #DFE3D8; border-radius: 18px; background: #FFFFFF; text-decoration: none;">
+        <span style="flex-grow: 1; display: flex; flex-direction: column; gap: 6px;">
+          <span style="font-size: 13px; font-weight: 600; color: #5A6960;">Today · General</span>
+          <span style="font-family: 'Newsreader', Georgia, serif; font-size: 22px; line-height: 1.3; color: #22302A;">What's a small thing that instantly makes your day better?</span>
+        </span>
+        <span style="flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
+          <span style="font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; color: #22302A;">2:20</span>
+          <span style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 13px; font-weight: 600; color: #5A6960;">3.3</span>
+            <span style="display: flex; gap: 4px;">
+              <span style="width: 7px; height: 7px; border-radius: 999px; background: {{accent}};"></span>
+              <span style="width: 7px; height: 7px; border-radius: 999px; background: {{accent}};"></span>
+              <span style="width: 7px; height: 7px; border-radius: 999px; background: {{accent}};"></span>
+              <span style="width: 7px; height: 7px; border-radius: 999px; background: #DFE3D8;"></span>
+              <span style="width: 7px; height: 7px; border-radius: 999px; background: #DFE3D8;"></span>
+            </span>
+          </span>
+        </span>
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="#3F5A48" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 L10.5 8 L6 12.5"></path></svg>
+      </a>
+
+      <a href="Review.dc.html" style="box-sizing: border-box; display: flex; align-items: center; gap: 24px; padding: 20px 24px; border: 1px solid #DFE3D8; border-radius: 18px; background: #FFFFFF; text-decoration: none;">
+        <span style="flex-grow: 1; display: flex; flex-direction: column; gap: 6px;">
+          <span style="font-size: 13px; font-weight: 600; color: #5A6960;">Tuesday · Interview Questions</span>
+          <span style="font-family: 'Newsreader', Georgia, serif; font-size: 22px; line-height: 1.3; color: #22302A;">Describe a time you disagreed with a teammate.</span>
+        </span>
+        <span style="flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
+          <span style="font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; color: #22302A;">1:52</span>
+          <span style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 13px; font-weight: 600; color: #5A6960;">4.0</span>
+            <span style="display: flex; gap: 4px;">
+              <span style="width: 7px; height: 7px; border-radius: 999px; background: {{accent}};"></span>
+              <span style="width: 7px; height: 7px; border-radius: 999px; background: {{accent}};"></span>
+              <span style="width: 7px; height: 7px; border-radius: 999px; background: {{accent}};"></span>
+              <span style="width: 7px; height: 7px; border-radius: 999px; background: {{accent}};"></span>
+              <span style="width: 7px; height: 7px; border-radius: 999px; background: #DFE3D8;"></span>
+            </span>
+          </span>
+        </span>
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="#3F5A48" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 L10.5 8 L6 12.5"></path></svg>
+      </a>
+
+      <a href="Review.dc.html" style="box-sizing: border-box; display: flex; align-items: center; gap: 24px; padding: 20px 24px; border: 1px solid #DFE3D8; border-radius: 18px; background: #FFFFFF; text-decoration: none;">
+        <span style="flex-grow: 1; display: flex; flex-direction: column; gap: 6px;">
+          <span style="font-size: 13px; font-weight: 600; color: #5A6960;">Monday · Wildcard</span>
+          <span style="font-family: 'Newsreader', Georgia, serif; font-size: 22px; line-height: 1.3; color: #22302A;">You're a pigeon giving a TED talk. Go.</span>
+        </span>
+        <span style="flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
+          <span style="font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; color: #22302A;">0:58</span>
+          <span style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 13px; font-weight: 600; color: #5A6960;">2.8</span>
+            <span style="display: flex; gap: 4px;">
+              <span style="width: 7px; height: 7px; border-radius: 999px; background: {{accent}};"></span>
+              <span style="width: 7px; height: 7px; border-radius: 999px; background: {{accent}};"></span>
+              <span style="width: 7px; height: 7px; border-radius: 999px; background: #DFE3D8;"></span>
+              <span style="width: 7px; height: 7px; border-radius: 999px; background: #DFE3D8;"></span>
+              <span style="width: 7px; height: 7px; border-radius: 999px; background: #DFE3D8;"></span>
+            </span>
+          </span>
+        </span>
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="#3F5A48" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 L10.5 8 L6 12.5"></path></svg>
+      </a>
+
+      <a href="Review.dc.html" style="box-sizing: border-box; display: flex; align-items: center; gap: 24px; padding: 20px 24px; border: 1px solid #DFE3D8; border-radius: 18px; background: #FFFFFF; text-decoration: none;">
+        <span style="flex-grow: 1; display: flex; flex-direction: column; gap: 6px;">
+          <span style="font-size: 13px; font-weight: 600; color: #5A6960;">Last Friday · Tech</span>
+          <span style="font-family: 'Newsreader', Georgia, serif; font-size: 22px; line-height: 1.3; color: #22302A;">Explain “the cloud” to someone who's never used a computer.</span>
+        </span>
+        <span style="flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
+          <span style="font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; color: #22302A;">2:04</span>
+          <span style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 13px; font-weight: 600; color: #5A6960;">3.5</span>
+            <span style="display: flex; gap: 4px;">
+              <span style="width: 7px; height: 7px; border-radius: 999px; background: {{accent}};"></span>
+              <span style="width: 7px; height: 7px; border-radius: 999px; background: {{accent}};"></span>
+              <span style="width: 7px; height: 7px; border-radius: 999px; background: {{accent}};"></span>
+              <span style="width: 7px; height: 7px; border-radius: 999px; background: #DFE3D8;"></span>
+              <span style="width: 7px; height: 7px; border-radius: 999px; background: #DFE3D8;"></span>
+            </span>
+          </span>
+        </span>
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="#3F5A48" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 L10.5 8 L6 12.5"></path></svg>
+      </a>
+
+      <a href="Review.dc.html" style="box-sizing: border-box; display: flex; align-items: center; gap: 24px; padding: 20px 24px; border: 1px solid #DFE3D8; border-radius: 18px; background: #FFFFFF; text-decoration: none;">
+        <span style="flex-grow: 1; display: flex; flex-direction: column; gap: 6px;">
+          <span style="font-size: 13px; font-weight: 600; color: #5A6960;">Last Thursday · Movies</span>
+          <span style="font-family: 'Newsreader', Georgia, serif; font-size: 22px; line-height: 1.3; color: #22302A;">Is the book always better than the movie?</span>
+        </span>
+        <span style="flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
+          <span style="font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; color: #22302A;">2:41</span>
+          <span style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 13px; font-weight: 600; color: #5A6960;">3.0</span>
+            <span style="display: flex; gap: 4px;">
+              <span style="width: 7px; height: 7px; border-radius: 999px; background: {{accent}};"></span>
+              <span style="width: 7px; height: 7px; border-radius: 999px; background: {{accent}};"></span>
+              <span style="width: 7px; height: 7px; border-radius: 999px; background: {{accent}};"></span>
+              <span style="width: 7px; height: 7px; border-radius: 999px; background: #DFE3D8;"></span>
+              <span style="width: 7px; height: 7px; border-radius: 999px; background: #DFE3D8;"></span>
+            </span>
+          </span>
+        </span>
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="#3F5A48" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 L10.5 8 L6 12.5"></path></svg>
+      </a>
+
+      <button type="button" style="align-self: flex-start; min-height: 52px; padding: 0 22px; border: 1px solid #DFE3D8; border-radius: 16px; background: #FFFFFF; font-family: inherit; font-size: 15px; font-weight: 600; color: #3F5A48; cursor: pointer;">Show older rounds</button>
+
+    </div>
+
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#6E8C74","options":["#6E8C74","#7C9A83","#5B7A63","#8AA582"]},"$preview":{"width":1440,"height":980}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { accent: this.props.accent ?? '#6E8C74' };
+  }
+}
+</script>
+</body>
+</html>

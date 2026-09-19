@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>History — sessions and trend</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=Newsreader:opsz,wght@6..72,400;6..72,500&amp;display=swap">
+<style>
+body { margin: 0; font-family: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif; background: #FAF8F3; }
+a { color: #3F5A48; } a:hover { color: #2C4033; }
+</style>
+</helmet>
+<div style="width: 390px; height: 1100px; box-sizing: border-box; background: #FAF8F3; padding: 60px 24px 28px; display: flex; flex-direction: column; gap: 20px;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+    <button type="button" aria-label="Back to home" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border: none; background: transparent; border-radius: 999px; cursor: pointer;">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#41504A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4 L6 10 L12 16"></path></svg>
+    </button>
+    <span style="font-size: 16px; font-weight: 600; color: #22302A;">History</span>
+    <span style="width: 44px;"></span>
+  </div>
+
+  <div style="box-sizing: border-box; border: 1px solid #DFE3D8; background: #FFFFFF; border-radius: 20px; padding: 18px; display: flex; flex-direction: column; gap: 16px;">
+    <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
+      <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #5A6960;">Last four weeks</span>
+      <span style="font-size: 13px; font-weight: 600; color: #5A6960;">12 rounds</span>
+    </div>
+    <div style="display: flex; align-items: flex-end; gap: 14px; height: 78px;">
+      <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 8px;">
+        <span style="width: 100%; height: 26px; border-radius: 8px 8px 0 0; background: #DCE5D6;"></span>
+        <span style="font-size: 12px; font-weight: 600; color: #5A6960;">2</span>
+      </div>
+      <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 8px;">
+        <span style="width: 100%; height: 42px; border-radius: 8px 8px 0 0; background: #C5D4BE;"></span>
+        <span style="font-size: 12px; font-weight: 600; color: #5A6960;">3</span>
+      </div>
+      <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 8px;">
+        <span style="width: 100%; height: 30px; border-radius: 8px 8px 0 0; background: #DCE5D6;"></span>
+        <span style="font-size: 12px; font-weight: 600; color: #5A6960;">2</span>
+      </div>
+      <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 8px;">
+        <span style="width: 100%; height: 58px; border-radius: 8px 8px 0 0; background: {{accent}};"></span>
+        <span style="font-size: 12px; font-weight: 700; color: #35503E;">5</span>
+      </div>
+    </div>
+    <p style="margin: 0; font-size: 14px; line-height: 1.45; color: #5A6960;">Your self-ratings have crept up from 3.1 to 3.6, and this is your busiest week so far.</p>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 12px;">
+
+    <a href="Review.dc.html" style="box-sizing: border-box; display: flex; flex-direction: column; gap: 8px; padding: 16px; border: 1px solid #DFE3D8; border-radius: 18px; background: #FFFFFF; text-decoration: none;">
+      <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
+        <span style="font-size: 13px; font-weight: 600; color: #5A6960;">Today · General</span>
+        <span style="font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; color: #5A6960;">2:20</span>
+      </div>
+      <span style="font-family: 'Newsreader', Georgia, serif; font-size: 18px; line-height: 1.3; color: #22302A;">What's a small thing that instantly makes your day better?</span>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 13px; font-weight: 600; color: #41504A;">Rated 3.3</span>
+        <span style="display: flex; gap: 4px;">
+          <span style="width: 7px; height: 7px; border-radius: 999px; background: {{accent}};"></span>
+          <span style="width: 7px; height: 7px; border-radius: 999px; background: {{accent}};"></span>
+          <span style="width: 7px; height: 7px; border-radius: 999px; background: {{accent}};"></span>
+          <span style="width: 7px; height: 7px; border-radius: 999px; background: #DFE3D8;"></span>
+          <span style="width: 7px; height: 7px; border-radius: 999px; background: #DFE3D8;"></span>
+        </span>
+      </div>
+    </a>
+
+    <a href="Review.dc.html" style="box-sizing: border-box; display: flex; flex-direction: column; gap: 8px; padding: 16px; border: 1px solid #DFE3D8; border-radius: 18px; background: #FFFFFF; text-decoration: none;">
+      <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
+        <span style="font-size: 13px; font-weight: 600; color: #5A6960;">Tuesday · Interview Questions</span>
+        <span style="font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; color: #5A6960;">1:52</span>
+      </div>
+      <span style="font-family: 'Newsreader', Georgia, serif; font-size: 18px; line-height: 1.3; color: #22302A;">Describe a time you disagreed with a teammate.</span>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 13px; font-weight: 600; color: #41504A;">Rated 4.0</span>
+        <span style="display: flex; gap: 4px;">
+          <span style="width: 7px; height: 7px; border-radius: 999px; background: {{accent}};"></span>
+          <span style="width: 7px; height: 7px; border-radius: 999px; background: {{accent}};"></span>
+          <span style="width: 7px; height: 7px; border-radius: 999px; background: {{accent}};"></span>
+          <span style="width: 7px; height: 7px; border-radius: 999px; background: {{accent}};"></span>
+          <span style="width: 7px; height: 7px; border-radius: 999px; background: #DFE3D8;"></span>
+        </span>
+      </div>
+    </a>
+
+    <a href="Review.dc.html" style="box-sizing: border-box; display: flex; flex-direction: column; gap: 8px; padding: 16px; border: 1px solid #DFE3D8; border-radius: 18px; background: #FFFFFF; text-decoration: none;">
+      <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
+        <span style="font-size: 13px; font-weight: 600; color: #5A6960;">Monday · Wildcard</span>
+        <span style="font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; color: #5A6960;">0:58</span>
+      </div>
+      <span style="font-family: 'Newsreader', Georgia, serif; font-size: 18px; line-height: 1.3; color: #22302A;">You're a pigeon giving a TED talk. Go.</span>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 13px; font-weight: 600; color: #41504A;">Rated 2.8</span>
+        <span style="display: flex; gap: 4px;">
+          <span style="width: 7px; height: 7px; border-radius: 999px; background: {{accent}};"></span>
+          <span style="width: 7px; height: 7px; border-radius: 999px; background: {{accent}};"></span>
+          <span style="width: 7px; height: 7px; border-radius: 999px; background: #DFE3D8;"></span>
+          <span style="width: 7px; height: 7px; border-radius: 999px; background: #DFE3D8;"></span>
+          <span style="width: 7px; height: 7px; border-radius: 999px; background: #DFE3D8;"></span>
+        </span>
+      </div>
+    </a>
+
+    <a href="Review.dc.html" style="box-sizing: border-box; display: flex; flex-direction: column; gap: 8px; padding: 16px; border: 1px solid #DFE3D8; border-radius: 18px; background: #FFFFFF; text-decoration: none;">
+      <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
+        <span style="font-size: 13px; font-weight: 600; color: #5A6960;">Last Friday · Tech</span>
+        <span style="font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; color: #5A6960;">2:04</span>
+      </div>
+      <span style="font-family: 'Newsreader', Georgia, serif; font-size: 18px; line-height: 1.3; color: #22302A;">Explain “the cloud” to someone who's never used a computer.</span>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 13px; font-weight: 600; color: #41504A;">Rated 3.5</span>
+        <span style="display: flex; gap: 4px;">
+          <span style="width: 7px; height: 7px; border-radius: 999px; background: {{accent}};"></span>
+          <span style="width: 7px; height: 7px; border-radius: 999px; background: {{accent}};"></span>
+          <span style="width: 7px; height: 7px; border-radius: 999px; background: {{accent}};"></span>
+          <span style="width: 7px; height: 7px; border-radius: 999px; background: #DFE3D8;"></span>
+          <span style="width: 7px; height: 7px; border-radius: 999px; background: #DFE3D8;"></span>
+        </span>
+      </div>
+    </a>
+
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 10px; margin-top: auto;">
+    <button type="button" style="min-height: 56px; border: none; border-radius: 16px; background: #3F5A48; color: #FAF8F3; font-family: inherit; font-size: 17px; font-weight: 600; cursor: pointer;">Start practicing</button>
+    <button type="button" style="min-height: 44px; border: none; background: transparent; font-family: inherit; font-size: 14px; font-weight: 600; color: #8A4A33; cursor: pointer;">Delete all recordings</button>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#6E8C74","options":["#6E8C74","#7C9A83","#5B7A63","#8AA582"]},"$preview":{"width":390,"height":1100}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { accent: this.props.accent ?? '#6E8C74' };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Session setup — microphone blocked</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=Newsreader:opsz,wght@6..72,400;6..72,500&amp;display=swap">
+<style>
+body { margin: 0; font-family: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif; background: #FAF8F3; }
+a { color: #3F5A48; } a:hover { color: #2C4033; }
+</style>
+</helmet>
+<div style="width: 390px; height: 900px; box-sizing: border-box; background: #FAF8F3; padding: 60px 24px 28px; display: flex; flex-direction: column; gap: 22px;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+    <button type="button" aria-label="Back to home" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border: none; background: transparent; border-radius: 999px; cursor: pointer;">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#41504A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4 L6 10 L12 16"></path></svg>
+    </button>
+    <span style="font-size: 16px; font-weight: 600; color: #22302A;">Set the round</span>
+    <span style="width: 44px;"></span>
+  </div>
+
+  <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 24px;">
+
+    <fieldset style="margin: 0; padding: 0; border: none; display: flex; flex-direction: column; gap: 10px;">
+      <legend style="padding: 0; font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #5A6960;">Topics</legend>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+        <label style="position: relative; display: flex; align-items: center; min-height: 44px; padding: 0 16px; border: 1px solid #3F5A48; background: #3F5A48; border-radius: 999px; font-size: 14px; font-weight: 600; color: #FAF8F3; cursor: pointer;"><input type="radio" name="category-b" value="interview" checked style="position: absolute; width: 1px; height: 1px; opacity: 0;">Interview Questions</label>
+        <label style="position: relative; display: flex; align-items: center; min-height: 44px; padding: 0 16px; border: 1px solid #DFE3D8; background: #FFFFFF; border-radius: 999px; font-size: 14px; font-weight: 600; color: #41504A; cursor: pointer;"><input type="radio" name="category-b" value="surprise" style="position: absolute; width: 1px; height: 1px; opacity: 0;">Surprise me</label>
+        <label style="position: relative; display: flex; align-items: center; min-height: 44px; padding: 0 16px; border: 1px solid #DFE3D8; background: #FFFFFF; border-radius: 999px; font-size: 14px; font-weight: 600; color: #41504A; cursor: pointer;"><input type="radio" name="category-b" value="general" style="position: absolute; width: 1px; height: 1px; opacity: 0;">General</label>
+        <label style="position: relative; display: flex; align-items: center; min-height: 44px; padding: 0 16px; border: 1px solid #DFE3D8; background: #FFFFFF; border-radius: 999px; font-size: 14px; font-weight: 600; color: #41504A; cursor: pointer;"><input type="radio" name="category-b" value="tech" style="position: absolute; width: 1px; height: 1px; opacity: 0;">Tech</label>
+        <label style="position: relative; display: flex; align-items: center; min-height: 44px; padding: 0 16px; border: 1px solid #DFE3D8; background: #FFFFFF; border-radius: 999px; font-size: 14px; font-weight: 600; color: #41504A; cursor: pointer;"><input type="radio" name="category-b" value="wildcard" style="position: absolute; width: 1px; height: 1px; opacity: 0;">Wildcard</label>
+      </div>
+    </fieldset>
+
+    <fieldset style="margin: 0; padding: 0; border: none; display: flex; flex-direction: column; gap: 10px;">
+      <legend style="padding: 0; font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #5A6960;">Speaking time</legend>
+      <div style="display: flex; gap: 8px;">
+        <label style="position: relative; flex-grow: 1; min-height: 48px; display: flex; align-items: center; justify-content: center; border: 1px solid #DFE3D8; background: #FFFFFF; border-radius: 14px; font-size: 15px; font-weight: 600; color: #41504A; cursor: pointer;"><input type="radio" name="speaking-b" value="60" style="position: absolute; width: 1px; height: 1px; opacity: 0;">1 min</label>
+        <label style="position: relative; flex-grow: 1; min-height: 48px; display: flex; align-items: center; justify-content: center; border: 1px solid #3F5A48; background: #3F5A48; border-radius: 14px; font-size: 15px; font-weight: 600; color: #FAF8F3; cursor: pointer;"><input type="radio" name="speaking-b" value="120" checked style="position: absolute; width: 1px; height: 1px; opacity: 0;">2 min</label>
+        <label style="position: relative; flex-grow: 1; min-height: 48px; display: flex; align-items: center; justify-content: center; border: 1px solid #DFE3D8; background: #FFFFFF; border-radius: 14px; font-size: 15px; font-weight: 600; color: #41504A; cursor: pointer;"><input type="radio" name="speaking-b" value="180" style="position: absolute; width: 1px; height: 1px; opacity: 0;">3 min</label>
+      </div>
+    </fieldset>
+
+    <div style="box-sizing: border-box; border: 1px solid #E6DCD2; background: #FBF5F1; border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <svg width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="#8A4A33" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M8 2.5 A2 2 0 0 1 10 4.5 L10 7"></path><path d="M6 5.4 L6 8 A2 2 0 0 0 9.4 9.4"></path><path d="M3.5 7.5 A4.5 4.5 0 0 0 8 12 A4.4 4.4 0 0 0 10.6 11.2"></path><path d="M12.5 7.5 A4.5 4.5 0 0 1 12.2 9"></path><path d="M8 12 L8 14"></path><path d="M3 3 L13 13"></path></svg>
+        <span style="font-size: 16px; font-weight: 600; color: #4C3B33;">The mic is blocked</span>
+      </div>
+      <p style="margin: 0; font-size: 15px; line-height: 1.45; color: #5C463C;">Your browser turned the microphone down for this site, so there'll be no recording to play back. Everything else works exactly the same — topic, timer, ratings, notes.</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+        <button type="button" style="min-height: 44px; padding: 0 16px; border: 1px solid #DDCBC0; border-radius: 12px; background: #FFFFFF; font-family: inherit; font-size: 14px; font-weight: 600; color: #8A4A33; cursor: pointer;">Ask again</button>
+        <a href="https://support.google.com/chrome/answer/2693767" style="display: flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 12px; font-size: 14px; font-weight: 600; text-decoration: none; color: #3F5A48;">How to unblock it</a>
+      </div>
+    </div>
+
+    <label for="record-toggle-blocked" style="box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; gap: 14px; min-height: 68px; padding: 14px 18px; border: 1px solid #E4E6DE; background: #F4F4EF; border-radius: 18px; cursor: default;">
+      <span style="display: flex; flex-direction: column; gap: 2px;">
+        <span style="font-size: 15px; font-weight: 600; color: #5A6960;">Record this round</span>
+        <span style="font-size: 13px; line-height: 1.35; color: #7A867D;">Off while the mic is blocked.</span>
+      </span>
+      <span style="position: relative; flex-shrink: 0; width: 52px; height: 32px; border-radius: 999px; background: #D8DCD2; display: flex; align-items: center; justify-content: flex-start; padding: 0 4px; box-sizing: border-box;">
+        <input type="checkbox" id="record-toggle-blocked" disabled style="position: absolute; width: 1px; height: 1px; opacity: 0;">
+        <span style="width: 24px; height: 24px; border-radius: 999px; background: #FFFFFF;"></span>
+      </span>
+    </label>
+
+  </div>
+
+  <button type="button" style="min-height: 60px; border: none; border-radius: 18px; background: #3F5A48; color: #FAF8F3; font-family: inherit; font-size: 18px; font-weight: 600; cursor: pointer;">Practice without recording</button>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#6E8C74","options":["#6E8C74","#7C9A83","#5B7A63","#8AA582"]},"$preview":{"width":390,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { accent: this.props.accent ?? '#6E8C74' };
+  }
+}
+</script>
+</body>
+</html>

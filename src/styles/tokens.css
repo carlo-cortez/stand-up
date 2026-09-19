@@ -1,0 +1,155 @@
+/*
+ * Design tokens — handoff §2, values copied verbatim from the artboards.
+ * The theme is resolved to data-theme="light" | "dark" before first paint
+ * (see index.html), so there is exactly one dark block.
+ */
+
+:root {
+  color-scheme: light;
+
+  /* Colour — light */
+  --ground: #FAF8F3;
+  --surface: #FFFFFF;
+  --surface-sunken: #F4F6EF;
+  --surface-muted: #F6F5EE;
+  --border: #DFE3D8;
+  --border-muted: #E6E4DA;
+  --text: #22302A;
+  --text-secondary: #41504A;
+  --text-body: #4B5A50;
+  --text-muted: #5A6960;
+  --text-disabled: #8A968D;
+  --icon-muted: #7D8A80;
+  --accent: #6E8C74;
+  --accent-strong: #3F5A48;
+  --accent-strong-hover: #2C4033;
+  --on-accent-strong: #FAF8F3; /* the primary button inverts between themes */
+  --accent-wash: #EAEFE5;
+  --accent-wash-text: #35503E;
+  --danger: #9A4F36;
+  --on-danger: #FDF7F4;
+  --danger-text: #8A4A33;
+  --ring-track: #E4E7DD;
+  --scrim: rgba(24, 34, 27, 0.5);
+
+  /* Timing lights — Speaking screen. Each state sets the whole set. */
+  --light-on-tint: #F2F5EC;
+  --light-on-bar: #6E8C74;
+  --light-on-track: #E0E6D6;
+  --light-on-chip: #E1EBD9;
+  --light-on-shape: #4F7359;
+  --light-on-chip-text: #2F4A38;
+  --light-on-pill-bg: #FBFCF7;
+  --light-on-pill-border: #D8E0CE;
+  --light-on-pill-text: #41504A;
+  --light-on-meta: #4B5A50;
+  --light-on-timer: #22302A;
+  --light-on-label: #5A6960;
+
+  --light-wrap-tint: #FAF3E4;
+  --light-wrap-bar: #C2A24A;
+  --light-wrap-track: #EDE2C8;
+  --light-wrap-chip: #F4E6C6;
+  --light-wrap-shape: #8A6A1E;
+  --light-wrap-chip-text: #5E4A17;
+  --light-wrap-pill-bg: #FDFBF4;
+  --light-wrap-pill-border: #E5DCC2;
+  --light-wrap-pill-text: #4A4636;
+  --light-wrap-meta: #55503E;
+  --light-wrap-timer: #2B2618;
+  --light-wrap-label: #6A6350;
+
+  --light-over-tint: #F9EDE8;
+  --light-over-bar: #B4664F;
+  --light-over-track: #EFDCD4;
+  --light-over-chip: #F3DCD3;
+  --light-over-shape: #9A4F36;
+  --light-over-chip-text: #6E3826;
+  --light-over-pill-bg: #FDF7F4;
+  --light-over-pill-border: #EBD6CC;
+  --light-over-pill-text: #4C3B33;
+  --light-over-meta: #57443B;
+  --light-over-timer: #2F231D;
+  --light-over-label: #6B554B;
+
+  /* Typography */
+  --font-display: 'Newsreader', Georgia, serif;
+  --font-ui: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif;
+
+  /* Radius */
+  --radius-sm: 12px;
+  --radius-input: 14px;
+  --radius-button: 16px;
+  --radius-card: 20px;
+  --radius-sheet: 28px;
+  --radius-pill: 999px;
+
+  /* Motion */
+  --tint-fade: 600ms;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --ground: #151A16;
+  --surface: #1D241E;
+  --surface-sunken: #232C24;
+  --surface-muted: #1A201B;
+  --border: #2E382F;
+  --border-muted: #2A332B;
+  --text: #EDF0E8;
+  --text-secondary: #C3CDC4;
+  --text-body: #C3CDC4;
+  --text-muted: #A2AFA4;
+  --text-disabled: #6F7C71;
+  --icon-muted: #8A978C;
+  --accent: #90B198;
+  --accent-strong: #A8C6AF;
+  --accent-strong-hover: #C4DBC9;
+  --on-accent-strong: #15201A;
+  --accent-wash: #26312A;
+  --accent-wash-text: #C7DCCB;
+  --danger-text: #D9A18C;
+  --ring-track: #2B342C;
+
+  /* On track is drawn (SpeakingDark). Wrapping up and overtime in dark are
+     not on the canvas yet — these are derived and should be checked. */
+  --light-on-tint: #141B16;
+  --light-on-bar: #90B198;
+  --light-on-track: #2B342C;
+  --light-on-chip: #223026;
+  --light-on-shape: #90B198;
+  --light-on-chip-text: #C7DCCB;
+  --light-on-pill-bg: #1D251E;
+  --light-on-pill-border: #2E382F;
+  --light-on-pill-text: #B8C4B9;
+  --light-on-meta: #A2AFA4;
+  --light-on-timer: #EDF0E8;
+  --light-on-label: #A2AFA4;
+
+  --light-wrap-tint: #1B1A12;
+  --light-wrap-bar: #C2A24A;
+  --light-wrap-track: #3A3322;
+  --light-wrap-chip: #332B17;
+  --light-wrap-shape: #D9B75E;
+  --light-wrap-chip-text: #EBD9A6;
+  --light-wrap-pill-bg: #221F15;
+  --light-wrap-pill-border: #3A3322;
+  --light-wrap-pill-text: #D6CDB4;
+  --light-wrap-meta: #BDB39A;
+  --light-wrap-timer: #F2EBDA;
+  --light-wrap-label: #BDB39A;
+
+  --light-over-tint: #1D1614;
+  --light-over-bar: #C7755C;
+  --light-over-track: #3D2A24;
+  --light-over-chip: #3A2520;
+  --light-over-shape: #D98C73;
+  --light-over-chip-text: #F0C8BA;
+  --light-over-pill-bg: #251B18;
+  --light-over-pill-border: #3D2A24;
+  --light-over-pill-text: #DCC5BC;
+  --light-over-meta: #C4ABA1;
+  --light-over-timer: #F4E6E0;
+  --light-over-label: #C4ABA1;
+}

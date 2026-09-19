@@ -1,0 +1,99 @@
+.setup .screen__column {
+  gap: 22px;
+}
+
+.setup__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.setup__title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.setup__spacer {
+  width: 44px;
+}
+
+.setup__form {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.setup__fields,
+.setup__grid {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.setup__fields {
+  flex-grow: 1;
+}
+
+.setup__footer {
+  display: flex;
+  flex-direction: column;
+}
+
+/* The phone version leaves this implicit; desktop has room to say it. */
+.setup__note {
+  display: none;
+}
+
+@media (min-width: 1180px) {
+  .setup__header,
+  .setup__form {
+    width: 100%;
+    max-width: 880px;
+    margin: 0 auto;
+  }
+
+  .setup__form {
+    flex-grow: 0;
+    margin-top: 24px;
+  }
+
+  .setup__fields {
+    padding: 32px;
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    background: var(--surface);
+    gap: 32px;
+  }
+
+  .setup__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  .setup__footer {
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .setup__start {
+    min-width: 260px;
+  }
+
+  .setup__note {
+    display: block;
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--text-muted);
+  }
+}
+
+.placeholder__text {
+  margin-top: 24px;
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--text-muted);
+}

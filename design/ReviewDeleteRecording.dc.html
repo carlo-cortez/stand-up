@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Review — delete recording</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=Newsreader:opsz,wght@6..72,400;6..72,500&amp;display=swap">
+<style>
+body { margin: 0; font-family: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif; background: #FAF8F3; }
+a { color: #3F5A48; } a:hover { color: #2C4033; }
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; box-sizing: border-box; background: #FAF8F3; overflow: hidden;">
+
+  <div style="box-sizing: border-box; width: 100%; height: 100%; padding: 60px 24px 28px; display: flex; flex-direction: column; gap: 18px;">
+    <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #5A6960;">Round 3 · today</span>
+    <h1 style="margin: 0; font-family: 'Newsreader', Georgia, serif; font-size: 30px; font-weight: 400; line-height: 1.2; color: #22302A;">Nice — that's the hard part done.</h1>
+    <div style="box-sizing: border-box; border: 1px solid #DFE3D8; background: #FFFFFF; border-radius: 20px; padding: 18px; display: flex; flex-direction: column; gap: 16px;">
+      <p style="margin: 0; font-family: 'Newsreader', Georgia, serif; font-size: 19px; line-height: 1.3; color: #41504A;">What's a small thing that instantly makes your day better?</p>
+      <div style="display: flex; gap: 10px;">
+        <div style="flex-grow: 1; background: #F4F6EF; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 2px;">
+          <span style="font-size: 22px; font-weight: 600; font-variant-numeric: tabular-nums; color: #22302A;">2:20</span>
+          <span style="font-size: 12px; font-weight: 600; color: #5A6960;">Spoken</span>
+        </div>
+        <div style="flex-grow: 1; background: #F4F6EF; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 2px;">
+          <span style="font-size: 22px; font-weight: 600; font-variant-numeric: tabular-nums; color: #22302A;">2:00</span>
+          <span style="font-size: 12px; font-weight: 600; color: #5A6960;">Target</span>
+        </div>
+        <div style="flex-grow: 1; background: #F4F6EF; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 2px;">
+          <span style="font-size: 22px; font-weight: 600; font-variant-numeric: tabular-nums; color: #22302A;">+0:20</span>
+          <span style="font-size: 12px; font-weight: 600; color: #5A6960;">Over</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(24, 34, 27, 0.5);"></div>
+
+  <div style="position: absolute; left: 0; right: 0; bottom: 0; box-sizing: border-box; background: #FAF8F3; border-radius: 28px 28px 0 0; padding: 28px 24px 32px; display: flex; flex-direction: column; gap: 14px;">
+    <span style="width: 44px; height: 4px; border-radius: 999px; background: #D8DED0; align-self: center;"></span>
+    <h2 style="margin: 0; font-family: 'Newsreader', Georgia, serif; font-size: 26px; font-weight: 400; line-height: 1.25; color: #22302A;">Delete this recording?</h2>
+    <p style="margin: 0; font-size: 15px; line-height: 1.5; color: #4B5A50;">This one is permanent — the audio is gone for good. Your ratings and notes stay put, so your history keeps the progress.</p>
+    <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 4px;">
+      <button type="button" style="min-height: 56px; border: none; border-radius: 16px; background: #9A4F36; color: #FDF7F4; font-family: inherit; font-size: 17px; font-weight: 600; cursor: pointer;">Delete recording</button>
+      <button type="button" style="min-height: 52px; border: 1px solid #DFE3D8; border-radius: 16px; background: #FFFFFF; font-family: inherit; font-size: 16px; font-weight: 600; color: #3F5A48; cursor: pointer;">Keep it</button>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#6E8C74","options":["#6E8C74","#7C9A83","#5B7A63","#8AA582"]},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { accent: this.props.accent ?? '#6E8C74' };
+  }
+}
+</script>
+</body>
+</html>

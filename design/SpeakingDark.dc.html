@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Speaking — dark, recording off</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=Newsreader:opsz,wght@6..72,400;6..72,500&amp;display=swap">
+<style>
+body { margin: 0; font-family: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif; background: #141B16; }
+a { color: #A8C6AF; } a:hover { color: #C4DBC9; }
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #141B16; padding: 60px 24px 28px; display: flex; flex-direction: column; gap: 18px;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+    <div style="display: flex; align-items: center; gap: 8px; padding: 8px 13px; border: 1px solid #2E382F; border-radius: 999px; background: #1D251E;">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#9AA89C" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M8 2.5 A2 2 0 0 1 10 4.5 L10 7"></path><path d="M6 5.4 L6 8 A2 2 0 0 0 9.4 9.4"></path><path d="M3.5 7.5 A4.5 4.5 0 0 0 8 12 A4.4 4.4 0 0 0 10.6 11.2"></path><path d="M12.5 7.5 A4.5 4.5 0 0 1 12.2 9"></path><path d="M8 12 L8 14"></path><path d="M3 3 L13 13"></path></svg>
+      <span style="font-size: 13px; font-weight: 600; color: #B8C4B9;">Recording off</span>
+    </div>
+    <span style="font-size: 13px; font-weight: 600; color: #A2AFA4;">Target 2:00</span>
+  </div>
+
+  <p style="margin: 0; font-family: 'Newsreader', Georgia, serif; font-size: 19px; font-weight: 400; line-height: 1.32; text-align: center; text-wrap: pretty; color: #A2AFA4;">What's a small thing that instantly makes your day better?</p>
+
+  <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 26px;">
+
+    <div style="display: flex; align-items: center; gap: 9px; height: 40px; padding: 0 16px; border-radius: 999px; background: #223026;">
+      <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><circle cx="7" cy="7" r="5.5" fill="#90B198"></circle></svg>
+      <span style="font-size: 14px; font-weight: 700; letter-spacing: 0.02em; color: #C7DCCB;">On track</span>
+    </div>
+
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+      <span style="font-size: 108px; font-weight: 600; line-height: 1; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; color: #EDF0E8;">1:23</span>
+      <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #A2AFA4;">Left to speak</span>
+    </div>
+
+    <div style="width: 100%; height: 8px; border-radius: 999px; background: #2B342C; display: flex;">
+      <div style="width: 31%; height: 8px; border-radius: 999px; background: {{accent}};"></div>
+    </div>
+
+  </div>
+
+  <button type="button" style="min-height: 60px; border: none; border-radius: 18px; background: #A8C6AF; color: #15201A; font-family: inherit; font-size: 18px; font-weight: 600; letter-spacing: 0.01em; cursor: pointer;">Finish</button>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#90B198","options":["#90B198","#A8C6AF","#7C9A83","#B9D2BE"]},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { accent: this.props.accent ?? '#90B198' };
+  }
+}
+</script>
+</body>
+</html>

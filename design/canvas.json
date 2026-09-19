@@ -1,0 +1,136 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "Main.dc.html": { "h": 844, "title": "Prep · default", "w": 390, "x": 0, "y": 0 },
+    "PrepStructureHint.dc.html": { "h": 844, "title": "Prep · structure hint open", "w": 390, "x": 470, "y": 0 },
+    "PrepLongTopic.dc.html": { "h": 844, "title": "Prep · long topic, skip used", "w": 390, "x": 940, "y": 0 },
+    "PrepDark.dc.html": { "h": 844, "title": "Prep · dark mode", "w": 390, "x": 1410, "y": 0 },
+    "PrepReducedMotion.dc.html": { "h": 844, "title": "Prep · reduced motion", "w": 390, "x": 1880, "y": 0 },
+
+    "SpeakingOnTrack.dc.html": { "h": 844, "title": "Speaking · on track", "w": 390, "x": 0, "y": 1204 },
+    "SpeakingWrapUp.dc.html": { "h": 844, "title": "Speaking · wrapping up", "w": 390, "x": 470, "y": 1204 },
+    "SpeakingOvertime.dc.html": { "h": 844, "title": "Speaking · overtime", "w": 390, "x": 940, "y": 1204 },
+    "SpeakingDark.dc.html": { "h": 844, "title": "Speaking · dark, recording off", "w": 390, "x": 1410, "y": 1204 },
+
+    "Review.dc.html": { "h": 1400, "title": "Review · full screen (scrolls)", "w": 390, "x": 0, "y": 2408 },
+    "ReviewAiLoading.dc.html": { "h": 560, "title": "Review · AI card loading", "w": 390, "x": 470, "y": 2408 },
+    "ReviewAiReady.dc.html": { "h": 900, "title": "Review · AI card ready", "w": 390, "x": 940, "y": 2408 },
+    "ReviewDeleteRecording.dc.html": { "h": 844, "title": "Review · delete recording", "w": 390, "x": 1410, "y": 2408 },
+    "ReviewDark.dc.html": { "h": 900, "title": "Review · dark mode", "w": 390, "x": 1880, "y": 2408 },
+
+    "Home.dc.html": { "h": 844, "title": "Home · returning", "w": 390, "x": 0, "y": 4168 },
+    "HomeFirstRun.dc.html": { "h": 844, "title": "Home · first run", "w": 390, "x": 470, "y": 4168 },
+    "SessionSetup.dc.html": { "h": 900, "title": "Session setup · defaults", "w": 390, "x": 940, "y": 4168 },
+    "SessionSetupMicBlocked.dc.html": { "h": 900, "title": "Session setup · mic blocked", "w": 390, "x": 1410, "y": 4168 },
+
+    "History.dc.html": { "h": 1100, "title": "History · sessions and trend", "w": 390, "x": 0, "y": 5428 },
+    "HistoryEmpty.dc.html": { "h": 844, "title": "History · empty", "w": 390, "x": 470, "y": 5428 },
+    "HistoryDeleteSession.dc.html": { "h": 844, "title": "History · delete a round", "w": 390, "x": 940, "y": 5428 },
+
+    "SpeakingDesktop.dc.html": { "h": 900, "title": "Speaking · desktop 1440", "w": 1440, "x": 0, "y": 6888 },
+    "ReviewDesktop.dc.html": { "h": 1040, "title": "Review · desktop 1440", "w": 1440, "x": 1520, "y": 6888 },
+
+    "HomeDesktop.dc.html": { "h": 900, "title": "Home · desktop 1440", "w": 1440, "x": 0, "y": 8288 },
+    "SessionSetupDesktop.dc.html": { "h": 900, "title": "Session setup · desktop 1440", "w": 1440, "x": 1520, "y": 8288 },
+    "PrepDesktop.dc.html": { "h": 900, "title": "Prep · desktop 1440", "w": 1440, "x": 3040, "y": 8288 },
+    "HistoryDesktop.dc.html": { "h": 980, "title": "History · desktop 1440", "w": 1440, "x": 4560, "y": 8288 }
+  },
+  "createdOnFiles": {
+    "at": "2026-09-18T14:00:00Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "launch": {
+    "view": "canvas"
+  },
+  "notes": {
+    "m1": {
+      "kind": "title1",
+      "maxW": 2270,
+      "text": "Module 1 — Topic reveal + Prep · mobile 390×844",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    },
+    "m2": {
+      "kind": "title1",
+      "maxW": 1800,
+      "text": "Module 2 — Speaking · mobile 390×844",
+      "w": 240,
+      "x": 0,
+      "y": 964
+    },
+    "m3": {
+      "kind": "title1",
+      "maxW": 2270,
+      "text": "Module 3 — Review · mobile",
+      "w": 240,
+      "x": 0,
+      "y": 2168
+    },
+    "m4": {
+      "kind": "title1",
+      "maxW": 1800,
+      "text": "Module 4 — Home + Session setup · mobile",
+      "w": 240,
+      "x": 0,
+      "y": 3928
+    },
+    "m5": {
+      "kind": "title1",
+      "maxW": 1330,
+      "text": "Module 5 — History · mobile",
+      "w": 240,
+      "x": 0,
+      "y": 5188
+    },
+    "m6": {
+      "kind": "title1",
+      "maxW": 2960,
+      "text": "Module 6 — Desktop · Speaking and Review at 1440",
+      "w": 240,
+      "x": 0,
+      "y": 6648
+    },
+    "m7": {
+      "kind": "title1",
+      "maxW": 6000,
+      "text": "Module 7 — Desktop · Home, Session setup, Prep and History at 1440",
+      "w": 240,
+      "x": 0,
+      "y": 8048
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "PrepStructureHint.dc.html",
+    "PrepLongTopic.dc.html",
+    "PrepDark.dc.html",
+    "PrepReducedMotion.dc.html",
+    "SpeakingOnTrack.dc.html",
+    "SpeakingWrapUp.dc.html",
+    "SpeakingOvertime.dc.html",
+    "SpeakingDark.dc.html",
+    "Review.dc.html",
+    "ReviewAiLoading.dc.html",
+    "ReviewAiReady.dc.html",
+    "ReviewDeleteRecording.dc.html",
+    "ReviewDark.dc.html",
+    "Home.dc.html",
+    "HomeFirstRun.dc.html",
+    "SessionSetup.dc.html",
+    "SessionSetupMicBlocked.dc.html",
+    "History.dc.html",
+    "HistoryEmpty.dc.html",
+    "HistoryDeleteSession.dc.html",
+    "SpeakingDesktop.dc.html",
+    "ReviewDesktop.dc.html",
+    "HomeDesktop.dc.html",
+    "SessionSetupDesktop.dc.html",
+    "PrepDesktop.dc.html",
+    "HistoryDesktop.dc.html"
+  ],
+  "pages": [],
+  "title": "Stand Up — Calm studio"
+}
