@@ -145,29 +145,3 @@ export function topicOfTheDay(date = new Date()): Topic {
   // A fixed stride so consecutive days don't walk through one category.
   return TOPICS[(dayNumber * 17) % TOPICS.length];
 }
-
-/**
- * Decoys for the reveal shuffle: real topics that flicker past before the
- * chosen one lands. They are close in length to the final topic so the
- * layout doesn't jump, and no two neighbours share a category, so the
- * shuffle visibly ranges across the whole table.
- */
-export function decoysFor(final: Topic, count: number, random: () => number = Math.random): Topic[] {
-  const close = (t: Topic) => Math.abs(t.text.length - final.text.length) <= final.text.length * 0.4;
-  const others = TOPICS.filter((t) => t.id !== final.id);
-  const pool = others.filter(close).length >= count ? others.filter(close) : others;
-
-  const shuffled = [...pool].sort(() => random() - 0.5);
-  const picked: Topic[] = [];
-  for (const t of shuffled) {
-    if (picked.length === count) break;
-    if (picked.at(-1)?.category === t.category) continue;
-    picked.push(t);
-  }
-  // Small pools can fall short once neighbours are constrained; top up.
-  for (const t of shuffled) {
-    if (picked.length === count) break;
-    if (!picked.includes(t)) picked.push(t);
-  }
-  return picked;
-}

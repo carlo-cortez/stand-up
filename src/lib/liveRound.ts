@@ -11,7 +11,8 @@ export type LiveRound = {
   startId: string;
   topicId: string;
   settings: RoundSettings;
-  phase: 'prep' | 'speaking';
+  /** 'draw' waits, untimed, for the user to pick a card. */
+  phase: 'draw' | 'prep' | 'speaking';
   /** clockNow() when the current phase began. */
   phaseStartedAt: number;
   skipUsed: boolean;

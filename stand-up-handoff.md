@@ -172,9 +172,9 @@ Chrome is deliberately thin: a category and difficulty pill, an end-session butt
 
 The ring counts prep down. The topic sits centred in Newsreader. The structure hint is collapsed by default behind "Show structure hint" and remembers the user's choice for subsequent rounds. Expanded, it shows PREP — Point ("Answer in one sentence."), Reason ("Why you land there."), Example ("One story, case, or number."), Point ("Say it again, shorter.") — and the ring shrinks to 112 with the topic dropping to 30px so the buttons stay put.
 
-**Topic reveal.** A new topic never just appears. Real topics from the table shuffle through the topic position — fast at first, easing out over about 1.9 seconds — and land on the chosen one with a small settle; the category pill cycles with them. Decoys are chosen close in length to the real topic, and the real topic always sets the block's height, so nothing below it moves. While it shuffles, the ring sits full at the prep total and the ring and actions are dimmed to 40% and inert; the prep countdown starts only when the topic lands, so the suspense never costs thinking time. Tapping the shuffle lands it at once. A skip reshuffles for 1.2 seconds. There is no shuffle for a topic the user picked by hand (Topic of the day), and none under `prefers-reduced-motion` — the topic simply appears. Screen readers hear "Drawing your topic" on the shuffle and "Prep started, 30 seconds" only once it lands.
+**Topic reveal: draw a card.** A new topic never just appears; the user draws it. A deck of seven face-down cards arrives as a loose pile under "Pick a card", riffles twice — the pile splitting left and right and falling back together — and spreads into a fan like a hand of cards, about 1.8 seconds in all, after which the cards can be tapped. The cards pivot around a point three card-heights below them, 7° apart, which leaves each one a tappable slice of about 44px on a phone. Deep sage backs with an inset rule and a four-point star, light sage in dark mode; and the pill shows what was asked for ("Surprise me · Medium"), not what came up. The draw is untimed: nothing counts until a card is picked, and the caption says so — "Your prep time starts once the topic is showing." Every card holds the same, already chosen topic; the pick is a ritual, not a choice. Tapping a card plays a 1.7-second sequence: it straightens out of the fan and lifts, the title fades aside, and it flips to show the category and difficulty ("Wildcard · Medium"), a first small reveal; the rest of the deck drops away; it holds a beat, then dissolves upward as the prep screen arrives. The topic then gets its emphasis: it rises into place, a short sage rule sweeps in beneath it and fades, and the ring fades in. Prep starts the moment the card sequence ends, so the suspense never costs thinking time. Cards are real buttons ("Card 1 of 3"), lift on hover and focus, and are drawn with Enter or Space. There is no draw for a topic the user picked by hand (Topic of the day). Under `prefers-reduced-motion` the cards are still dealt but nothing animates — the tap goes straight to prep.
 
-"Start now" begins Speaking immediately. "Skip this topic" is allowed once per round; once used, it becomes a disabled, friendly line — "Skip used — this one's yours" — rather than a greyed-out scold. When prep reaches zero, transition to Speaking automatically, with no interstitial.
+"Start now" begins Speaking immediately. "Draw another · 1 left" is allowed once per round: it reshuffles and spreads the six cards left, with a new topic under them. Once used, it becomes a disabled, friendly line — "Skip used — this one's yours" — rather than a greyed-out scold. When prep reaches zero, transition to Speaking automatically, with no interstitial.
 
 Long topics wrap to four lines at 34px within the 342px content width; the artboard with the socks topic is the wrap test. Do not truncate a topic, ever.
 
@@ -237,10 +237,11 @@ Empty state: a line drawing, "Nothing here yet.", a sentence explaining what wil
 ## 5. Round state machine
 
 ```
-idle → setup → prep → speaking → overtime → review → (next topic → prep | save → idle)
+idle → setup → draw → prep → speaking → overtime → review → (next topic → draw | save → idle)
 ```
 
-- `prep`: `prepRemaining` counts down from the setting. Exits on timeout, on "Start now", or on "Skip topic" (which redraws a topic and restarts prep with the same duration).
+- `draw`: untimed; waits for a card to be picked. Skipped entirely for a topic picked by hand. Picking schedules prep to begin when the card sequence ends.
+- `prep`: `prepRemaining` counts down from the setting. Exits on timeout, on "Start now", or on "Draw another" (which returns to the draw with six cards and a new topic, then restarts prep with the same duration).
 - `speaking`: `elapsed` counts up; `remaining = target − elapsed`. Crosses into the yellow band at the threshold above.
 - `overtime`: entered when `elapsed ≥ target`. Display flips to `+elapsed − target`. Exits only on "Finish".
 - Recording starts on entry to `speaking` and stops on exit from `speaking`/`overtime`, so prep is never recorded.

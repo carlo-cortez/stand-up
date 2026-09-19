@@ -1,7 +1,8 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useBlocker, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
+import { CardDraw } from '../components/CardDraw';
 import { CountdownRing } from '../components/CountdownRing';
 import { ChevronDownIcon, CloseIcon, MicOffIcon } from '../components/Icon';
 import { ProgressBar } from '../components/ProgressBar';
@@ -28,7 +29,7 @@ import {
   saveLastRoundSettings,
   saveSettings,
 } from '../lib/settings';
-import { categoryLabel, decoysFor, difficultyLabel, pickTopic, topicById, type Topic } from '../lib/topics';
+import { categoryLabel, difficultyLabel, pickTopic, topicById, type Topic } from '../lib/topics';
 import { useDesktop, useReducedMotion } from '../lib/useMediaQuery';
 import { clockNow, timingLight, useRoundTimer } from '../lib/useRoundTimer';
 import './Round.css';
@@ -36,14 +37,13 @@ import './Round.css';
 type Start = { round: LiveRound; resumed: boolean } | { interrupted: true };
 
 /*
- * The topic reveal: real topics shuffle past, slow down, and land on yours.
- * Prep is scheduled to begin the moment it lands — phaseStartedAt sits in the
- * future while the shuffle runs — so the suspense never costs thinking time,
- * and a refresh mid-shuffle needs no special handling.
+ * The topic reveal: the user draws a card. The draw itself is untimed; once a
+ * card is picked, prep is scheduled to begin when its animation ends —
+ * phaseStartedAt sits in the future while the card lifts, flips and dissolves
+ * — so the suspense never costs thinking time, and a refresh mid-flip needs
+ * no special handling.
  */
-const REVEAL_MS = 1900;
-const SKIP_REVEAL_MS = 1200;
-const REVEAL_FRAMES = 16;
+const CARD_MS = 1700;
 
 function revealDelay(ms: number): number {
   return matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : ms;
@@ -68,9 +68,9 @@ function resolveStart(intent: RoundIntent | null): Start {
       startId,
       settings,
       topicId: topic.id,
-      phase: 'prep',
-      // A topic picked by hand (Topic of the day) is already known: no shuffle.
-      phaseStartedAt: clockNow() + (topicId ? 0 : revealDelay(REVEAL_MS)),
+      // A topic picked by hand (Topic of the day) is already known: no draw.
+      phase: topicId ? 'prep' : 'draw',
+      phaseStartedAt: clockNow(),
       skipUsed: false,
     } as LiveRound,
   };
@@ -144,7 +144,7 @@ function LiveRoundScreen({ initial, resumed }: { initial: LiveRound; resumed: bo
   const phaseKey = `${round.phase}:${round.topicId}`;
   const lastAnnounced = useRef(resumed ? phaseKey : null);
   useEffect(() => {
-    if (revealing || lastAnnounced.current === phaseKey) return;
+    if (round.phase === 'draw' || revealing || lastAnnounced.current === phaseKey) return;
     lastAnnounced.current = phaseKey;
     announce(
       round.phase === 'prep'
@@ -201,31 +201,17 @@ function LiveRoundScreen({ initial, resumed }: { initial: LiveRound; resumed: bo
       ...round.settings,
       exclude: [round.topicId, ...loadRecentTopics()],
     });
-    setRound((r) => ({
-      ...r,
-      topicId: next.id,
-      phase: 'prep',
-      phaseStartedAt: clockNow() + revealDelay(SKIP_REVEAL_MS),
-      skipUsed: true,
-    }));
+    setPicked(null);
+    setRound((r) => ({ ...r, topicId: next.id, phase: 'draw', phaseStartedAt: clockNow(), skipUsed: true }));
   };
 
-  // Tapping the shuffle lands it at once; prep starts from that instant.
-  const showNow = () => setRound((r) => ({ ...r, phaseStartedAt: clockNow() }));
-
-  // Decoys are drawn once per reveal, then eased through: fast at first,
-  // slowing as it closes in, holding on the real topic before prep starts.
-  const decoys = useMemo(
-    () => decoysFor(topic, REVEAL_FRAMES - 1),
-    // A new reveal is a new topic or a new scheduled prep start.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [topic.id, round.phaseStartedAt],
-  );
-  const revealTotal = round.skipUsed ? SKIP_REVEAL_MS : REVEAL_MS;
-  const progress = revealing ? Math.min(1, Math.max(0, 1 + (sinceStart * 1000) / revealTotal)) : 1;
-  const frame = Math.min(REVEAL_FRAMES - 1, Math.floor(REVEAL_FRAMES * (1 - (1 - progress) ** 2)));
-  const landed = frame === REVEAL_FRAMES - 1;
-  const shown = revealing && !landed ? decoys[frame] : topic;
+  // Which card was drawn. Local to this screen: after a refresh mid-flip the
+  // prep screen simply shows, waiting out the last of the animation.
+  const [picked, setPicked] = useState<number | null>(null);
+  const draw = (card: number) => {
+    setPicked(card);
+    setRound((r) => ({ ...r, phase: 'prep', phaseStartedAt: clockNow() + revealDelay(CARD_MS) }));
+  };
 
   const finish = () => {
     leaving.current = true;
@@ -262,7 +248,7 @@ function LiveRoundScreen({ initial, resumed }: { initial: LiveRound; resumed: bo
     saveSettings({ showStructureHint: open });
   };
 
-  const topicMeta = `${categoryLabel(shown.category)} · ${difficultyLabel(shown.difficulty)}`;
+  const topicMeta = `${categoryLabel(topic.category)} · ${difficultyLabel(topic.difficulty)}`;
 
   const sheet = (
     <Sheet open={sheetOpen} title="Leave this round?" onCancel={keepGoing}>
@@ -279,18 +265,57 @@ function LiveRoundScreen({ initial, resumed }: { initial: LiveRound; resumed: bo
     </Sheet>
   );
 
+  const header = (meta: string) => (
+    <header className="round__header">
+      <span className="round__pill">
+        <span className="round__dot" aria-hidden="true" />
+        {meta}
+      </span>
+      {desktop && <span className="wordmark round__wordmark">Stand Up</span>}
+      <button type="button" className="icon-button" aria-label="End practice session" onClick={() => setCloseAsked(true)}>
+        <CloseIcon />
+      </button>
+    </header>
+  );
+
+  // ---- The draw: untimed, then the picked card's animation plays out.
+  if (round.phase === 'draw' || (revealing && picked !== null)) {
+    // Until the card flips, the pill shows what was asked for, not what came up.
+    const asked = `${categoryLabel(round.settings.category)} · ${difficultyLabel(round.settings.difficulty)}`;
+    return (
+      <div className="screen round round--draw">
+        <div className="screen__column">
+          {header(asked)}
+          <main className={`draw${picked !== null ? ' has-pick' : ''}`}>
+            <h1 className="draw__title">Pick a card</h1>
+            <CardDraw
+              count={round.skipUsed ? 6 : 7}
+              picked={picked}
+              face={{ category: categoryLabel(topic.category), difficulty: difficultyLabel(topic.difficulty) }}
+              onPick={draw}
+            />
+          </main>
+          <div className="prep__bottom">
+            <p className="prep__caption">Your prep time starts once the topic is showing.</p>
+          </div>
+        </div>
+        {sheet}
+      </div>
+    );
+  }
+
   if (round.phase === 'prep') {
     const hint = hintOpen ? (
       <StructureHint onHide={() => setHint(false)} />
     ) : (
-      <Button variant="pill" onClick={() => setHint(true)}>
+      <Button variant="pill" onClick={() => setHint(true)} className="prep__hint-toggle">
         <ChevronDownIcon />
         Show structure hint
       </Button>
     );
 
     const actions = (
-      <div className="prep__actions" inert={revealing}>
+      <div className="prep__actions">
         <Button size={desktop ? 'large' : 'default'} onClick={startNow} className="prep__start">
           Start now
         </Button>
@@ -300,7 +325,7 @@ function LiveRoundScreen({ initial, resumed }: { initial: LiveRound; resumed: bo
           </Button>
         ) : (
           <Button variant={desktop ? 'secondary' : 'text'} onClick={skip} className="prep__skip">
-            Skip this topic · 1 left
+            Draw another · 1 left
           </Button>
         )}
       </div>
@@ -310,20 +335,11 @@ function LiveRoundScreen({ initial, resumed }: { initial: LiveRound; resumed: bo
     return (
       <div className="screen round round--prep">
         <div className="screen__column">
-          <header className="round__header">
-            <span className="round__pill">
-              <span className="round__dot" aria-hidden="true" />
-              {topicMeta}
-            </span>
-            {desktop && <span className="wordmark round__wordmark">Stand Up</span>}
-            <button type="button" className="icon-button" aria-label="End practice session" onClick={() => setCloseAsked(true)}>
-              <CloseIcon />
-            </button>
-          </header>
+          {header(topicMeta)}
 
-          <main className={`prep${hintOpen ? ' prep--hint' : ''}`}>
+          <main className={`prep${hintOpen ? ' prep--hint' : ''}${picked !== null ? ' prep--drawn' : ''}`}>
             <div className="prep__centre">
-              <div className={`prep__timer${revealing ? ' is-waiting' : ''}`}>
+              <div className="prep__timer">
                 <CountdownRing
                   remaining={prepRemaining}
                   total={prepSeconds}
@@ -331,20 +347,7 @@ function LiveRoundScreen({ initial, resumed }: { initial: LiveRound; resumed: bo
                   reducedMotion={reducedMotion}
                 />
               </div>
-              <h1 className="prep__topic">
-                {/* The real topic always sets the height, so nothing jumps
-                    while decoys of other lengths flicker over it. */}
-                <span className="prep__topic-text" aria-hidden={revealing}>
-                  {topic.text}
-                </span>
-                {revealing && (
-                  <button type="button" className="reveal" onClick={showNow} aria-label="Drawing your topic. Show it now">
-                    <span key={landed ? 'landed' : 'shuffling'} className={landed ? 'reveal__text is-landed' : 'reveal__text'}>
-                      {shown.text}
-                    </span>
-                  </button>
-                )}
-              </h1>
+              <h1 className="prep__topic">{topic.text}</h1>
               {desktop ? (
                 <>
                   {actions}
@@ -359,7 +362,7 @@ function LiveRoundScreen({ initial, resumed }: { initial: LiveRound; resumed: bo
           </main>
 
           {!desktop && (
-            <div className="prep__bottom" inert={revealing}>
+            <div className="prep__bottom">
               {actions}
               {!hintOpen && caption}
             </div>

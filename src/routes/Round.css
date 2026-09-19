@@ -442,66 +442,301 @@
   }
 }
 
-/* ---------- Topic reveal ---------- */
+/* ---------- Topic reveal: draw a card ---------- */
 
-.prep__timer {
-  transition: opacity 300ms ease;
-}
-
-.prep__timer.is-waiting,
-.prep__actions[inert],
-.prep__bottom[inert] {
-  opacity: 0.4;
-}
-
-/* On phones the actions sit inside the dimmed bottom block; dim once. */
-.prep__bottom .prep__actions[inert] {
-  opacity: 1;
-}
-
-.prep__topic {
-  position: relative;
-  width: 100%;
-}
-
-.round--prep .prep__topic-text[aria-hidden='true'] {
-  visibility: hidden;
-}
-
-/* The shuffle sits over the real topic's box, centred in it. */
-.reveal {
-  position: absolute;
-  inset: 0;
+.draw {
+  flex-grow: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 36px;
+}
+
+.draw__title {
+  transition: opacity 300ms ease;
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-align: center;
+}
+
+/* The picked card rises into the title's space, so the title steps aside. */
+.draw.has-pick .draw__title {
+  opacity: 0;
+}
+
+/*
+ * The deck. Every card sits at the same spot, top centre of the stage, and
+ * pivots around a point far below it — so rotating them spreads the deck into
+ * a fan, like a hand of cards held low. 7° apart at 3× card height leaves each
+ * card a tappable slice of about 44px on a phone.
+ */
+.draw__deck {
+  --card-w: 84px;
+  --card-h: 120px;
+  --fan-step: 7deg;
+  position: relative;
+  width: 100%;
+  height: calc(var(--card-h) + 64px);
+  perspective: 900px;
+}
+
+.draw__card {
+  --angle: calc(var(--fan) * var(--fan-step));
+  position: absolute;
+  top: 24px;
+  left: 50%;
+  width: var(--card-w);
+  height: var(--card-h);
+  margin-left: calc(var(--card-w) / -2);
   padding: 0;
   border: none;
   background: none;
-  font: inherit;
-  letter-spacing: inherit;
-  line-height: inherit;
+  border-radius: 12px;
+  transform-origin: 50% 300%;
+  transform: rotate(var(--angle));
+  transition: transform 200ms ease;
+  /* Pile, riffle, riffle, spread — a small cascade from card to card. */
+  animation: deck-intro 1800ms cubic-bezier(0.35, 0.1, 0.25, 1) calc(var(--i) * 30ms) both;
+}
+
+.draw__deck.is-ready:not(.has-pick) .draw__card:hover,
+.draw__deck.is-ready:not(.has-pick) .draw__card:focus-visible {
+  transform: rotate(var(--angle)) translateY(-12px);
+}
+
+.draw__card:disabled {
+  cursor: default;
+}
+
+@keyframes deck-intro {
+  0% {
+    opacity: 0;
+    transform: translateY(24px) rotate(var(--pile-r));
+  }
+  10%,
+  20% {
+    opacity: 1;
+    transform: rotate(var(--pile-r));
+  }
+  30% {
+    transform: translateX(calc(var(--side) * 58px)) rotate(calc(var(--side) * 5deg));
+  }
+  42% {
+    transform: rotate(var(--pile-r));
+  }
+  52% {
+    transform: translateX(calc(var(--side) * -58px)) rotate(calc(var(--side) * -5deg));
+  }
+  64% {
+    transform: rotate(var(--pile-r));
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(var(--angle));
+  }
+}
+
+.draw__inner {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+}
+
+.draw__back,
+.draw__face {
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.draw__back {
+  background: var(--accent-strong);
+  color: var(--on-accent-strong);
+  /* An inset rule, like the border printed on a playing card. */
+  box-shadow: inset 0 0 0 6px var(--accent-strong), inset 0 0 0 7px color-mix(in srgb, var(--on-accent-strong) 35%, transparent);
+}
+
+.draw__back svg {
+  opacity: 0.7;
+}
+
+.draw__face {
+  transform: rotateY(180deg);
+  gap: 6px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
   text-align: center;
-  color: var(--text-muted);
-  cursor: pointer;
 }
 
-.reveal__text {
-  text-wrap: pretty;
+.draw__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
 }
 
-.reveal__text.is-landed {
+.draw__category {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.25;
+  text-transform: uppercase;
   color: var(--text);
-  animation: reveal-land 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-@keyframes reveal-land {
+.draw__difficulty {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+/*
+ * The pick, 1.7s in all (CARD_MS): the card straightens out of the fan and
+ * lifts, flips to show the category, holds a beat, then dissolves upward as
+ * the topic takes its place. The rest of the deck drops away.
+ */
+.draw__card.is-picked {
+  z-index: 1;
+  animation: card-pick 1700ms cubic-bezier(0.3, 0.7, 0.3, 1) forwards;
+}
+
+.draw__card.is-picked .draw__inner {
+  animation: card-flip 520ms 480ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.draw__card.is-other {
+  animation: card-away 360ms ease-in calc(var(--i) * 20ms) forwards;
+}
+
+@keyframes card-pick {
+  0% {
+    transform: rotate(var(--angle));
+  }
+  28% {
+    transform: translateY(-20px) scale(1.3);
+  }
+  80% {
+    opacity: 1;
+    transform: translateY(-20px) scale(1.3);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-44px) scale(1.5);
+  }
+}
+
+@keyframes card-flip {
+  to {
+    transform: rotateY(180deg);
+  }
+}
+
+@keyframes card-away {
   from {
-    opacity: 0.55;
-    transform: translateY(6px) scale(0.985);
+    opacity: 1;
+    transform: rotate(var(--angle));
+  }
+  to {
+    opacity: 0;
+    transform: rotate(var(--angle)) translateY(48px) scale(0.94);
+  }
+}
+
+/*
+ * The topic's entrance after a draw: it rises into place, a short sage rule
+ * sweeps in beneath it and fades, and the ring follows. Once per draw — the
+ * animations run when the prep screen mounts, never on later re-renders.
+ */
+.prep__topic {
+  position: relative;
+}
+
+.prep--drawn .prep__topic {
+  animation: topic-arrive 560ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.prep--drawn .prep__topic::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -16px;
+  width: 56px;
+  height: 3px;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  transform: translateX(-50%) scaleX(0);
+  animation: topic-rule 1800ms 200ms ease forwards;
+}
+
+.prep--drawn .prep__timer {
+  animation: fade-in 500ms 250ms ease both;
+}
+
+@keyframes topic-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
   }
   to {
     opacity: 1;
     transform: none;
+  }
+}
+
+@keyframes topic-rule {
+  0% {
+    transform: translateX(-50%) scaleX(0);
+    opacity: 1;
+  }
+  30% {
+    transform: translateX(-50%) scaleX(1);
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-50%) scaleX(1);
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (min-width: 1180px) {
+  .draw__title {
+    font-size: 42px;
+  }
+
+  .draw__deck {
+    --card-w: 130px;
+    --card-h: 186px;
+    --fan-step: 8deg;
+  }
+
+  .draw__back svg {
+    width: 40px;
+    height: 40px;
+  }
+
+  .draw__category,
+  .draw__difficulty {
+    font-size: 14px;
   }
 }
