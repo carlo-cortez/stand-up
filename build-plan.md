@@ -96,11 +96,11 @@ Commit, tag `m3`.
 
 The milestone people skip, and the one that decides whether you keep using it.
 
-- **Accessibility pass** against handoff §7: keyboard through every flow, the live-region announcements actually announcing, contrast spot-checked on the tinted Speaking backgrounds, 44px targets verified on a real phone.
-- **Service worker and manifest** so it installs to your home screen and runs offline. For a phone-first practice app this matters more than it sounds — an app behind a URL bar gets opened less.
-- **Deploy.** Static hosting, any provider. Put it on a real domain or subdomain so it is two taps away.
+- **Accessibility pass** against handoff §7: keyboard through every flow, the live-region announcements actually announcing, contrast spot-checked on the tinted Speaking backgrounds, 44px targets verified on a real phone. *Done in the browser: every control has an accessible name, focus order follows visual order, each screen has one h1 and header/main landmarks, and every text/background pair in both themes was measured — the only failure, the disabled skip line, was darkened to 4.7:1.*
+- **Service worker and manifest** so it installs to your home screen and runs offline. For a phone-first practice app this matters more than it sounds — an app behind a URL bar gets opened less. *Done with vite-plugin-pwa: the shell and topic list are precached, the Google fonts are cached at first use, and the built app was verified loading Home and a deep route with the server stopped.*
+- **Deploy.** Static hosting, any provider. Put it on a real domain or subdomain so it is two taps away. *`vercel.json` is ready: SPA rewrites, immutable asset caching, no-cache on the service worker, and a Content-Security-Policy that refuses inline scripts (which is why the theme bootstrap lives in `public/theme-init.js`). Running the deploy needs the account, so it is yours to run.*
 - **Cross-browser check** on Safari especially, where `MediaRecorder` behaviour and IndexedDB in private windows differ most.
-- **Privacy and hardening.** Note somewhere in the app that recordings stay on the device. Add a Content-Security-Policy at the host, and decide whether to self-host the Google Fonts.
+- **Privacy and hardening.** Note somewhere in the app that recordings stay on the device — still to write, and it now belongs next to the recording toggle. The Content-Security-Policy ships in `vercel.json`. Self-hosting the fonts is still open; the service worker caches them for a year on first use, which covers offline but not the first load.
 - **Automated tests for the risky logic.** Vitest for `useRoundTimer`, topic selection and the `format` helpers (ideally added at M1, when the timer is written).
 
 **Done when** it is on your home screen and you reach for it without thinking about it.

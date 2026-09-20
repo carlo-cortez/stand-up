@@ -66,7 +66,7 @@ export default function History() {
       <div className="screen history">
         <div className="screen__column">
           {header}
-          <div className="history__empty">
+          <main className="history__empty">
             <EmptyMark />
             <div className="history__empty-text">
               <h2 className="history__empty-headline">Nothing here yet.</h2>
@@ -75,7 +75,7 @@ export default function History() {
                 Three minutes from now you'll have one.
               </p>
             </div>
-          </div>
+          </main>
           <Button size="large" onClick={start}>
             Start practicing
           </Button>
@@ -99,6 +99,7 @@ export default function History() {
       <div className="screen__column">
         {header}
 
+        <main className="history__body">
         <Card className="history__trend">
           <div className="history__trend-head">
             <span className="section-label">Last four weeks</span>
@@ -170,6 +171,7 @@ export default function History() {
             </Button>
           )}
         </div>
+        </main>
       </div>
 
       <Sheet open={askDelete !== null} title="Delete this whole round?" onCancel={() => setAskDelete(null)}>

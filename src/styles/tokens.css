@@ -18,7 +18,8 @@
   --text-secondary: #41504A;
   --text-body: #4B5A50;
   --text-muted: #5A6960;
-  --text-disabled: #8A968D;
+  /* Readable, not a scold: 4.7:1 on ground — a disabled line still says something. */
+  --text-disabled: #65736B;
   --icon-muted: #7D8A80;
   --accent: #6E8C74;
   --accent-strong: #3F5A48;
@@ -104,7 +105,7 @@
   --text-secondary: #C3CDC4;
   --text-body: #C3CDC4;
   --text-muted: #A2AFA4;
-  --text-disabled: #6F7C71;
+  --text-disabled: #8A968C;
   --icon-muted: #8A978C;
   --accent: #90B198;
   --accent-strong: #A8C6AF;

@@ -249,6 +249,7 @@ function ReviewScreen({
         </header>
         <h1 className="review__headline">Nice — that's the hard part done.</h1>
 
+        <main className="review__body">
         {desktop ? (
           <div className="review__grid">
             <div className="review__column">
@@ -270,6 +271,7 @@ function ReviewScreen({
             {actions}
           </>
         )}
+        </main>
       </div>
 
       <Sheet open={deleteAsked} title="Delete this recording?" onCancel={() => setDeleteAsked(false)}>

@@ -81,6 +81,7 @@ export default function Setup() {
 
         <form
           className="setup__form"
+          aria-label="Round settings"
           onSubmit={(event) => {
             event.preventDefault();
             start();

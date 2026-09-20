@@ -61,7 +61,7 @@ export default function Settings() {
           <span className="setup__spacer" aria-hidden="true" />
         </header>
 
-        <div className="setup__form">
+        <main className="setup__form">
           <SegmentedControl legend="Theme" name="theme" options={THEME_OPTIONS} value={theme} onChange={change} />
 
           <div className="settings__data">
@@ -90,7 +90,7 @@ export default function Settings() {
               </Button>
             </div>
           </div>
-        </div>
+        </main>
       </div>
 
       <Sheet open={askRecordings} title="Delete every recording?" onCancel={() => setAskRecordings(false)}>

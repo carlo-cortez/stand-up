@@ -244,3 +244,7 @@
     min-width: 260px;
   }
 }
+
+.history__body {
+  display: contents;
+}

@@ -206,3 +206,7 @@
     max-width: 520px;
   }
 }
+
+.review__body {
+  display: contents;
+}
