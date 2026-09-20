@@ -59,13 +59,16 @@ Open:
    and Groq is reachable. A stale service worker will keep showing an old build
    until the tab or home-screen app is fully closed and reopened. The category
    line is not deployed yet — it needs a deploy once its branch merges.
-3. **Supabase redirect URLs** still point at localhost only. Add the Vercel URL
-   under Authentication → URL Configuration, or signing in from the phone will
-   bounce.
+3. ~~Supabase redirect URLs point at localhost only.~~ Done, 20 September.
+   Site URL is the Vercel domain and the allow-list takes a preview wildcard;
+   both confirmed by probing the auth server.
 4. **Google sign-in** is built but unconfigured. It needs a Google Cloud OAuth
    client, with `https://zgzwnpjcdywzamyonefn.supabase.co/auth/v1/callback` as
    the redirect URI, and the client id and secret pasted into Supabase's Google
-   provider. The secret belongs only there — never in this repo.
+   provider. The secret belongs only there — never in this repo. It also needs
+   a real contact address on `/privacy`, which currently shows a red
+   placeholder: Google will not let the consent screen be published without
+   a privacy policy, and the page is no good with a gap in it.
 5. **Setup discards edits unless you start from it.** Surfaced by the fix for
    the category question: Home's new line reads the saved defaults, but Setup
    only saves when its own button starts a round. Change a pill, press back,

@@ -363,7 +363,8 @@ This is a web app, not a native one wearing a browser costume. These behaviours 
 | `/round/review` | Review of the round just finished | |
 | `/history` | History | |
 | `/history/:sessionId` | Review of a past round | Same component as `/round/review`, loaded from storage |
-| `/settings` | Settings | Theme, the account section when signed in, a line saying what is stored, and the two delete-everything actions |
+| `/settings` | Settings | Theme, the account section when signed in, a line saying what is stored, the two delete-everything actions, and a link to `/privacy` |
+| `/privacy` | Your data | Where a recording goes, in plain words. Linked from Settings. Google sign-in cannot be published without a page here |
 | `/signin` | Sign in | Email magic link. Optional: the app works signed out, and says so here |
 
 Prep and Speaking share `/round` deliberately. They are one continuous act from the user's point of view, and giving Speaking its own URL invites a back-button press that lands on a prep screen for a round already under way.

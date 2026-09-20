@@ -133,6 +133,9 @@ export default function Settings() {
                 Delete all data
               </Button>
             </div>
+            <p className="settings__note">
+              <Link to="/privacy">Where your data goes</Link> — on this device, and the two times it leaves.
+            </p>
           </div>
         </main>
       </div>
