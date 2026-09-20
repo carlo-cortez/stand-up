@@ -1,6 +1,6 @@
-# Where things stand — 20 September 2026 (end of session two)
+# Where things stand — 20 September 2026 (session three)
 
-A handover note, written at the end of the first build session. The durable
+A handover note, kept current across build sessions. The durable
 documents are `stand-up-handoff.md` (behaviour), `build-plan.md` (milestones
 and decisions) and `README.md` (how to run it). This file is just the state of
 play, and should be deleted or rewritten once it stops being true.
@@ -19,7 +19,7 @@ M1 through M5, plus M2.5, in eight commits on `main` and two branches:
 | M5 | Optional accounts and sync (Supabase) | merged, PR #1 |
 | M2.5 | Feedback card and `api/feedback.ts` (Groq) | merged, PR #2 |
 
-Open and unmerged:
+Merged since:
 
 - **PR #3, `fix-feedback-runtime`** — the deployed function crashed on every
   request (`request.formData is not a function`: Vercel's Node runtime passes
@@ -27,13 +27,15 @@ Open and unmerged:
 - **PR #4, `mic-reminder`** — a line on the draw screen before the browser
   asks for the microphone, and a different one when it is blocked.
 
-**Production is ahead of `main`**: PR #3 was deployed straight to production to
-fix the live break. Merging it brings them back in line.
+Open:
+
+- **`find-the-category`** — Home now names the round the big button will play,
+  with Change beside it. Open question 8, answered.
 
 ## Configured
 
-- **GitHub:** `carlo-cortez/stand-up`. `origin/main` is at M4; the two branches
-  above carry the rest.
+- **GitHub:** `carlo-cortez/stand-up`. `origin/main` carries everything
+  through PR #4; `find-the-category` is the only branch ahead of it.
 - **Supabase:** project ref `zgzwnpjcdywzamyonefn`. `supabase/schema.sql` has
   been run — the `sessions` table and the private `recordings` bucket both
   answer, and row-level security returns nothing to an anonymous caller.
@@ -51,11 +53,12 @@ fix the live break. Merging it brings them back in line.
 1. **`VITE_SUPABASE_URL` is missing from Preview.** Preview deploys will behave
    as though no account were configured, because Vite bakes these in at build
    time. Add it to Preview.
-2. **Deployed.** The app is live, the service worker is serving it, and
+2. **Deployed, and level with `main` again.** The app is live, the service worker is serving it, and
    `/api/feedback` answers correctly: 400 without audio, 405 on GET, and Groq's
    own "is it a valid media file?" for a bogus one — which proves the key works
    and Groq is reachable. A stale service worker will keep showing an old build
-   until the tab or home-screen app is fully closed and reopened.
+   until the tab or home-screen app is fully closed and reopened. The category
+   line is not deployed yet — it needs a deploy once its branch merges.
 3. **Supabase redirect URLs** still point at localhost only. Add the Vercel URL
    under Authentication → URL Configuration, or signing in from the phone will
    bounce.
@@ -63,12 +66,11 @@ fix the live break. Merging it brings them back in line.
    client, with `https://zgzwnpjcdywzamyonefn.supabase.co/auth/v1/callback` as
    the redirect URI, and the client id and secret pasted into Supabase's Google
    provider. The secret belongs only there — never in this repo.
-5. **Choosing a category is hard to find.** It lives on Setup, reached only by
-   the "Set the round" text button on Home, and Home never says which category
-   the big button will use. Raised in session two as "I'm not sure if there's a
-   button to select a category" — which is the evidence. Written up as open
-   question 8 in `stand-up-handoff.md` §11, with three options; showing the
-   current choice under Start is the one to try first.
+5. **Setup discards edits unless you start from it.** Surfaced by the fix for
+   the category question: Home's new line reads the saved defaults, but Setup
+   only saves when its own button starts a round. Change a pill, press back,
+   and the line still reads the old round. Either save on change, or say on
+   Setup that the choices take effect when the round starts.
 6. **Consider Git-based deploys** rather than `npx vercel` from the laptop:
    every push deploys, and every PR gets a preview URL to open on the phone.
 

@@ -1,12 +1,19 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Button, ButtonLink } from '../components/Button';
+import { Button } from '../components/Button';
 import { Card } from '../components/Card';
 import { ChevronRightIcon, ClockIcon, SettingsIcon } from '../components/Icon';
 import { activityLine, dayLabel, historyLine, loadRounds } from '../lib/activity';
 import { minutes } from '../lib/format';
 import { clearFlash, newIntent, peekFlash } from '../lib/liveRound';
-import { loadLastRoundSettings, loadSettings, roundSettingsOf, type RoundSettings } from '../lib/settings';
+import {
+  loadLastRoundSettings,
+  loadSettings,
+  roundSettingsOf,
+  roundSummary,
+  sameRound,
+  type RoundSettings,
+} from '../lib/settings';
 import { categoryLabel, topicOfTheDay } from '../lib/topics';
 import { useDesktop } from '../lib/useMediaQuery';
 import './Home.css';
@@ -26,6 +33,7 @@ export default function Home() {
   const desktop = useDesktop();
 
   const [rounds] = useState(loadRounds);
+  const [settings] = useState(loadSettings);
   const [lastRound] = useState(loadLastRoundSettings);
   const [topic] = useState(() => topicOfTheDay());
   const firstRun = rounds.length === 0;
@@ -36,9 +44,10 @@ export default function Home() {
   useEffect(clearFlash, []);
 
   // Fresh intents per visit to Home; each one starts a distinct round.
-  const topicIntent = useMemo(() => newIntent(roundSettingsOf(loadSettings()), topic.id), [topic.id]);
+  const round = useMemo(() => roundSettingsOf(settings), [settings]);
+  const topicIntent = useMemo(() => newIntent(round, topic.id), [round, topic.id]);
 
-  const start = () => navigate('/round', { state: newIntent(roundSettingsOf(loadSettings())) });
+  const start = () => navigate('/round', { state: newIntent(round) });
   const repeat = () => lastRound && navigate('/round', { state: newIntent(lastRound) });
 
   const summary = flash ?? (firstRun ? null : activityLine(rounds));
@@ -72,19 +81,24 @@ export default function Home() {
     </div>
   );
 
+  // The round the big button will play, spelled out — otherwise the choice
+  // lives only behind a text button and goes unfound. Handoff §11 q8.
   const actions = (
     <div className="home__actions">
-      <Button size="hero" onClick={start}>
+      <Button size="hero" onClick={start} aria-describedby="home-round">
         Start practicing
       </Button>
-      {lastRound && (
+      <p className="home__round" id="home-round">
+        <span className="home__round-text">{roundSummary(round)}</span>
+        <Link to="/setup" className="home__change">
+          Change
+        </Link>
+      </p>
+      {lastRound && !sameRound(lastRound, round) && (
         <Button variant="secondary" className="home__repeat" onClick={repeat}>
           {sameAsLastLabel(lastRound)}
         </Button>
       )}
-      <ButtonLink to="/setup" variant="text" className="home__set">
-        Set the round
-      </ButtonLink>
     </div>
   );
 

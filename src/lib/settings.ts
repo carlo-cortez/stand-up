@@ -1,4 +1,5 @@
-import type { Category, Difficulty } from './topics';
+import { minutes } from './format';
+import { categoryLabel, difficultyLabel, type Category, type Difficulty } from './topics';
 
 export type PrepSeconds = 15 | 30 | 60;
 export type TargetSeconds = 60 | 120 | 180;
@@ -77,6 +78,22 @@ export function roundSettingsOf(s: Settings): RoundSettings {
     targetSeconds: s.targetSeconds,
     recordAudio: s.recordAudio,
   };
+}
+
+/** "Surprise me · Medium · 30s, 2 min" — what the next round will be. */
+export function roundSummary(s: RoundSettings): string {
+  return `${categoryLabel(s.category)} · ${difficultyLabel(s.difficulty)} · ${s.prepSeconds}s, ${minutes(s.targetSeconds)}`;
+}
+
+/** Whether two rounds would play out the same, so Home can drop the repeat. */
+export function sameRound(a: RoundSettings, b: RoundSettings): boolean {
+  return (
+    a.category === b.category &&
+    a.difficulty === b.difficulty &&
+    a.prepSeconds === b.prepSeconds &&
+    a.targetSeconds === b.targetSeconds &&
+    a.recordAudio === b.recordAudio
+  );
 }
 
 export function loadLastRoundSettings(): RoundSettings | null {
