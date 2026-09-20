@@ -73,6 +73,8 @@ Transcription, and the numbers that fall out of it. No language model, no bill.
 
 **Done when** a round ends, you tap once, and ten seconds later you know you said "um" seven times, that this is four fewer than usual, and one plain sentence about what to try next time.
 
+*Built. The card has its five states; the counting is done in the browser from the transcript and was checked against a deliberately disfluent sample ("like" counted, "likely" not; "kind of" and "you know" caught as phrases). Deltas stay silent until three earlier rounds exist. What is untested is the Groq call itself, which needs the key and `vercel dev` or a deploy.*
+
 Commit, tag `m2.5`.
 
 **The known soft spot.** Whisper is trained to tidy disfluencies away, so the filler count will run low on some rounds. Seed the decoder prompt with fillers to bias it back. If the number still cannot be trusted after twenty rounds, either move to a speech API built for disfluencies (Deepgram, AssemblyAI) or drop the tile and leave filler words to your own self-rating, which is already on the screen.

@@ -3,12 +3,14 @@ import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { AudioPlayer } from '../components/AudioPlayer';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
+import { FeedbackCard } from '../components/FeedbackCard';
 import { CloseIcon } from '../components/Icon';
 import { SegmentedControl } from '../components/SegmentedControl';
 import { Sheet } from '../components/Sheet';
 import { dayLabel } from '../lib/activity';
 import { announce } from '../lib/announce';
 import { deleteRecording, loadRecording } from '../lib/audioStore';
+import { measure, requestFeedback } from '../lib/feedback';
 import { mmss, plusMmss } from '../lib/format';
 import { newIntent } from '../lib/liveRound';
 import {
@@ -145,6 +147,36 @@ function ReviewScreen({
     announce('Recording deleted. Your ratings and notes are still here.');
   };
 
+  // ---- Feedback: asked for, never automatic (handoff §4.5).
+  const [feedbackState, setFeedbackState] = useState<'idle' | 'loading' | 'offline' | 'ready'>(
+    session.metrics ? 'ready' : 'idle',
+  );
+  const [feedbackError, setFeedbackError] = useState<string | null>(null);
+
+  const runFeedback = async () => {
+    if (!blob) return;
+    if (!navigator.onLine) {
+      setFeedbackState('offline');
+      return;
+    }
+    setFeedbackState('loading');
+    setFeedbackError(null);
+    try {
+      const { transcript, written } = await requestFeedback(blob, session.targetSeconds);
+      // The counted half is derived here, from the transcript: no model, and
+      // nothing to go wrong that would cost the round its numbers.
+      const metrics = measure(transcript, session.spokenSeconds);
+      const next = updateSession(session.id, { transcript, metrics, written: written ?? undefined });
+      if (next) setSession(next);
+      setFeedbackState('ready');
+      void syncNow();
+      announce('Feedback ready');
+    } catch (error) {
+      setFeedbackError(error instanceof Error ? error.message : 'That did not work. Try again in a moment.');
+      setFeedbackState('idle');
+    }
+  };
+
   const nextTopic = () => {
     const settings = loadLastRoundSettings() ?? roundSettingsOf(loadSettings());
     navigate('/round', { state: newIntent(settings) });
@@ -225,18 +257,14 @@ function ReviewScreen({
     </Card>
   );
 
-  // Handoff §4.5: the feedback card in its empty state until M2.5, at its reserved height.
   const feedback = (
-    <Card muted className="review__feedback">
-      <div className="review__feedback-head">
-        <span className="section-label">AI feedback</span>
-        <span className="review__badge">Not on yet</span>
-      </div>
-      <p className="review__feedback-text">
-        When this is switched on, you'll get a transcript, a filler-word count, and one of your own sentences
-        rewritten a little sharper.
-      </p>
-    </Card>
+    <FeedbackCard
+      session={session}
+      history={loadSessions()}
+      state={feedbackState}
+      error={feedbackError}
+      onRun={blob ? () => void runFeedback() : undefined}
+    />
   );
 
   const actions = (

@@ -16,6 +16,24 @@ export type Ratings = {
   fillers?: Rating;
 };
 
+export type Flagged = { word: string; kind: 'filler' | 'vague'; count: number };
+
+export type Metrics = {
+  wordsPerMinute: number;
+  /** Total occurrences, not distinct words. */
+  fillerWords: number;
+  vagueWords: number;
+  flagged: Flagged[];
+};
+
+export type Written = {
+  wentWell: string;
+  /** The user's own sentence, verbatim, so the rewrite has something to sit against. */
+  quoted: string;
+  sharper: string;
+  tryNextTime: string;
+};
+
 export type Session = {
   id: string;
   startedAt: string; // ISO
@@ -32,6 +50,13 @@ export type Session = {
   audioNote?: 'incomplete' | 'no-room' | 'interrupted';
   ratings?: Ratings;
   note?: string;
+
+  // ---- Feedback (M2.5). Absent until the user asks for it, and absent for
+  // good if they never do. Deleting the audio does not touch any of it.
+  transcript?: string;
+  metrics?: Metrics;
+  /** The model-written half. The counted half stands on its own without it. */
+  written?: Written;
 
   // ---- Sync (see sync.ts). Harmless and unused while signed out.
   /** Last local change, ISO. Last writer wins between devices. */

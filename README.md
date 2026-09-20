@@ -75,6 +75,22 @@ Sync runs on start, when the connection returns, when the tab comes back and
 after a round. Conflicts settle by `updatedAt`, last writer wins; deletes
 travel as tombstones so another device cannot hand a round back.
 
+## Feedback (optional)
+
+`api/feedback.ts` sends a recording to Groq and returns a transcript plus three
+short pieces of writing. The counted half of the card — words per minute,
+filler and vague words — is derived from that transcript in the browser, with
+no model involved, so it still works if the writing fails.
+
+Set `GROQ_API_KEY` (from console.groq.com) in Vercel's environment variables,
+and in `.env.local` for local work. **No `VITE_` prefix**: anything with it is
+compiled into the JavaScript every visitor downloads. One key covers both the
+speech and text models; `GROQ_STT_MODEL` and `GROQ_TEXT_MODEL` override the
+defaults if the ids move.
+
+Functions do not run under `npm run dev`. Use `vercel dev` to exercise the
+feedback path locally.
+
 ## Deploying
 
 Static hosting; `vercel.json` carries the SPA rewrites, cache headers and a
