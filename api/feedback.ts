@@ -9,7 +9,11 @@
  * run functions.
  */
 
-export const config = { runtime: 'nodejs', maxDuration: 60 };
+// Vercel's Node runtime hands this function a Node request and response, not
+// a Web Request — so the body is read as a stream and handed to undici's
+// Response to be parsed as multipart. Transcription plus writing is usually
+// under fifteen seconds; sixty is headroom, not an expectation.
+export const config = { maxDuration: 60 };
 
 const GROQ = 'https://api.groq.com/openai/v1';
 
@@ -17,8 +21,12 @@ const GROQ = 'https://api.groq.com/openai/v1';
 const STT_MODEL = process.env.GROQ_STT_MODEL || 'whisper-large-v3-turbo';
 const TEXT_MODEL = process.env.GROQ_TEXT_MODEL || 'llama-3.3-70b-versatile';
 
-/** A two-minute round is about 1MB; this is generous and still a ceiling. */
-const MAX_BYTES = 12 * 1024 * 1024;
+/**
+ * A two-minute round is well under 1MB as webm/opus, and about 1.4MB as the
+ * mp4 Safari produces. Vercel caps a request body at 4.5MB, so this refuses
+ * anything larger with a sentence rather than letting the platform cut it off.
+ */
+const MAX_BYTES = 4 * 1024 * 1024;
 
 /*
  * Whisper is trained to tidy disfluencies away, which is exactly the thing
@@ -98,30 +106,75 @@ async function write(transcript: string, targetSeconds: number, key: string): Pr
   }
 }
 
-export default async function handler(request: Request): Promise<Response> {
-  if (request.method !== 'POST') return new Response('Use POST.', { status: 405 });
+type NodeRequest = {
+  method?: string;
+  headers: Record<string, string | string[] | undefined>;
+  on: (event: string, listener: (chunk?: unknown) => void) => void;
+};
+
+type NodeResponse = {
+  statusCode: number;
+  setHeader: (name: string, value: string) => void;
+  end: (body?: string) => void;
+};
+
+function readBody(request: NodeRequest, limit: number): Promise<Buffer> {
+  return new Promise((resolve, reject) => {
+    const chunks: Buffer[] = [];
+    let size = 0;
+    request.on('data', (chunk) => {
+      const buffer = chunk as Buffer;
+      size += buffer.length;
+      if (size > limit) reject(new Error('too large'));
+      else chunks.push(buffer);
+    });
+    request.on('end', () => resolve(Buffer.concat(chunks)));
+    request.on('error', reject);
+  });
+}
+
+function send(response: NodeResponse, status: number, body: string): void {
+  response.statusCode = status;
+  response.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  response.end(body);
+}
+
+export default async function handler(request: NodeRequest, response: NodeResponse): Promise<void> {
+  if (request.method !== 'POST') return send(response, 405, 'Use POST.');
 
   const key = process.env.GROQ_API_KEY;
-  if (!key) return new Response('Feedback is not switched on for this deployment.', { status: 503 });
+  if (!key) return send(response, 503, 'Feedback is not switched on for this deployment.');
 
-  const form = await request.formData().catch(() => null);
-  const audio = form?.get('audio');
-  if (!(audio instanceof Blob) || audio.size === 0) return new Response('No audio.', { status: 400 });
-  if (audio.size > MAX_BYTES) return new Response('That recording is too long.', { status: 413 });
+  let form: FormData | null = null;
+  try {
+    const raw = await readBody(request, MAX_BYTES);
+    const contentType = request.headers['content-type'];
+    // undici's Response parses multipart for us, so there is no hand-rolled
+    // boundary parsing to get wrong.
+    form = await new Response(raw, {
+      headers: { 'content-type': Array.isArray(contentType) ? contentType[0] : (contentType ?? '') },
+    }).formData();
+  } catch (error) {
+    const tooLarge = error instanceof Error && error.message === 'too large';
+    return send(response, tooLarge ? 413 : 400, tooLarge ? 'That recording is too long to send.' : 'No audio.');
+  }
 
-  const targetSeconds = Number(form?.get('targetSeconds') ?? 120);
+  const audio = form.get('audio');
+  if (!(audio instanceof Blob) || audio.size === 0) return send(response, 400, 'No audio.');
+
+  const targetSeconds = Number(form.get('targetSeconds') ?? 120);
 
   try {
     const transcript = await transcribe(audio, key);
-    if (!transcript) return new Response('Nothing was said, or nothing could be heard.', { status: 422 });
+    if (!transcript) return send(response, 422, 'Nothing was said, or nothing could be heard.');
     const written = await write(transcript, targetSeconds, key);
-    return Response.json(
-      { transcript, written },
-      // The transcript belongs to the speaker; no caching anywhere in between.
-      { headers: { 'Cache-Control': 'no-store' } },
-    );
+    response.statusCode = 200;
+    response.setHeader('Content-Type', 'application/json');
+    // The transcript belongs to the speaker; no caching anywhere in between.
+    response.setHeader('Cache-Control', 'no-store');
+    response.end(JSON.stringify({ transcript, written }));
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Feedback failed.';
-    return new Response(message, { status: 502 });
+    return send(response, 502, message);
   }
 }
