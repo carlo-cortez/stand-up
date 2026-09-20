@@ -21,6 +21,7 @@ import {
   type Session,
 } from '../lib/sessions';
 import { loadLastRoundSettings, loadSettings, roundSettingsOf } from '../lib/settings';
+import { fetchRecording, removeRemoteRecording, syncNow } from '../lib/sync';
 import { useDesktop } from '../lib/useMediaQuery';
 import './Review.css';
 
@@ -84,15 +85,22 @@ function ReviewScreen({
   const desktop = useDesktop();
 
   // ---- Audio, loaded from IndexedDB. undefined while loading, null if gone.
-  const [blob, setBlob] = useState<Blob | null | undefined>(session.recordingId ? undefined : null);
+  const hasAudio = Boolean(session.recordingId || session.recordingPath);
+  const [blob, setBlob] = useState<Blob | null | undefined>(hasAudio ? undefined : null);
   useEffect(() => {
-    if (!session.recordingId) return;
+    if (!hasAudio) return;
     let live = true;
-    void loadRecording(session.recordingId).then((b) => live && setBlob(b));
+    void (async () => {
+      // On the device that recorded it, it is already here; on another one,
+      // fetch it once and keep it.
+      const local = session.recordingId ? await loadRecording(session.recordingId) : null;
+      const found = local ?? (await fetchRecording(session));
+      if (live) setBlob(found);
+    })();
     return () => {
       live = false;
     };
-  }, [session.recordingId]);
+  }, [hasAudio, session]);
 
   // ---- Ratings and note save on change, so leaving by any route keeps them.
   const rate = (key: keyof Ratings, value: Rating) => {
@@ -128,7 +136,9 @@ function ReviewScreen({
   const [deleteAsked, setDeleteAsked] = useState(false);
   const confirmDelete = async () => {
     if (session.recordingId) await deleteRecording(session.recordingId);
-    const next = updateSession(session.id, { recordingId: undefined, audioNote: undefined });
+    await removeRemoteRecording(session);
+    const next = updateSession(session.id, { recordingId: undefined, recordingPath: undefined, audioNote: undefined });
+    void syncNow();
     if (next) setSession(next);
     setBlob(null);
     setDeleteAsked(false);
@@ -166,11 +176,11 @@ function ReviewScreen({
 
   // Absent entirely when the round was never recorded (handoff §4.5).
   const playback =
-    session.recordingId || session.audioNote ? (
+    hasAudio || session.audioNote ? (
       <Card className="review__playback">
         {blob && <AudioPlayer blob={blob} fallbackSeconds={session.spokenSeconds} />}
         {blob === undefined && <div className="review__player-placeholder" aria-hidden="true" />}
-        {session.recordingId && blob === null && (
+        {hasAudio && blob === null && (
           <p className="review__audio-note">This recording is no longer in this browser.</p>
         )}
         {session.audioNote && <p className="review__audio-note">{AUDIO_NOTES[session.audioNote]}</p>}

@@ -11,6 +11,7 @@ import { mmss } from '../lib/format';
 import { newIntent } from '../lib/liveRound';
 import { deleteSession, forgetAllRecordings, loadSessions, updateSession, type Session } from '../lib/sessions';
 import { loadSettings, roundSettingsOf } from '../lib/settings';
+import { removeRemoteRecording, syncNow } from '../lib/sync';
 import { categoryLabel } from '../lib/topics';
 import './History.css';
 
@@ -29,7 +30,9 @@ export default function History() {
 
   const deleteRound = async (session: Session) => {
     if (session.recordingId) await deleteRecording(session.recordingId);
+    await removeRemoteRecording(session);
     deleteSession(session.id);
+    void syncNow();
     setAskDelete(null);
     reload();
     announce('Round deleted');
@@ -37,7 +40,9 @@ export default function History() {
 
   const deleteAudioOnly = async (session: Session) => {
     if (session.recordingId) await deleteRecording(session.recordingId);
-    updateSession(session.id, { recordingId: undefined, audioNote: undefined });
+    await removeRemoteRecording(session);
+    updateSession(session.id, { recordingId: undefined, recordingPath: undefined, audioNote: undefined });
+    void syncNow();
     setAskDelete(null);
     reload();
     announce('Recording deleted. The round is still here.');
@@ -45,7 +50,9 @@ export default function History() {
 
   const deleteEveryRecording = async () => {
     await deleteAllRecordings();
+    for (const session of sessions) await removeRemoteRecording(session);
     forgetAllRecordings();
+    void syncNow();
     setAskDeleteAll(false);
     reload();
     announce('Every recording deleted. Your rounds, ratings and notes are still here.');

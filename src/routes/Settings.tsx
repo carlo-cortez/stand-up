@@ -4,10 +4,13 @@ import { Button } from '../components/Button';
 import { BackIcon } from '../components/Icon';
 import { SegmentedControl } from '../components/SegmentedControl';
 import { Sheet } from '../components/Sheet';
+import { useAccount, signOut } from '../lib/account';
 import { announce } from '../lib/announce';
 import { deleteAllRecordings } from '../lib/audioStore';
 import { forgetAllRecordings, loadSessions } from '../lib/sessions';
 import { applyTheme, clearAllLocalData, loadSettings, saveSettings, type Theme } from '../lib/settings';
+import { cloudConfigured } from '../lib/supabase';
+import { deleteEverythingRemote, lastSyncedAt, removeRemoteRecording, syncNow } from '../lib/sync';
 import './Setup.css';
 
 const THEME_OPTIONS: { value: Theme; label: string }[] = [
@@ -22,6 +25,7 @@ const THEME_OPTIONS: { value: Theme; label: string }[] = [
  */
 export default function Settings() {
   const navigate = useNavigate();
+  const { user, loading } = useAccount();
   const [theme, setTheme] = useState<Theme>(() => loadSettings().theme);
   const [askRecordings, setAskRecordings] = useState(false);
   const [askEverything, setAskEverything] = useState(false);
@@ -37,13 +41,17 @@ export default function Settings() {
 
   const deleteRecordings = async () => {
     await deleteAllRecordings();
+    for (const session of rounds) await removeRemoteRecording(session);
     forgetAllRecordings();
+    void syncNow();
     setAskRecordings(false);
     announce('Every recording deleted. Your rounds, ratings and notes are still here.');
   };
 
   const deleteEverything = async () => {
     await deleteAllRecordings();
+    // The server copy goes first: clearing local data would lose the paths.
+    await deleteEverythingRemote();
     clearAllLocalData();
     setAskEverything(false);
     applyTheme('system');
@@ -63,6 +71,42 @@ export default function Settings() {
 
         <main className="setup__form">
           <SegmentedControl legend="Theme" name="theme" options={THEME_OPTIONS} value={theme} onChange={change} />
+
+          {cloudConfigured && (
+            <div className="settings__account">
+              <h2 className="section-label">Account</h2>
+              {loading ? (
+                <p className="settings__note">Checking…</p>
+              ) : user ? (
+                <>
+                  <p className="settings__note">
+                    Signed in as {user.email}. Your rounds and recordings follow you between devices
+                    {lastSyncedAt() ? `, last synced ${lastSyncedAt()!.toLocaleTimeString()}` : ''}.
+                  </p>
+                  <div className="settings__actions">
+                    <Button variant="secondary" onClick={() => void syncNow()}>
+                      Sync now
+                    </Button>
+                    <Button variant="secondary" onClick={() => void signOut()}>
+                      Sign out
+                    </Button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <p className="settings__note">
+                    Rounds are kept on this device. Sign in and they follow you to your other ones, and survive losing
+                    this one.
+                  </p>
+                  <div className="settings__actions">
+                    <Button variant="secondary" onClick={() => navigate('/signin')}>
+                      Sign in
+                    </Button>
+                  </div>
+                </>
+              )}
+            </div>
+          )}
 
           <div className="settings__data">
             <h2 className="section-label">Your data</h2>

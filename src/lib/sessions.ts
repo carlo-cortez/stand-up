@@ -32,6 +32,16 @@ export type Session = {
   audioNote?: 'incomplete' | 'no-room' | 'interrupted';
   ratings?: Ratings;
   note?: string;
+
+  // ---- Sync (see sync.ts). Harmless and unused while signed out.
+  /** Last local change, ISO. Last writer wins between devices. */
+  updatedAt?: string;
+  /** A tombstone: the round is gone, but the fact of it must reach other devices. */
+  deletedAt?: string;
+  /** Where the audio sits in cloud storage, once uploaded. */
+  recordingPath?: string;
+  /** updatedAt at the moment this round last reached the server. */
+  syncedAt?: string;
 };
 
 const KEY = 'standup.sessions';
@@ -45,7 +55,13 @@ function write(sessions: Session[]): void {
   }
 }
 
+/** Live rounds, newest last. Tombstones are for sync only and never shown. */
 export function loadSessions(): Session[] {
+  return allSessions().filter((s) => !s.deletedAt);
+}
+
+/** Including tombstones — sync needs them; nothing else should. */
+export function allSessions(): Session[] {
   try {
     return JSON.parse(localStorage.getItem(KEY) || '[]') as Session[];
   } catch {
@@ -53,20 +69,30 @@ export function loadSessions(): Session[] {
   }
 }
 
+function stamp(session: Session): Session {
+  return { ...session, updatedAt: new Date().toISOString() };
+}
+
 export function getSession(id: string): Session | undefined {
   return loadSessions().find((s) => s.id === id);
 }
 
 export function addSession(session: Session): void {
-  write([...loadSessions(), session]);
+  write([...allSessions(), stamp(session)]);
+}
+
+/** Straight from the server: no new timestamp, or it would never settle. */
+export function putSessionFromCloud(session: Session): void {
+  const rest = allSessions().filter((s) => s.id !== session.id);
+  write([...rest, session].sort((a, b) => Date.parse(a.startedAt) - Date.parse(b.startedAt)));
 }
 
 export function updateSession(id: string, patch: Partial<Session>): Session | undefined {
   let updated: Session | undefined;
   write(
-    loadSessions().map((s) => {
+    allSessions().map((s) => {
       if (s.id !== id) return s;
-      updated = { ...s, ...patch };
+      updated = stamp({ ...s, ...patch });
       return updated;
     }),
   );
@@ -76,6 +102,11 @@ export function updateSession(id: string, patch: Partial<Session>): Session | un
 /** 1-based position among all rounds, for "Round 3 · today". */
 export function roundNumber(id: string): number {
   return loadSessions().findIndex((s) => s.id === id) + 1;
+}
+
+/** Rounds whose latest change has not reached the server yet. */
+export function unsyncedSessions(): Session[] {
+  return allSessions().filter((s) => !s.syncedAt || (s.updatedAt ?? '') > s.syncedAt);
 }
 
 /**
@@ -112,11 +143,31 @@ export function sessionFor(
   };
 }
 
+/**
+ * A delete leaves a tombstone rather than a hole, so another device cannot
+ * hand the round back on the next sync. The round's content goes at once.
+ */
 export function deleteSession(id: string): void {
-  write(loadSessions().filter((s) => s.id !== id));
+  const now = new Date().toISOString();
+  write(
+    allSessions().map((s) =>
+      s.id === id
+        ? { ...s, deletedAt: now, updatedAt: now, recordingId: undefined, recordingPath: undefined, note: undefined, ratings: undefined }
+        : s,
+    ),
+  );
+}
+
+/** Tombstones that have reached the server are no longer worth keeping. */
+export function purgeSyncedTombstones(): void {
+  write(allSessions().filter((s) => !(s.deletedAt && s.syncedAt && s.syncedAt >= (s.updatedAt ?? ''))));
 }
 
 /** Drops every recordingId, keeping the rounds themselves. */
 export function forgetAllRecordings(): void {
-  write(loadSessions().map(({ recordingId: _dropped, audioNote: _also, ...rest }) => rest));
+  write(
+    allSessions().map(({ recordingId: _dropped, recordingPath: _path, audioNote: _also, ...rest }) =>
+      rest.deletedAt ? rest : stamp(rest),
+    ),
+  );
 }

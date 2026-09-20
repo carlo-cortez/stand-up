@@ -125,13 +125,46 @@ Bring these back here with the running app and we'll settle them against the can
 
 ---
 
+## M5 — Accounts and sync (Phase 5, brought forward)
+
+Decided mid-build: rounds should survive losing the device, and follow you
+between them. That means a database, and a database means owners, so it means
+accounts. Supabase carries all three — Postgres, auth and file storage.
+
+**The rule that keeps it honest: local-first.** The device stays the source of
+truth. A round is written locally the instant it ends and reaches the server
+when it can, so a dropped connection mid-speech can never cost a round. The app
+still works signed out and offline, exactly as before.
+
+1. **Schema and policies** — `supabase/schema.sql`: one `sessions` table, a
+   private `recordings` bucket, and row-level security so a person only ever
+   sees their own. Run it once in the SQL editor.
+2. **Sign-in** — email magic link, no passwords. `/signin`, plus the account
+   section in Settings.
+3. **Sync** — `src/lib/sync.ts`. Pull by `updated_at` cursor, push what this
+   device changed, upload recordings that only exist here. Conflicts settle by
+   last writer wins; deletes travel as tombstones so another device cannot hand
+   a round back.
+4. **Deletes reach the server** — one recording, all recordings, or everything.
+   The copy already promises this; now it has to be true in two places.
+
+**Done when** you finish a round on the phone, open the app on the Mac, and it
+is there — with its audio — and deleting it in one place empties the other.
+
+**Still open.** Storage has a ceiling (Supabase's free tier is 1GB, roughly a
+thousand two-minute rounds); the handoff's "past 300MB, offer to delete old
+recordings" plan now applies to the account as well as the device. A privacy
+note belongs on Settings once audio leaves the device.
+
+---
+
 ## Phases 3 to 5 — deliberately unplanned
 
 **Phase 3, better writing.** The whole feedback card ships free at M2.5 on Groq. What is left for later is quality: if the open-weight model's observations stay generic, or its rewrites lose your meaning, pointing `writeFeedback()` at Claude is a one-line change and pennies a month at a round a day. That is the only part of this app with a bill attached, and it is worth paying only once you know the writing is what's holding the card back. Judge it after twenty real rounds, not before.
 
 **Phase 4, progress and habit.** Streaks, a daily topic, practice modes. Worth designing only once History has real data in it, because the trends worth showing will be obvious by then and are not obvious now.
 
-**Phase 5, wider audience.** Accounts, sync, onboarding. Nothing here until you have used the app for months and know whether anyone else wants it. The navigation already leaves room, which is all that is needed today.
+**Phase 5, wider audience.** Accounts and sync came forward into M5. What is left here is onboarding and anything a second person would need — still nothing to build until someone else actually wants it.
 
 ---
 
