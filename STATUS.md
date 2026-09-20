@@ -63,7 +63,13 @@ fix the live break. Merging it brings them back in line.
    client, with `https://zgzwnpjcdywzamyonefn.supabase.co/auth/v1/callback` as
    the redirect URI, and the client id and secret pasted into Supabase's Google
    provider. The secret belongs only there — never in this repo.
-5. **Consider Git-based deploys** rather than `npx vercel` from the laptop:
+5. **Choosing a category is hard to find.** It lives on Setup, reached only by
+   the "Set the round" text button on Home, and Home never says which category
+   the big button will use. Raised in session two as "I'm not sure if there's a
+   button to select a category" — which is the evidence. Written up as open
+   question 8 in `stand-up-handoff.md` §11, with three options; showing the
+   current choice under Start is the one to try first.
+6. **Consider Git-based deploys** rather than `npx vercel` from the laptop:
    every push deploys, and every PR gets a preview URL to open on the phone.
 
 ## Untested, and worth distrusting until tried
