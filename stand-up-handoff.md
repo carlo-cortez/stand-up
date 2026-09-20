@@ -11,7 +11,8 @@ Scope here is Phase 1 (core practice loop) and Phase 2 (recording, self-review, 
 Mobile-first responsive web app, no accounts, no backend. Everything runs in the browser.
 
 - Rendering: any modern framework or none. State is small enough for plain component state plus one store.
-- Persistence: IndexedDB for audio blobs, localStorage for settings and session metadata. Nothing leaves the device in Phase 1–2.
+- Persistence: IndexedDB for audio blobs, localStorage for settings and session metadata. That is the whole store while signed out, and stays the source of truth even when signed in — a round is written here the moment it ends, and reaches the server when it can.
+- Accounts (brought forward from Phase 5) are optional: with none, nothing leaves the device. Signed in, rounds and recordings sync to Supabase — Postgres behind row-level security, audio in a private per-user bucket. Conflicts settle by `updatedAt`, last writer wins; deletes travel as tombstones so another device cannot hand a round back.
 - Audio: `MediaRecorder` with `getUserMedia({ audio: true })`. Store as `audio/webm;codecs=opus` where supported, fall back to `audio/mp4`.
 - Timers: a single `requestAnimationFrame` loop driven by `performance.now()` deltas, not `setInterval`, so drift and background-tab throttling don't accumulate. Persist `startedAt` so a refresh mid-round can recover or abandon cleanly.
 - Breakpoints: two. Below 900px, the mobile layouts. From 900px to 1180px, a tablet band — the mobile layout centred in a 560px column, with Speaking allowed to grow its timer to 150px because it is still being read from arm's length. At 1180px and up, the desktop layouts, of which every screen now has one on the canvas.
@@ -38,6 +39,7 @@ Mobile-first responsive web app, no accounts, no backend. Everything runs in the
 | `--accent-wash` | `#EAEFE5` | Badge and letter-chip fills |
 | `--danger` | `#9A4F36` | Destructive button fill |
 | `--danger-text` | `#8A4A33` | Destructive text button |
+| `--text-disabled` | `#65736B` | Disabled control text — 4.7:1, because a disabled line still says something |
 
 ### Colour — dark
 
@@ -53,6 +55,7 @@ Mobile-first responsive web app, no accounts, no backend. Everything runs in the
 | `--accent` | `#90B198` |
 | `--accent-strong` | `#A8C6AF` (fill; text on it is `#15201A`) |
 | `--danger-text` | `#D9A18C` |
+| `--text-disabled` | `#8A968C` |
 
 Dark mode follows `prefers-color-scheme` with a manual override in Settings. Note the inversion: in light mode the primary button is a dark sage fill with light text; in dark mode it is a light sage fill with dark text. Do not simply swap the palette — the button pair is defined explicitly above.
 
@@ -67,6 +70,10 @@ Each state is carried three ways at once: page tint, progress-bar colour, and a 
 | Overtime | `#F9EDE8` | `#B4664F` / `#F3DCD3` | `#6E3826` | square | "Past your target" |
 
 Tint changes cross-fade over 600ms; under `prefers-reduced-motion` they cut instantly. Never flash or pulse the background.
+
+### Motion
+
+Two curves for everything that moves, so the draw, the arrival and the sheet read as one system: `--ease-out` `cubic-bezier(0.2, 0.8, 0.2, 1)` for anything entering or settling, and `--ease-in-out` `cubic-bezier(0.45, 0, 0.25, 1)` for anything that travels. Under `prefers-reduced-motion` every duration drops to zero, so each animation lands on its final state at once.
 
 ### Typography
 
@@ -148,7 +155,7 @@ Focus moves into the sheet on open, is trapped while it is open, and returns to 
 
 Two states on the canvas: returning and first run.
 
-Returning shows the wordmark and a settings button, the headline "The floor is yours.", a one-line summary of recent activity, the dominant "Start practicing" button at 68px, a "Same as last time" button that repeats the last settings verbatim (label it with those settings, e.g. "Same as last time · Surprise me, 30s, 2 min"), a Topic of the day card that jumps straight into Prep with that topic, and a History row at the bottom showing the round count and the date of the last round.
+Returning shows the wordmark and a settings button — a cog, eight teeth around a small circle. (The artboard drew a sun under that label; it reads as a brightness toggle, and Settings now holds the account and the delete-everything actions, so the app uses a cog and the canvas should follow.) Then the headline "The floor is yours.", a one-line summary of recent activity, the dominant "Start practicing" button at 68px, a "Same as last time" button that repeats the last settings verbatim (label it with those settings, e.g. "Same as last time · Surprise me, 30s, 2 min"), a Topic of the day card that jumps straight into Prep with that topic, and a History row at the bottom showing the round count and the date of the last round.
 
 First run replaces the activity line and the Topic of the day card with a three-step explainer and a quiet "No rounds yet" row where History would be. The Start button is identical in both — its position must not move between states.
 
@@ -289,6 +296,12 @@ type Session = {
     sharper: string;
     tryNextTime: string;
   };
+
+  // Sync (M5). Unused while signed out, and harmless to carry.
+  updatedAt?: string;         // ISO; last local change. Last writer wins between devices
+  deletedAt?: string;         // a tombstone: the round is gone, but other devices must hear so
+  recordingPath?: string;     // where the audio sits in the account's private bucket
+  syncedAt?: string;          // updatedAt at the moment this round last reached the server
 };
 
 type Settings = {
@@ -348,7 +361,8 @@ This is a web app, not a native one wearing a browser costume. These behaviours 
 | `/round/review` | Review of the round just finished | |
 | `/history` | History | |
 | `/history/:sessionId` | Review of a past round | Same component as `/round/review`, loaded from storage |
-| `/settings` | Settings | Theme, a line saying what is stored, and the two delete-everything actions |
+| `/settings` | Settings | Theme, the account section when signed in, a line saying what is stored, and the two delete-everything actions |
+| `/signin` | Sign in | Email magic link. Optional: the app works signed out, and says so here |
 
 Prep and Speaking share `/round` deliberately. They are one continuous act from the user's point of view, and giving Speaking its own URL invites a back-button press that lands on a prep screen for a round already under way.
 
@@ -376,7 +390,7 @@ Feedback changes this, and only feedback: turning the recording into text is a n
 
 ### Where the audio goes
 
-The recording leaves the device to be turned into text, through a small function of our own that holds the API key, and is not kept at the other end. The copy the user keeps lives on their device and nowhere else. Say this once, plainly, on the card's ready-to-run state — "Your recording leaves the device to be turned into text, and is not kept once that is done" — and again in Settings. Do not bury it in a policy page, and do not say "we value your privacy".
+The recording leaves the device to be turned into text, through a small function of our own that holds the API key, and is not kept at the other end. Signed out, the copy the user keeps lives on their device and nowhere else. Signed in, it is also in their own account's private storage — the recording toggle says so in as many words, and deleting a recording removes it from both. Say this once, plainly, on the card's ready-to-run state — "Your recording leaves the device to be turned into text, and is not kept once that is done" — and again in Settings. Do not bury it in a policy page, and do not say "we value your privacy".
 
 ### Storage limits and failure
 

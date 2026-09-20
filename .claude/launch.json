@@ -13,19 +13,6 @@
         "--strictPort"
       ],
       "port": 5173
-    },
-    {
-      "name": "built",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": [
-        "run",
-        "preview",
-        "--",
-        "--port",
-        "4173",
-        "--strictPort"
-      ],
-      "port": 4173
     }
   ]
 }

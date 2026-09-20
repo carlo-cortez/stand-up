@@ -8,6 +8,7 @@ import App from './App';
 import { clearLiveRound, isResumable, loadLiveRound, setFlash } from './lib/liveRound';
 import { addSession, sessionFor } from './lib/sessions';
 import { applyTheme, loadSettings } from './lib/settings';
+import { syncNow } from './lib/sync';
 
 // Follow the OS theme live while the setting is "system".
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
@@ -28,6 +29,14 @@ if (location.pathname !== '/round') {
     setFlash('That round got interrupted.');
   }
 }
+
+// Sync is best-effort and never blocks the app: it does nothing while signed
+// out, offline, or built without cloud keys.
+void syncNow();
+window.addEventListener('online', () => void syncNow());
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') void syncNow();
+});
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

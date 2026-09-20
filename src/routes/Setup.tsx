@@ -4,6 +4,7 @@ import { Button } from '../components/Button';
 import { BackIcon } from '../components/Icon';
 import { SegmentedControl } from '../components/SegmentedControl';
 import { Toggle } from '../components/Toggle';
+import { useAccount } from '../lib/account';
 import { checkMic } from '../lib/recorder';
 import { useDesktop } from '../lib/useMediaQuery';
 import { newIntent } from '../lib/liveRound';
@@ -44,6 +45,7 @@ const TARGET_OPTIONS: { value: TargetSeconds; label: string }[] = [
 export default function Setup() {
   const navigate = useNavigate();
   const desktop = useDesktop();
+  const { user } = useAccount();
   const [round, setRound] = useState<RoundSettings>(() => roundSettingsOf(loadSettings()));
   const [micBlocked, setMicBlocked] = useState(() => loadSettings().micBlocked);
   const recording = round.recordAudio && !micBlocked;
@@ -149,9 +151,11 @@ export default function Setup() {
               description={
                 micBlocked
                   ? 'Off while the mic is blocked.'
-                  : desktop
-                    ? 'Stays in this browser, on this device. Delete it whenever you like.'
-                    : 'Stays on your device. Delete it any time.'
+                  : user
+                    ? 'Kept on this device and in your account, so it follows you. Delete it any time.'
+                    : desktop
+                      ? 'Stays in this browser, on this device. Delete it whenever you like.'
+                      : 'Stays on your device. Delete it any time.'
               }
               checked={recording}
               disabled={micBlocked}

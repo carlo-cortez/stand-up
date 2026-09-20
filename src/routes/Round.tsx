@@ -11,6 +11,7 @@ import { TimingChip } from '../components/TimingChip';
 import { saveRecording } from '../lib/audioStore';
 import { checkMic, startRecording, type Recording } from '../lib/recorder';
 import { addSession, sessionFor, type Session } from '../lib/sessions';
+import { syncNow } from '../lib/sync';
 import { announce } from '../lib/announce';
 import { countdown, mmss, plusMmss } from '../lib/format';
 import {
@@ -299,6 +300,7 @@ function LiveRoundScreen({ initial, resumed }: { initial: LiveRound; resumed: bo
     if (!blob && wantsAudio && audioIncomplete.current) audioNote = 'interrupted';
 
     addSession(sessionFor(round, spoken, { id, recordingId, audioNote }));
+    void syncNow();
     saveLastRoundSettings(round.settings);
     clearLiveRound();
     announce('Round finished');

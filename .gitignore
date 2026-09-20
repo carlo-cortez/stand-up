@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local env files (the Supabase keys live here)
+.env.local
+.env*.local
+
+# Vercel project files
+.vercel

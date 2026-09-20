@@ -4,6 +4,7 @@ import Home from './routes/Home';
 import Review from './routes/Review';
 import Round from './routes/Round';
 import Settings from './routes/Settings';
+import SignIn from './routes/SignIn';
 import Setup from './routes/Setup';
 
 // Routes only — handoff §9. Prep and Speaking share /round on purpose.
@@ -15,6 +16,7 @@ const router = createBrowserRouter([
   { path: '/history', element: <History /> },
   { path: '/history/:sessionId', element: <Review /> },
   { path: '/settings', element: <Settings /> },
+  { path: '/signin', element: <SignIn /> },
   { path: '*', element: <Home /> },
 ]);
 
