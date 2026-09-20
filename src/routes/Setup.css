@@ -252,3 +252,25 @@
   flex-direction: column;
   gap: 10px;
 }
+
+.signin__google {
+  justify-content: center;
+  gap: 10px;
+}
+
+/* A quiet divider between the one-tap path and the email one. */
+.signin__or {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.signin__or::before,
+.signin__or::after {
+  content: '';
+  flex: 1 1 0;
+  height: 1px;
+  background: var(--border);
+}

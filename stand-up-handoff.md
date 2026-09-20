@@ -155,7 +155,7 @@ Focus moves into the sheet on open, is trapped while it is open, and returns to 
 
 Two states on the canvas: returning and first run.
 
-Returning shows the wordmark and a settings button, the headline "The floor is yours.", a one-line summary of recent activity, the dominant "Start practicing" button at 68px, a "Same as last time" button that repeats the last settings verbatim (label it with those settings, e.g. "Same as last time · Surprise me, 30s, 2 min"), a Topic of the day card that jumps straight into Prep with that topic, and a History row at the bottom showing the round count and the date of the last round.
+Returning shows the wordmark and a settings button — a cog, eight teeth around a small circle. (The artboard drew a sun under that label; it reads as a brightness toggle, and Settings now holds the account and the delete-everything actions, so the app uses a cog and the canvas should follow.) Then the headline "The floor is yours.", a one-line summary of recent activity, the dominant "Start practicing" button at 68px, a "Same as last time" button that repeats the last settings verbatim (label it with those settings, e.g. "Same as last time · Surprise me, 30s, 2 min"), a Topic of the day card that jumps straight into Prep with that topic, and a History row at the bottom showing the round count and the date of the last round.
 
 First run replaces the activity line and the Topic of the day card with a three-step explainer and a quiet "No rounds yet" row where History would be. The Start button is identical in both — its position must not move between states.
 

@@ -26,17 +26,13 @@ export function BackIcon() {
 }
 
 export function SettingsIcon() {
+  // A cog with eight teeth, drawn in polar coordinates so it is symmetric.
+  // The artboard put a sun under this label, which reads as a brightness
+  // toggle rather than settings — see the handoff's §4.1 note.
   return (
-    <svg width="20" height="20" viewBox="0 0 20 20" strokeWidth="1.7" {...common}>
+    <svg width="20" height="20" viewBox="0 0 20 20" strokeWidth="1.5" {...common}>
+      <path d="M7.81 1.99 L12.19 1.99 L10.99 3.78 L13.70 4.90 L14.11 2.79 L17.21 5.89 L15.10 6.30 L16.22 9.01 L18.01 7.81 L18.01 12.19 L16.22 10.99 L15.10 13.70 L17.21 14.11 L14.11 17.21 L13.70 15.10 L10.99 16.22 L12.19 18.01 L7.81 18.01 L9.01 16.22 L6.30 15.10 L5.89 17.21 L2.79 14.11 L4.90 13.70 L3.78 10.99 L1.99 12.19 L1.99 7.81 L3.78 9.01 L4.90 6.30 L2.79 5.89 L5.89 2.79 L6.30 4.90 L9.01 3.78 Z" />
       <circle cx="10" cy="10" r="2.6" />
-      <path d="M10 3 L10 4.6" />
-      <path d="M10 15.4 L10 17" />
-      <path d="M3 10 L4.6 10" />
-      <path d="M15.4 10 L17 10" />
-      <path d="M5 5 L6.2 6.2" />
-      <path d="M13.8 13.8 L15 15" />
-      <path d="M15 5 L13.8 6.2" />
-      <path d="M6.2 13.8 L5 15" />
     </svg>
   );
 }

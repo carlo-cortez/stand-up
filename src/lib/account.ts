@@ -63,6 +63,20 @@ export async function sendMagicLink(email: string): Promise<{ error: string | nu
   return { error: error?.message ?? null };
 }
 
+/**
+ * Google, for the one-tap path — much less friction on a phone than opening
+ * an email. Supabase sends the user out and back; the session is picked up
+ * from the returning URL by detectSessionInUrl.
+ */
+export async function signInWithGoogle(): Promise<{ error: string | null }> {
+  if (!supabase) return { error: 'This copy of the app has no account set up.' };
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: `${location.origin}/` },
+  });
+  return { error: error?.message ?? null };
+}
+
 export async function signOut(): Promise<void> {
   await supabase?.auth.signOut();
 }
