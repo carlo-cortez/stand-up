@@ -14,6 +14,21 @@ function toResult(error: unknown): MicResult {
   return name === 'NotAllowedError' || name === 'SecurityError' ? 'blocked' : 'unavailable';
 }
 
+/**
+ * What the browser will do when asked, without asking. Used to warn before a
+ * round rather than surprising someone mid-draw. Not every browser answers
+ * this — Safari has been patchy — so 'unknown' means "say nothing".
+ */
+export async function micPermission(): Promise<'granted' | 'denied' | 'prompt' | 'unknown'> {
+  if (!navigator.permissions?.query) return 'unknown';
+  try {
+    const status = await navigator.permissions.query({ name: 'microphone' as PermissionName });
+    return status.state;
+  } catch {
+    return 'unknown';
+  }
+}
+
 /** Asks for the mic, records the answer in settings, and lets go of it. */
 export async function checkMic(): Promise<MicResult> {
   if (!navigator.mediaDevices?.getUserMedia) return 'unavailable';

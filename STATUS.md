@@ -1,4 +1,4 @@
-# Where things stand — 20 September 2026
+# Where things stand — 20 September 2026 (end of session two)
 
 A handover note, written at the end of the first build session. The durable
 documents are `stand-up-handoff.md` (behaviour), `build-plan.md` (milestones
@@ -16,10 +16,19 @@ M1 through M5, plus M2.5, in eight commits on `main` and two branches:
 | M2 | Recording, Review, playback, ratings, notes, delete | on `main` |
 | M3 | History, trend card, delete controls, Settings | on `main` |
 | M4 | Accessibility pass, PWA, `vercel.json` | on `main` |
-| M5 | Optional accounts and sync (Supabase) | branch `accounts-and-sync`, **PR #1 open** |
-| M2.5 | Feedback card and `api/feedback.ts` (Groq) | branch `feedback-card`, **no PR yet** |
+| M5 | Optional accounts and sync (Supabase) | merged, PR #1 |
+| M2.5 | Feedback card and `api/feedback.ts` (Groq) | merged, PR #2 |
 
-`feedback-card` is stacked on `accounts-and-sync`, so merge PR #1 first.
+Open and unmerged:
+
+- **PR #3, `fix-feedback-runtime`** — the deployed function crashed on every
+  request (`request.formData is not a function`: Vercel's Node runtime passes
+  a Node request, not a Web one). Fixed and verified against production.
+- **PR #4, `mic-reminder`** — a line on the draw screen before the browser
+  asks for the microphone, and a different one when it is blocked.
+
+**Production is ahead of `main`**: PR #3 was deployed straight to production to
+fix the live break. Merging it brings them back in line.
 
 ## Configured
 
@@ -29,7 +38,8 @@ M1 through M5, plus M2.5, in eight commits on `main` and two branches:
   been run — the `sessions` table and the private `recordings` bucket both
   answer, and row-level security returns nothing to an anonymous caller.
 - **Vercel:** project `impromptu-speech-web-app` under `cotriis-projects`.
-  Note the project name does not match the repo name.
+  Note the project name does not match the repo name. Live at
+  https://impromptu-speech-web-app.vercel.app
 - **Environment variables** set in Vercel:
   `GROQ_API_KEY` (Production, Preview), `VITE_SUPABASE_ANON_KEY` (Production,
   Preview), `VITE_SUPABASE_URL` (**Production only** — see gaps).
@@ -41,8 +51,11 @@ M1 through M5, plus M2.5, in eight commits on `main` and two branches:
 1. **`VITE_SUPABASE_URL` is missing from Preview.** Preview deploys will behave
    as though no account were configured, because Vite bakes these in at build
    time. Add it to Preview.
-2. **Not deployed yet.** Nothing has been published. Until it is, the phone
-   cannot be tested at all: the microphone needs HTTPS.
+2. **Deployed.** The app is live, the service worker is serving it, and
+   `/api/feedback` answers correctly: 400 without audio, 405 on GET, and Groq's
+   own "is it a valid media file?" for a bogus one — which proves the key works
+   and Groq is reachable. A stale service worker will keep showing an old build
+   until the tab or home-screen app is fully closed and reopened.
 3. **Supabase redirect URLs** still point at localhost only. Add the Vercel URL
    under Authentication → URL Configuration, or signing in from the phone will
    bounce.
@@ -50,7 +63,13 @@ M1 through M5, plus M2.5, in eight commits on `main` and two branches:
    client, with `https://zgzwnpjcdywzamyonefn.supabase.co/auth/v1/callback` as
    the redirect URI, and the client id and secret pasted into Supabase's Google
    provider. The secret belongs only there — never in this repo.
-5. **Consider Git-based deploys** rather than `npx vercel` from the laptop:
+5. **Choosing a category is hard to find.** It lives on Setup, reached only by
+   the "Set the round" text button on Home, and Home never says which category
+   the big button will use. Raised in session two as "I'm not sure if there's a
+   button to select a category" — which is the evidence. Written up as open
+   question 8 in `stand-up-handoff.md` §11, with three options; showing the
+   current choice under Start is the one to try first.
+6. **Consider Git-based deploys** rather than `npx vercel` from the laptop:
    every push deploys, and every PR gets a preview URL to open on the phone.
 
 ## Untested, and worth distrusting until tried
@@ -59,9 +78,10 @@ M1 through M5, plus M2.5, in eight commits on `main` and two branches:
   been exercised in Chrome, with a synthetic tone standing in for the mic.
 - **The locked screen.** Lock the phone mid-round: the timer should recompute
   correctly, and Review should admit it if iOS stopped the recording early.
-- **The Groq call.** Everything either side of it was tested with the call
-  stubbed. The filler count is the number to be sceptical of — Whisper is
-  trained to tidy disfluencies away, which is exactly what this app counts.
+- **A real recording through Groq.** The endpoint is proven, but no actual
+  speech has been through Whisper. The filler count is the number to be
+  sceptical of — Whisper is trained to tidy disfluencies away, which is exactly
+  what this app counts.
 - **Sign-in round trips and two-device sync.** Both need a deploy first.
 
 ## Open design questions

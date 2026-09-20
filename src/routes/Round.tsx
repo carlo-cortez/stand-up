@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { useBlocker, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useBlocker, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
 import { CardDraw } from '../components/CardDraw';
@@ -9,7 +9,7 @@ import { ProgressBar } from '../components/ProgressBar';
 import { Sheet } from '../components/Sheet';
 import { TimingChip } from '../components/TimingChip';
 import { saveRecording } from '../lib/audioStore';
-import { checkMic, startRecording, type Recording } from '../lib/recorder';
+import { checkMic, micPermission, startRecording, type Recording } from '../lib/recorder';
 import { addSession, sessionFor, type Session } from '../lib/sessions';
 import { syncNow } from '../lib/sync';
 import { announce } from '../lib/announce';
@@ -132,6 +132,13 @@ function LiveRoundScreen({ initial, resumed }: { initial: LiveRound; resumed: bo
   const recording = useRef<Recording | null>(null);
   const [recordingOn, setRecordingOn] = useState(false);
   const audioIncomplete = useRef(resumedIntoSpeaking && wantsAudio);
+
+  // What the browser will say when asked, so the draw screen can warn first.
+  const [micState, setMicState] = useState<'granted' | 'denied' | 'prompt' | 'unknown'>('unknown');
+  useEffect(() => {
+    if (!wantsAudio) return;
+    void micPermission().then(setMicState);
+  }, [wantsAudio]);
 
   // Ask for the mic as the round begins, so the prompt never lands mid-sentence.
   useEffect(() => {
@@ -385,6 +392,16 @@ function LiveRoundScreen({ initial, resumed }: { initial: LiveRound; resumed: bo
           </main>
           <div className="prep__bottom">
             <p className="prep__caption">Your prep time starts once the topic is showing.</p>
+            {/* Warn before the round rather than surprising someone mid-draw. */}
+            {wantsAudio && micState === 'prompt' && (
+              <p className="prep__caption">Your browser will ask for the microphone — say yes and this round is recorded.</p>
+            )}
+            {wantsAudio && micState === 'denied' && (
+              <p className="prep__caption">
+                The mic is blocked, so this round won't be recorded. Everything else works the same, or{' '}
+                <Link to="/setup">turn it back on</Link>.
+              </p>
+            )}
           </div>
         </div>
         {sheet}
