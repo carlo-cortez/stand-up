@@ -79,3 +79,10 @@ export async function deleteRecording(id: string): Promise<void> {
   if (!(await open())) return;
   await run('readwrite', (store) => store.delete(id));
 }
+
+/** Every recording, gone. Ratings and notes live elsewhere and are untouched. */
+export async function deleteAllRecordings(): Promise<void> {
+  memory.clear();
+  if (!(await open())) return;
+  await run('readwrite', (store) => store.clear());
+}

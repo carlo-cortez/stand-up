@@ -166,3 +166,39 @@
   border-color: #3D2A24;
   background: var(--surface);
 }
+
+/* ---------- Settings: your data ---------- */
+
+.settings__data {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.settings__note {
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+.settings__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.settings__danger:not(:disabled) {
+  color: var(--danger-text);
+}
+
+.settings__danger:disabled {
+  color: var(--text-disabled);
+  cursor: default;
+}
+
+@media (min-width: 1180px) {
+  .settings__actions {
+    flex-direction: row;
+  }
+}

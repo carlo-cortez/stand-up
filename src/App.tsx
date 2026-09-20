@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import History from './routes/History';
 import Home from './routes/Home';
-import Placeholder from './routes/Placeholder';
 import Review from './routes/Review';
 import Round from './routes/Round';
 import Settings from './routes/Settings';
@@ -12,7 +12,7 @@ const router = createBrowserRouter([
   { path: '/setup', element: <Setup /> },
   { path: '/round', element: <Round /> },
   { path: '/round/review', element: <Review /> },
-  { path: '/history', element: <Placeholder title="History" /> },
+  { path: '/history', element: <History /> },
   { path: '/history/:sessionId', element: <Review /> },
   { path: '/settings', element: <Settings /> },
   { path: '*', element: <Home /> },

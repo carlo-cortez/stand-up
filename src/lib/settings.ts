@@ -106,3 +106,14 @@ export function resolvedTheme(theme: Theme): 'light' | 'dark' {
 export function applyTheme(theme: Theme): void {
   document.documentElement.dataset.theme = resolvedTheme(theme);
 }
+
+/** Everything this app has stored, gone: rounds, settings, the lot. */
+export function clearAllLocalData(): void {
+  try {
+    Object.keys(localStorage)
+      .filter((key) => key.startsWith('standup.'))
+      .forEach((key) => localStorage.removeItem(key));
+  } catch {
+    // Nothing more to do; the visit continues with defaults.
+  }
+}

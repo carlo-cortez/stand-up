@@ -228,7 +228,7 @@ Trend card first: four weekly bars with counts, the current week accented, and o
 
 Then the session list. Each row is a link to that round's Review and shows date and category, duration, the topic in Newsreader, and the average rating as a number plus a five-dot meter. Rows are `<a>` elements, not divs with click handlers.
 
-At the bottom: "Start practicing" and a "Delete all recordings" text button. The delete-a-round sheet offers three choices in this order: delete the whole round, delete only the recording, cancel. The middle option exists because the brief requires that users can drop audio and keep progress.
+At the bottom: "Start practicing" and a "Delete all recordings" text button, the latter shown only while some round still has audio. Each row carries a 44×44 overflow button (three dots, top right, labelled for the round it belongs to) — the canvas shows the sheet but not what opens it, and a row that is a link cannot also hold a button. The delete-a-round sheet offers three choices in this order: delete the whole round, delete only the recording, cancel. The middle option exists because the brief requires that users can drop audio and keep progress.
 
 Empty state: a line drawing, "Nothing here yet.", a sentence explaining what will appear, and the Start button.
 
@@ -348,7 +348,7 @@ This is a web app, not a native one wearing a browser costume. These behaviours 
 | `/round/review` | Review of the round just finished | |
 | `/history` | History | |
 | `/history/:sessionId` | Review of a past round | Same component as `/round/review`, loaded from storage |
-| `/settings` | Settings | Theme, and the two delete-everything actions |
+| `/settings` | Settings | Theme, a line saying what is stored, and the two delete-everything actions |
 
 Prep and Speaking share `/round` deliberately. They are one continuous act from the user's point of view, and giving Speaking its own URL invites a back-button press that lands on a prep screen for a round already under way.
 

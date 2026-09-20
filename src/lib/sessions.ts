@@ -111,3 +111,12 @@ export function sessionFor(
     audioNote: extra.audioNote,
   };
 }
+
+export function deleteSession(id: string): void {
+  write(loadSessions().filter((s) => s.id !== id));
+}
+
+/** Drops every recordingId, keeping the rounds themselves. */
+export function forgetAllRecordings(): void {
+  write(loadSessions().map(({ recordingId: _dropped, audioNote: _also, ...rest }) => rest));
+}
