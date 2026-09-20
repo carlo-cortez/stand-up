@@ -50,9 +50,10 @@ Open:
 
 ## Gaps and next actions
 
-1. **`VITE_SUPABASE_URL` is missing from Preview.** Preview deploys will behave
-   as though no account were configured, because Vite bakes these in at build
-   time. Add it to Preview.
+1. ~~`VITE_SUPABASE_URL` is missing from Preview.~~ Added, 20 September.
+   All three variables are now on Production and Preview. Previews built
+   before that are still local-only — Vite baked the absence in — so judge
+   only a fresh one.
 2. **Deployed, and level with `main` again.** The app is live, the service worker is serving it, and
    `/api/feedback` answers correctly: 400 without audio, 405 on GET, and Groq's
    own "is it a valid media file?" for a bogus one — which proves the key works
