@@ -81,8 +81,33 @@
   font-size: 15px;
 }
 
-.home__set {
-  align-self: center;
+.home__round {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px 10px;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.home__round-text {
+  letter-spacing: 0.01em;
+}
+
+.home__change {
+  color: var(--accent-strong);
+  font-size: 14px;
+  text-decoration: none;
+  /* A 14px link needs the padding to reach a comfortable tap target. */
+  padding: 6px 4px;
+  margin: -6px 0;
+}
+
+.home__change:hover {
+  color: var(--accent-strong-hover);
+  text-decoration: underline;
 }
 
 .home__steps ol {
@@ -263,6 +288,15 @@
 
   .home__repeat {
     min-height: 52px;
+  }
+
+  .home__round {
+    justify-content: flex-start;
+    font-size: 15px;
+  }
+
+  .home__change {
+    font-size: 15px;
   }
 
   .home__topic {
