@@ -210,3 +210,251 @@
 .review__body {
   display: contents;
 }
+
+/* ---------- Feedback card (handoff §4.5) ---------- */
+
+.feedback {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.feedback__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.feedback__head--spread {
+  justify-content: space-between;
+}
+
+.feedback__mark,
+.feedback__spinner {
+  flex-shrink: 0;
+  stroke: var(--accent);
+}
+
+.feedback__spinner-track {
+  stroke: var(--ring-track);
+}
+
+.feedback__spinner {
+  animation: feedback-spin 900ms linear infinite;
+}
+
+@keyframes feedback-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.feedback__title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.feedback__lede {
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--text-muted);
+  text-wrap: pretty;
+}
+
+.feedback__note {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+.feedback__error {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--danger-text);
+}
+
+.feedback__block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.feedback__block--tight {
+  gap: 6px;
+}
+
+.feedback__prose {
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--text);
+  text-wrap: pretty;
+}
+
+/* ---------- Counted half ---------- */
+
+.feedback__tiles {
+  display: flex;
+  gap: 10px;
+}
+
+.feedback__tile {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px;
+  border-radius: 14px;
+  background: var(--surface-sunken);
+}
+
+.feedback__value {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.feedback__label {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--text-muted);
+}
+
+.feedback__delta {
+  font-size: 11px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+.feedback__delta.is-better {
+  color: var(--accent-strong);
+}
+
+.feedback__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.feedback__chip {
+  padding: 8px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Vague words in warm sand, fillers in neutral grey (handoff §4.5). */
+.feedback__chip--vague {
+  background: #F4EFE2;
+  color: #5E4A17;
+}
+
+.feedback__chip--filler {
+  background: #F1F0E8;
+  color: #55604F;
+}
+
+:root[data-theme='dark'] .feedback__chip--vague {
+  background: #332B17;
+  color: #EBD9A6;
+}
+
+:root[data-theme='dark'] .feedback__chip--filler {
+  background: #262B25;
+  color: #C3CDC4;
+}
+
+.feedback__strip {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 16px;
+  background: var(--surface-sunken);
+}
+
+.feedback__bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  height: 56px;
+}
+
+.feedback__bars > span {
+  flex: 1 1 0;
+  border-radius: 6px;
+  background: var(--ring-track);
+}
+
+.feedback__bars > span.is-current {
+  background: var(--accent);
+}
+
+/* ---------- Written half ---------- */
+
+.feedback__sharper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 16px;
+  background: var(--surface-sunken);
+}
+
+.feedback__quoted {
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+.feedback__rewrite {
+  font-family: var(--font-display);
+  font-size: 19px;
+  line-height: 1.4;
+  color: var(--text);
+  text-wrap: pretty;
+}
+
+.feedback__transcript summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent-strong);
+  cursor: pointer;
+}
+
+.feedback__transcript p {
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  text-wrap: pretty;
+}
+
+/* ---------- Loading skeletons, at the size of the real thing ---------- */
+
+.feedback__skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.feedback__skeleton > span {
+  height: 12px;
+  border-radius: 6px;
+  background: var(--surface-sunken);
+}
+
+.feedback__skeleton > span.is-short {
+  width: 70%;
+}
+
+.feedback__tile-ghost {
+  flex: 1 1 0;
+  height: 62px;
+  border-radius: 14px;
+  background: var(--surface-sunken);
+}
