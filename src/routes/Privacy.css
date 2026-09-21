@@ -37,15 +37,6 @@
   color: var(--text);
 }
 
-/* Visibly unfinished, so it cannot ship unnoticed. */
-.privacy__todo {
-  padding: 1px 6px;
-  border-radius: 4px;
-  background: var(--danger);
-  color: var(--on-danger);
-  font-size: 14px;
-}
-
 .privacy__updated {
   margin: 0;
   font-size: 13px;

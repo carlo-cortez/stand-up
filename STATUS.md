@@ -65,10 +65,9 @@ Open:
 4. **Google sign-in** is built but unconfigured. It needs a Google Cloud OAuth
    client, with `https://zgzwnpjcdywzamyonefn.supabase.co/auth/v1/callback` as
    the redirect URI, and the client id and secret pasted into Supabase's Google
-   provider. The secret belongs only there — never in this repo. It also needs
-   a real contact address on `/privacy`, which currently shows a red
-   placeholder: Google will not let the consent screen be published without
-   a privacy policy, and the page is no good with a gap in it.
+   provider. The secret belongs only there — never in this repo. The privacy
+   policy URL Google asks for is `/privacy`; the support and developer emails
+   go in Google's own consent-screen form.
 5. **Setup discards edits unless you start from it.** Surfaced by the fix for
    the category question: Home's new line reads the saved defaults, but Setup
    only saves when its own button starts a round. Change a pill, press back,

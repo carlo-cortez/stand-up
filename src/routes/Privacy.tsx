@@ -104,8 +104,11 @@ export default function Privacy() {
           <section className="privacy__section">
             <h2 className="section-label">Asking about any of this</h2>
             <p>
-              {/* TODO: a real contact before Google sign-in is published. */}
-              Write to <span className="privacy__todo">[contact address]</span>.
+              Find me on GitHub as{' '}
+              <a href="https://github.com/carlo-cortez" target="_blank" rel="noreferrer noopener">
+                carlo-cortez
+              </a>
+              .
             </p>
           </section>
 
