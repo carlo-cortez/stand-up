@@ -1,4 +1,5 @@
 import { useEffect, useState, type CSSProperties } from 'react';
+import { playFlip, playShuffle } from '../lib/sounds';
 
 type Props = {
   /** Seven on a fresh round, six after "Draw another". */
@@ -29,8 +30,18 @@ export function CardDraw({ count, picked, face, onPick }: Props) {
   useEffect(() => {
     const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const timer = window.setTimeout(() => setReady(true), reduced ? 0 : INTRO_MS + count * STAGGER_MS);
-    return () => window.clearTimeout(timer);
+    // No shuffle on screen, so no shuffle to hear.
+    const stop = reduced ? () => {} : playShuffle();
+    return () => {
+      window.clearTimeout(timer);
+      stop();
+    };
   }, [count]);
+
+  const pick = (index: number) => {
+    playFlip(matchMedia('(prefers-reduced-motion: reduce)').matches);
+    onPick(index);
+  };
 
   const middle = (count - 1) / 2;
 
@@ -51,7 +62,7 @@ export function CardDraw({ count, picked, face, onPick }: Props) {
             type="button"
             className={`draw__card${state}`}
             style={style}
-            onClick={() => onPick(i)}
+            onClick={() => pick(i)}
             disabled={!ready || picked !== null}
             aria-label={`Card ${i + 1} of ${count}`}
           >

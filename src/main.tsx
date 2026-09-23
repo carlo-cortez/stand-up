@@ -8,12 +8,16 @@ import App from './App';
 import { clearLiveRound, isResumable, loadLiveRound, setFlash } from './lib/liveRound';
 import { addSession, sessionFor } from './lib/sessions';
 import { applyTheme, loadSettings } from './lib/settings';
+import { unlockSoundsOnFirstGesture } from './lib/sounds';
 import { syncNow } from './lib/sync';
 
 // Follow the OS theme live while the setting is "system".
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
   if (loadSettings().theme === 'system') applyTheme('system');
 });
+
+// Audio starts suspended until a tap; the first one anywhere wakes it for the draw.
+unlockSoundsOnFirstGesture();
 
 // A round left behind by a closed tab. /round handles its own recovery; on
 // any other page a stale round is dropped with one quiet line on Home.

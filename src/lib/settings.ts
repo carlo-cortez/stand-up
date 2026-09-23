@@ -17,6 +17,8 @@ export type Settings = {
   /** null until the user first opens or hides it; then their choice sticks. */
   showStructureHint: boolean | null;
   theme: Theme;
+  /** The card draw's riffle, spread and flip. Nothing else makes sound. */
+  sounds: boolean;
 };
 
 /** The round-shaping part of Settings — what "Same as last time" repeats. */
@@ -31,6 +33,7 @@ export const DEFAULT_SETTINGS: Settings = {
   micBlocked: false,
   showStructureHint: null,
   theme: 'system',
+  sounds: true,
 };
 
 const KEYS = {
