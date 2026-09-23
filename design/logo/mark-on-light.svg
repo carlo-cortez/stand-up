@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- The mark without its tile, for a cream or white ground. -->
+  <circle cx="32" cy="18.5" r="5.8" fill="#3F5A48"/>
+  <path d="M21.5 47 V37 Q21.5 28 30.5 28 H33.5 Q42.5 28 42.5 37 V47 Z" fill="#3F5A48"/>
+  <line x1="13" y1="50.5" x2="51" y2="50.5" stroke="#6E8C74" stroke-width="3.6" stroke-linecap="round"/>
+</svg>

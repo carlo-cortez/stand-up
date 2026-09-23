@@ -108,6 +108,16 @@ Every element showing a clock value uses `font-variant-numeric: tabular-nums` so
 
 ---
 
+### Logo
+
+Someone standing up, on the stage line: a cream head and shouldered torso over a sage floor, on the deep green tile (`--accent-strong`, `--ground`, and `#9FBBA5` for the floor). The source is `design/logo/mark.svg`, on a 64-unit grid; `mark-on-light.svg` is the same figure without its tile, in green, for a cream ground.
+
+Two rules the shape depends on. The torso must stay clearly wider than the head: at equal widths the mark reads as an information "i", which is where the first version landed. And the floor is what keeps it from reading as a generic account icon, so it is never dropped, even at 16px.
+
+`public/favicon.svg` is kept by hand (rounded corners, since a tab shows the file as it is). Every PNG in `public/` is drawn from `mark.svg` by `sh design/logo/export.sh`, using only macOS's own renderer: full-bleed squares for iOS and Android, which round the corners themselves, and a maskable version with the figure at 80% so the floor's ends stay inside Android's safe circle. Change the mark, run the script, and the icons follow.
+
+The header wordmark stays as text. The mark lives on the home screen and in the browser tab; on Home, the words are enough.
+
 ## 3. Components
 
 ### Button
