@@ -1,0 +1,54 @@
+/* Reading, not filling in a form: prose measure, generous leading. */
+
+.privacy {
+  max-width: 62ch;
+}
+
+.privacy__lede {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--text);
+}
+
+.privacy__section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.privacy__section p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-body);
+}
+
+.privacy__section a {
+  color: var(--accent-strong);
+}
+
+.privacy__section a:hover {
+  color: var(--accent-strong-hover);
+}
+
+.privacy__section strong {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.privacy__updated {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+@media (min-width: 1180px) {
+  .privacy__lede {
+    font-size: 19px;
+  }
+
+  .privacy__section p {
+    font-size: 16px;
+  }
+}
