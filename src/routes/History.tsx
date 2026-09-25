@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Ace } from '../components/Ace';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
 import { BackIcon } from '../components/Icon';
@@ -74,7 +75,7 @@ export default function History() {
         <div className="screen__column">
           {header}
           <main className="history__empty">
-            <EmptyMark />
+            <Ace pose="lean" />
             <div className="history__empty-text">
               <h2 className="history__empty-headline">Nothing here yet.</h2>
               <p className="history__empty-body">
@@ -214,22 +215,5 @@ export default function History() {
         </div>
       </Sheet>
     </div>
-  );
-}
-
-function EmptyMark() {
-  return (
-    <svg width="96" height="80" viewBox="0 0 96 80" fill="none" aria-hidden="true">
-      <rect x="41" y="28" width="14" height="24" rx="7" stroke="var(--accent)" strokeWidth="2.5" />
-      <path
-        d="M33 46a15 15 0 0 0 30 0"
-        stroke="var(--accent)"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-        fill="none"
-      />
-      <path d="M48 61v8" stroke="var(--accent)" strokeWidth="2.5" strokeLinecap="round" />
-      <path d="M12 20h18M12 28h10M66 20h18M74 28h10" stroke="var(--border)" strokeWidth="2.5" strokeLinecap="round" />
-    </svg>
   );
 }

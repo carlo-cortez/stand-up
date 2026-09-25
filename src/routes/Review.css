@@ -21,6 +21,26 @@
   letter-spacing: -0.01em;
 }
 
+.review__hello {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.review__hello .review__headline {
+  flex: 1;
+  min-width: 0;
+}
+
+.review__ace {
+  flex: none;
+  width: 56px;
+  height: auto;
+  /* The floor line sits a little below the text's baseline. */
+  margin-bottom: -4px;
+}
+
 .review__missing {
   gap: 16px;
 }
@@ -174,10 +194,28 @@
 @media (min-width: 1180px) {
   .review__header,
   .review__headline,
+  .review__hello,
   .review__grid {
     width: 100%;
     max-width: 1200px;
     margin-inline: auto;
+  }
+
+  /* Wide enough for the line not to wrap: Ace follows it, not the far edge. */
+  .review__hello {
+    justify-content: flex-start;
+    gap: 20px;
+  }
+
+  .review__hello .review__headline {
+    flex: none;
+    width: auto;
+    max-width: none;
+    margin-inline: 0;
+  }
+
+  .review__ace {
+    width: 76px;
   }
 
   .review__headline {
