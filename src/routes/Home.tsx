@@ -24,7 +24,7 @@ function sameAsLastLabel(s: RoundSettings): string {
 
 const STEPS = [
   'A topic lands. Anything from pineapple on pizza to “tell me about yourself.”',
-  'Thirty seconds to gather a point, a reason, an example.',
+  'A minute to gather a point, a reason, an example.',
   'Then you talk. Go long if you like — the timer keeps counting, gently.',
 ];
 
@@ -73,7 +73,7 @@ export default function Home() {
       <h1 className="home__headline">The floor is yours.</h1>
       {firstRun && !flash ? (
         <p className="home__lede">
-          You get a topic, half a minute to think, then two minutes to talk. Nobody's listening but you.
+          You get a topic, a minute to think, then two minutes to talk. Nobody's listening but you.
         </p>
       ) : (
         summary && <p className="home__summary">{summary}</p>
