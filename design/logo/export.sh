@@ -4,8 +4,8 @@
 # Uses macOS's own Quick Look renderer (qlmanage) and sips, so nothing needs
 # installing. Run from anywhere:  sh design/logo/export.sh
 #
-# public/favicon.svg is kept by hand: it is the same mark with rounded
-# corners, since a browser tab shows the file as it is.
+# public/favicon.svg is kept by hand: at 16px the icon's face would be half
+# a pixel wide, so the tab version draws the same deck with a face 2.5x larger.
 
 set -eu
 cd "$(dirname "$0")/../.."
@@ -22,7 +22,7 @@ import re, sys
 mark, scale = sys.argv[1], float(sys.argv[2])
 s = open(mark).read()
 s = re.sub(r'<!--.*?-->', '', s, flags=re.S)
-s = s.replace('viewBox="0 0 64 64"', 'viewBox="0 0 64 64" width="512" height="512"', 1)
+s = re.sub(r'<svg ', '<svg width="512" height="512" ', s, count=1)
 if scale != 1:
     tile_end = s.index('/>', s.index('<rect')) + 2
     s = (s[:tile_end]
@@ -44,6 +44,7 @@ render apple-touch-icon 180 1
 render icon-192 192 1
 render icon-512 512 1
 
-# Android crops maskable icons to a shape inside a circle of 40% radius. At
-# full size the floor line's ends reach 45% from centre; 80% brings them in.
-render icon-maskable-512 512 0.8
+# Android crops maskable icons to a shape inside a circle of 40% radius. The
+# face sits 23% from centre and the cards are meant to be cropped, so the
+# icon goes in as it is.
+render icon-maskable-512 512 1

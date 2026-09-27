@@ -110,13 +110,13 @@ Every element showing a clock value uses `font-variant-numeric: tabular-nums` so
 
 ### Logo
 
-Someone standing up, on the stage line: a cream head and shouldered torso over a sage floor, on the deep green tile (`--accent-strong`, `--ground`, and `#9FBBA5` for the floor). The source is `design/logo/mark.svg`, on a 64-unit grid; `mark-on-light.svg` is the same figure without its tile, in green, for a cream ground.
+Ace's deck peeking in from the lower right: two stacked cards, dark green `#2F4636` behind and sage `#6E8C74` (`--accent`) in front, spilling off the edge of a cream `#E7E1CF` ground, with a small face low on the front card — two dot eyes and a little oval mouth. Cute by scale and crop rather than by detail, and the same character as the mascot (§3), so the icon and the app introduce each other.
 
-Two rules the shape depends on. The torso must stay clearly wider than the head: at equal widths the mark reads as an information "i", which is where the first version landed. And the floor is what keeps it from reading as a generic account icon, so it is never dropped, even at 16px.
+The source is `design/logo/mark.svg`, on a 1536 grid. Every PNG in `public/` is drawn from it by `sh design/logo/export.sh`, using only macOS's own renderer: full-bleed squares for iOS and Android, which round the corners themselves. The maskable icon uses the mark unscaled — the face sits 23% from centre, inside the 40% circle Android keeps, and the cards are meant to be cropped.
 
-`public/favicon.svg` is kept by hand (rounded corners, since a tab shows the file as it is). Every PNG in `public/` is drawn from `mark.svg` by `sh design/logo/export.sh`, using only macOS's own renderer: full-bleed squares for iOS and Android, which round the corners themselves, and a maskable version with the figure at 80% so the floor's ends stay inside Android's safe circle. Change the mark, run the script, and the icons follow.
+`public/favicon.svg` is kept by hand. At 16px the icon's face would be half a pixel wide, so the tab version draws the same deck on a 64 grid with the face about 2.5 times larger. Legible at 32px; at 16px the face is faint but present, which is the trade for not crowding the card.
 
-The header wordmark stays as text. The mark lives on the home screen and in the browser tab; on Home, the words are enough.
+The header wordmark stays as text.
 
 ## 3. Components
 
