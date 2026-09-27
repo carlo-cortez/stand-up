@@ -11,7 +11,7 @@ import { Sheet } from '../components/Sheet';
 import { dayLabel } from '../lib/activity';
 import { announce } from '../lib/announce';
 import { deleteRecording, loadRecording } from '../lib/audioStore';
-import { measure, requestFeedback } from '../lib/feedback';
+import { enoughSpeech, measure, requestFeedback } from '../lib/feedback';
 import { mmss, plusMmss } from '../lib/format';
 import { newIntent } from '../lib/liveRound';
 import {
@@ -149,8 +149,10 @@ function ReviewScreen({
   };
 
   // ---- Feedback: asked for, never automatic (handoff §4.5).
-  const [feedbackState, setFeedbackState] = useState<'idle' | 'loading' | 'offline' | 'ready'>(
-    session.metrics ? 'ready' : 'idle',
+  // 'thin' is a transcript with too little in it to say anything about. Rounds
+  // measured before that existed still carry numbers; they read as thin too.
+  const [feedbackState, setFeedbackState] = useState<'idle' | 'loading' | 'offline' | 'thin' | 'ready'>(
+    session.transcript !== undefined && !enoughSpeech(session.transcript) ? 'thin' : session.metrics ? 'ready' : 'idle',
   );
   const [feedbackError, setFeedbackError] = useState<string | null>(null);
 
@@ -166,15 +168,26 @@ function ReviewScreen({
       const { transcript, written } = await requestFeedback(blob, session.targetSeconds);
       // The counted half is derived here, from the transcript: no model, and
       // nothing to go wrong that would cost the round its numbers.
+      if (!enoughSpeech(transcript)) {
+        // Keep what was heard, but no numbers: zeros would read as results
+        // and drag the averages down.
+        const next = updateSession(session.id, { transcript, metrics: undefined, written: undefined });
+        if (next) setSession(next);
+        setFeedbackState('thin');
+        void syncNow();
+        announce('Not enough speech in this round for feedback');
+        return;
+      }
       const metrics = measure(transcript, session.spokenSeconds);
       const next = updateSession(session.id, { transcript, metrics, written: written ?? undefined });
       if (next) setSession(next);
       setFeedbackState('ready');
       void syncNow();
-      announce('Feedback ready');
+      announce(written ? 'Feedback ready' : 'Feedback ready, without the written part');
     } catch (error) {
       setFeedbackError(error instanceof Error ? error.message : 'That did not work. Try again in a moment.');
-      setFeedbackState('idle');
+      // A failed retry keeps the numbers it already had.
+      setFeedbackState(session.metrics ? 'ready' : 'idle');
     }
   };
 

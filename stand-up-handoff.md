@@ -235,7 +235,9 @@ Order on the screen is deliberate and follows the tone rules: what happened, the
 3. Playback: play button, waveform, duration, and a "Delete recording" text button. Absent entirely when the round wasn't recorded.
 4. Self-ratings: Structure, Clarity, Confidence, Filler words, each 1–5. No aggregate score is shown here; the average appears only in History.
 5. Notes: a single textarea, labelled "One thing to try next time", placeholder "Slow down before the example."
-6. Feedback card (ships at M2.5), in one of five states.
+6. Feedback card (ships at M2.5), in one of six states: idle (Get feedback), loading, offline, **thin**, ready, and ready without the written half.
+   - **Thin**: the transcript has fewer than 20 words (`MIN_WORDS`, about ten seconds of talk). The card says "Not enough to go on" and asks for half a minute or more next time. No tiles, no chips, no "lowest so far" — zeros read as results, and a silent four-second round once earned praise for having no filler words. Thin rounds keep their transcript but store no numbers, and any round too thin to count is left out of the averages and the filler strip, including ones measured before this existed. The server skips the model call for them.
+   - **Ready without the written half**: the numbers show, then a block titled "The written part" says it didn't come back, with Try again when there's audio to resend. Never a silent gap where three sections should be. The function logs why (model status and error code, empty reply, missing fields, not JSON) — never the transcript or the reply.
 7. Actions: "Next topic" primary, "Save and go home" secondary.
 
 Ratings and notes save on change, not on submit, so leaving by any route keeps them.
