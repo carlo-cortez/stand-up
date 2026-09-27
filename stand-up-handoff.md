@@ -110,11 +110,11 @@ Every element showing a clock value uses `font-variant-numeric: tabular-nums` so
 
 ### Logo
 
-Ace's deck peeking in from the lower right: two stacked cards, dark green `#2F4636` behind and sage `#6E8C74` (`--accent`) in front, spilling off the edge of a cream `#E7E1CF` ground, with a small face low on the front card — two dot eyes and a little oval mouth. Cute by scale and crop rather than by detail, and the same character as the mascot (§3), so the icon and the app introduce each other.
+Ace peeking in from the lower right: Ace himself — the white card with his dot eyes and small smile (§3) — in front of a dark green `#2F4636` card, spilling off the edge of a cream `#E7E1CF` ground. Cute by scale and crop rather than by detail, and the same character the app shows in empty History and on Review, so the icon and the app introduce each other. It follows Ace's rules: a white card with dark features, no limbs.
 
 The source is `design/logo/mark.svg`, on a 1536 grid. Every PNG in `public/` is drawn from it by `sh design/logo/export.sh`, using only macOS's own renderer: full-bleed squares for iOS and Android, which round the corners themselves. The maskable icon uses the mark unscaled — the face sits 23% from centre, inside the 40% circle Android keeps, and the cards are meant to be cropped.
 
-`public/favicon.svg` is kept by hand. At 16px the icon's face would be half a pixel wide, so the tab version draws the same deck on a 64 grid with the face about 2.5 times larger. Legible at 32px; at 16px the face is faint but present, which is the trade for not crowding the card.
+`public/favicon.svg` is kept by hand. At 16px the icon's face would be half a pixel wide, so the tab version draws the same composition on a 64 grid with the face about 2.5 times larger. Clear at 32px and still there at 16px — dark features on white hold up far better than they did on the earlier sage card.
 
 The header wordmark stays as text.
 
