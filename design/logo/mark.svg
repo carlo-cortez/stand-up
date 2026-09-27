@@ -1,13 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1536 1536">
   <!-- Stand Up app icon: Ace peeking in from the lower right, in front of a dark
        green card, on a cream ground. Composition from A8, 25 September 2026;
-       the front card is Ace himself, white with his dot eyes and small smile.
+       the front card is Ace himself, white with his dot eyes and small smile,
+       leaning back 9 degrees as he does in History, with the green card at 4.
        Every PNG in public/ is drawn from this file by export.sh. The face sits
        23% from centre, inside the 40% circle Android keeps. -->
   <rect width="1536" height="1536" fill="#E7E1CF"/>
-  <rect x="246" y="150" width="1280" height="1450" rx="150" fill="#2F4636"/>
-  <rect x="396" y="310" width="1280" height="1450" rx="150" fill="#FFFFFF"/>
-  <circle cx="916" cy="940" r="54" fill="#22302A"/>
-  <circle cx="1156" cy="940" r="54" fill="#22302A"/>
-  <path d="M964 1058 Q1036 1118 1108 1058" fill="none" stroke="#22302A" stroke-width="40" stroke-linecap="round"/>
+  <rect x="246" y="150" width="1280" height="1450" rx="150" fill="#2F4636" transform="rotate(-4 1036 1000)"/>
+  <g transform="rotate(-9 1036 1000)">
+    <rect x="396" y="310" width="1280" height="1450" rx="150" fill="#FFFFFF"/>
+    <circle cx="916" cy="940" r="54" fill="#22302A"/>
+    <circle cx="1156" cy="940" r="54" fill="#22302A"/>
+    <path d="M964 1058 Q1036 1118 1108 1058" fill="none" stroke="#22302A" stroke-width="40" stroke-linecap="round"/>
+  </g>
 </svg>
