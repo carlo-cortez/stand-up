@@ -236,7 +236,7 @@ Order on the screen is deliberate and follows the tone rules: what happened, the
 4. Self-ratings: Structure, Clarity, Confidence, Filler words, each 1–5. No aggregate score is shown here; the average appears only in History.
 5. Notes: a single textarea, labelled "One thing to try next time", placeholder "Slow down before the example."
 6. Feedback card (ships at M2.5), in one of five states.
-7. Actions: "Next topic" primary, "Save and go home" secondary.
+7. Actions: "Next topic" primary, "Save and go home" secondary, and — for a round just finished — a "Retake this topic" text button. Retake replaces the round rather than adding one, so History keeps one round per attempt that counted and the trend isn't skewed by do-overs. It asks first, in a sheet that says what goes and what stays: "This round is deleted — its recording, your ratings, your note and any feedback. You go straight back to prep with the same topic and the same timings." Buttons: "Delete and retake" (destructive) and "Keep this round" (focused by default). It isn't offered on a past round opened from History, or if the round's topic no longer exists, since Round would silently pick another. The retake goes straight to prep, not the card draw — the topic is already chosen.
 
 Ratings and notes save on change, not on submit, so leaving by any route keeps them.
 

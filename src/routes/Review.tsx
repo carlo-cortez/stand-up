@@ -15,6 +15,7 @@ import { measure, requestFeedback } from '../lib/feedback';
 import { mmss, plusMmss } from '../lib/format';
 import { newIntent } from '../lib/liveRound';
 import {
+  deleteSession,
   getSession,
   loadSessions,
   roundNumber,
@@ -25,6 +26,7 @@ import {
 } from '../lib/sessions';
 import { loadLastRoundSettings, loadSettings, roundSettingsOf } from '../lib/settings';
 import { fetchRecording, removeRemoteRecording, syncNow } from '../lib/sync';
+import { topicById } from '../lib/topics';
 import { useDesktop } from '../lib/useMediaQuery';
 import './Review.css';
 
@@ -183,6 +185,27 @@ function ReviewScreen({
     navigate('/round', { state: newIntent(settings) });
   };
 
+  // ---- Retake: this round goes, and the same topic comes straight back to
+  // prep with the same timings. Only for a round just finished, and only
+  // while its topic still exists — otherwise Round would quietly pick another.
+  const [retakeAsked, setRetakeAsked] = useState(false);
+  const canRetake = fromRound && topicById(session.topicId) !== undefined;
+  const confirmRetake = async () => {
+    if (session.recordingId) await deleteRecording(session.recordingId);
+    await removeRemoteRecording(session);
+    deleteSession(session.id);
+    void syncNow();
+    const settings = {
+      ...(loadLastRoundSettings() ?? roundSettingsOf(loadSettings())),
+      category: session.category,
+      difficulty: session.difficulty,
+      prepSeconds: session.prepSeconds,
+      targetSeconds: session.targetSeconds,
+    };
+    // Replace, so Back can't land on the review of a round that's gone.
+    navigate('/round', { state: newIntent(settings, session.topicId), replace: true });
+  };
+
   const over = session.spokenSeconds - session.targetSeconds;
   const label = `Round ${roundNumber(session.id)} · ${dayLabel(Date.parse(session.startedAt))}`;
 
@@ -274,6 +297,11 @@ function ReviewScreen({
       <Button variant="secondary" onClick={() => navigate('/')}>
         Save and go home
       </Button>
+      {canRetake && (
+        <Button variant="text" onClick={() => setRetakeAsked(true)}>
+          Retake this topic
+        </Button>
+      )}
     </div>
   );
 
@@ -330,6 +358,21 @@ function ReviewScreen({
           </Button>
           <Button variant="secondary" onClick={() => setDeleteAsked(false)} data-autofocus>
             Keep it
+          </Button>
+        </div>
+      </Sheet>
+
+      <Sheet open={retakeAsked} title="Retake this topic?" onCancel={() => setRetakeAsked(false)}>
+        <p className="sheet__text">
+          This round is deleted — its recording, your ratings, your note and any feedback. You go straight back to prep
+          with the same topic and the same timings.
+        </p>
+        <div className="sheet__actions">
+          <Button variant="destructive" onClick={() => void confirmRetake()}>
+            Delete and retake
+          </Button>
+          <Button variant="secondary" onClick={() => setRetakeAsked(false)} data-autofocus>
+            Keep this round
           </Button>
         </div>
       </Sheet>
