@@ -1,0 +1,60 @@
+/* Fixed colours, not theme tokens: Ace is a white card in both themes. */
+
+.ace {
+  display: block;
+  overflow: visible;
+}
+
+.ace__floor {
+  stroke: #9fbba5;
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.ace__card {
+  fill: #ffffff;
+  stroke: #c9d0c2;
+  stroke-width: 2;
+}
+
+.ace__eye {
+  fill: #22302a;
+}
+
+.ace__line {
+  fill: none;
+  stroke: #22302a;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+/* One hop, then still. Squash before, stretch at the top, settle after.
+   Reduced motion zeroes the duration globally, so it simply lands. */
+.ace--hop .ace__body {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: ace-hop 900ms var(--ease-out) 300ms both;
+}
+
+@keyframes ace-hop {
+  0% {
+    transform: translateY(0) scaleY(1);
+  }
+  15% {
+    transform: translateY(0) scaleY(0.94);
+  }
+  45% {
+    transform: translateY(-12px) scaleY(1.03);
+  }
+  75% {
+    transform: translateY(0) scaleY(0.97);
+  }
+  100% {
+    transform: translateY(0) scaleY(1);
+  }
+}
+
+/* A past round, opened from History: the same pose, no hop. */
+.ace--still .ace__body {
+  animation: none;
+}

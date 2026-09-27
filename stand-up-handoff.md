@@ -159,6 +159,21 @@ Focus moves into the sheet on open, is trapped while it is open, and returns to 
 
 ---
 
+### Ace, the mascot
+
+A plain white playing card with a face — two dot eyes and a small smile, nothing else — standing on the same sage line as the logo. `src/components/Ace.tsx`, two poses: `lean` (tilted against the line, waiting) and `hop` (upright, eyes smiling, one small squash-and-hop on arrival).
+
+Rules, each learned the hard way or written in from the start:
+
+- **No limbs.** The first draft had thin dark limbs behind a white face panel and a wide grin, which reads as minstrel caricature and the rubber-hose cartoons that came out of it. Ace is one material and moves by tilting and hopping. Any new pose keeps to that — no arms, no legs, no gloves, and the smile stays small.
+- **Always a white card with dark features, in both themes.** Not `--surface`, which goes dark green in the dark theme and would turn Ace into a dark card with light eyes and mouth — the same trope from the other side.
+- **Never reacts to how a round went.** No sad Ace, no proud Ace. It appears only where §8 allows playfulness — empty states and the celebration line — and never in error states, where playfulness reads as evasive; that rules out the offline feedback card.
+- **Never on Prep or Speaking**, where it would compete with the topic and the timer.
+
+Where it appears: empty History (`lean`, in place of the old line drawing) and beside Review's celebration line (`hop`, only on arrival from a round — reopening a past round from History shows the line without Ace). Reduced motion zeroes the hop, so Ace simply lands.
+
+Show a new pose to someone else before it ships. The first draft's problem was invisible to the person who drew it.
+
 ## 4. Screens
 
 ### 4.1 Home
@@ -215,7 +230,7 @@ Desktop: same structure, timer at 208px, bar 720px wide, Finish centred with "Or
 
 Order on the screen is deliberate and follows the tone rules: what happened, then what you thought, then anything the app has to say.
 
-1. A warm headline ("Nice — that's the hard part done.") and the round label.
+1. A warm headline ("Nice — that's the hard part done.") and the round label. Straight after a round, Ace hops beside the headline (§3).
 2. Summary card: the topic, then three tiles — Spoken, Target, Over. Overtime is shown in the same neutral text colour as the other two. Never red, never an icon, never "exceeded".
 3. Playback: play button, waveform, duration, and a "Delete recording" text button. Absent entirely when the round wasn't recorded.
 4. Self-ratings: Structure, Clarity, Confidence, Filler words, each 1–5. No aggregate score is shown here; the average appears only in History.
@@ -251,7 +266,7 @@ Then the session list. Each row is a link to that round's Review and shows date 
 
 At the bottom: "Start practicing" and a "Delete all recordings" text button, the latter shown only while some round still has audio. Each row carries a 44×44 overflow button (three dots, top right, labelled for the round it belongs to) — the canvas shows the sheet but not what opens it, and a row that is a link cannot also hold a button. The delete-a-round sheet offers three choices in this order: delete the whole round, delete only the recording, cancel. The middle option exists because the brief requires that users can drop audio and keep progress.
 
-Empty state: a line drawing, "Nothing here yet.", a sentence explaining what will appear, and the Start button.
+Empty state: Ace leaning on the stage line (§3), "Nothing here yet.", a sentence explaining what will appear, and the Start button.
 
 ---
 

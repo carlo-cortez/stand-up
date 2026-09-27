@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Ace } from '../components/Ace';
 import { AudioPlayer } from '../components/AudioPlayer';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
@@ -285,7 +286,13 @@ function ReviewScreen({
             <CloseIcon />
           </Link>
         </header>
-        <h1 className="review__headline">Nice — that's the hard part done.</h1>
+        {/* The celebration line is the same after every round, so Ace's hop
+            marks finishing one — never how it went. Only on arrival from a
+            round, not when a past one is reopened from History. */}
+        <div className="review__hello">
+          <h1 className="review__headline">Nice — that's the hard part done.</h1>
+          {fromRound && <Ace pose="hop" className="review__ace" />}
+        </div>
 
         <main className="review__body">
         {desktop ? (

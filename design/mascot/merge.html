@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A7 — A2 and A4 merged</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&family=Newsreader:opsz,wght@6..72,400&display=swap">
+<style>
+  :root { color-scheme: light dark; }
+  body { margin: 0; padding: 48px 24px 64px; background: #FAF8F3; color: #22302A;
+         font-family: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif; }
+  .wrap { max-width: 1060px; margin: 0 auto; }
+  h1 { margin: 0 0 8px; font-family: 'Newsreader', Georgia, serif; font-size: 34px; font-weight: 400; letter-spacing: -0.015em; }
+  .sub { margin: 0 0 40px; font-size: 15px; line-height: 1.55; color: #5A6960; max-width: 620px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 26px; align-items: start; }
+  figure { margin: 0; display: flex; flex-direction: column; gap: 12px; }
+  .art { width: 100%; aspect-ratio: 1; border-radius: 18px; overflow: hidden; border: 1px solid #DFE3D8; }
+  .art.hero { border-width: 2px; border-color: #6E8C74; }
+  .art svg { display: block; width: 100%; height: 100%; }
+  figcaption { display: flex; align-items: center; gap: 12px; }
+  .sizes { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .s64 { width: 64px; height: 64px; }
+  .s32 { width: 32px; height: 32px; }
+  .s16 { width: 16px; height: 16px; }
+  .sizes span { display: block; border-radius: 6px; overflow: hidden; border: 1px solid #DFE3D8; }
+  .sizes svg { display: block; width: 100%; height: 100%; }
+  .label { display: flex; flex-direction: column; gap: 2px; }
+  .name { font-size: 15px; font-weight: 700; }
+  .desc { font-size: 13px; color: #5A6960; line-height: 1.35; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) body { background: #151A16; color: #EDF0E8; }
+    :root:not([data-theme="light"]) .sub, :root:not([data-theme="light"]) .desc { color: #A2AFA4; }
+    :root:not([data-theme="light"]) .art, :root:not([data-theme="light"]) .sizes span { border-color: #2E382F; }
+    :root:not([data-theme="light"]) .art.hero { border-color: #90B198; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>A7 — A2 and A4, merged</h1>
+<p class="sub">A2's cream card and clay suit dot, sitting on A4's stack. Same three colours as both parents: cream card, clay for the card behind and the whole face, muted sage ground.</p>
+
+<div class="grid">
+
+  <figure>
+    <div class="art hero"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1536 1536"><rect width="1536" height="1536" fill="#CFDAD3"/><rect x="246" y="150" width="1280" height="1450" rx="150" fill="#B4664F"/><rect x="396" y="310" width="1280" height="1450" rx="150" fill="#F4ECDB"/><circle cx="1036" cy="660" r="152" fill="#B4664F"/><circle cx="916" cy="960" r="54" fill="#B4664F"/><circle cx="1156" cy="960" r="54" fill="#B4664F"/><ellipse cx="1036" cy="1084" rx="46" ry="30" fill="#B4664F"/></svg></div>
+    <figcaption>
+      <span class="sizes">
+        <span class="s64"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1536 1536"><rect width="1536" height="1536" fill="#CFDAD3"/><rect x="246" y="150" width="1280" height="1450" rx="150" fill="#B4664F"/><rect x="396" y="310" width="1280" height="1450" rx="150" fill="#F4ECDB"/><circle cx="1036" cy="660" r="152" fill="#B4664F"/><circle cx="916" cy="960" r="54" fill="#B4664F"/><circle cx="1156" cy="960" r="54" fill="#B4664F"/><ellipse cx="1036" cy="1084" rx="46" ry="30" fill="#B4664F"/></svg></span>
+        <span class="s32"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1536 1536"><rect width="1536" height="1536" fill="#CFDAD3"/><rect x="246" y="150" width="1280" height="1450" rx="150" fill="#B4664F"/><rect x="396" y="310" width="1280" height="1450" rx="150" fill="#F4ECDB"/><circle cx="1036" cy="660" r="152" fill="#B4664F"/><circle cx="916" cy="960" r="54" fill="#B4664F"/><circle cx="1156" cy="960" r="54" fill="#B4664F"/><ellipse cx="1036" cy="1084" rx="46" ry="30" fill="#B4664F"/></svg></span>
+        <span class="s16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1536 1536"><rect width="1536" height="1536" fill="#CFDAD3"/><rect x="246" y="150" width="1280" height="1450" rx="150" fill="#B4664F"/><rect x="396" y="310" width="1280" height="1450" rx="150" fill="#F4ECDB"/><circle cx="1036" cy="660" r="152" fill="#B4664F"/><circle cx="916" cy="960" r="54" fill="#B4664F"/><circle cx="1156" cy="960" r="54" fill="#B4664F"/><ellipse cx="1036" cy="1084" rx="46" ry="30" fill="#B4664F"/></svg></span>
+      </span>
+      <span class="label"><span class="name">A7 · Merged</span><span class="desc">At 64, 32 and 16 pixels</span></span>
+    </figcaption>
+  </figure>
+
+  <figure>
+    <div class="art"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1536 1536"><rect width="1536" height="1536" fill="#CFDAD3"/><rect x="346" y="250" width="1280" height="1450" rx="150" fill="#F4ECDB"/><circle cx="986" cy="600" r="152" fill="#B4664F"/><circle cx="866" cy="900" r="52" fill="#B4664F"/><circle cx="1106" cy="900" r="52" fill="#B4664F"/><ellipse cx="986" cy="1024" rx="44" ry="28" fill="#B4664F"/></svg></div>
+    <figcaption><span class="label"><span class="name">A2 · Dot</span><span class="desc">Parent — the face and colours</span></span></figcaption>
+  </figure>
+
+  <figure>
+    <div class="art"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1536 1536"><rect width="1536" height="1536" fill="#D8DFD6"/><rect x="246" y="150" width="1280" height="1450" rx="150" fill="#F4ECDB"/><rect x="396" y="310" width="1280" height="1450" rx="150" fill="#B4664F"/><circle cx="916" cy="940" r="54" fill="#F4ECDB"/><circle cx="1156" cy="940" r="54" fill="#F4ECDB"/><ellipse cx="1036" cy="1070" rx="46" ry="30" fill="#F4ECDB"/></svg></div>
+    <figcaption><span class="label"><span class="name">A4 · Deck</span><span class="desc">Parent — the stack</span></span></figcaption>
+  </figure>
+
+</div>
+
+</div>
+</body>
+</html>
