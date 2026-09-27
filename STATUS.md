@@ -78,6 +78,13 @@ Open:
 
 ## Untested, and worth distrusting until tried
 
+- **Card sounds on a real phone.** Verified only by instrumenting the audio
+  calls in Chrome: what is scheduled, when, and that the switch silences it.
+  Nobody has heard them. Two things to listen for — whether noise bursts pass
+  for cards or sound like static, and whether, on iOS, playing sound before
+  the mic opens drops the recording's volume or moves playback to the
+  earpiece. If recording misbehaves, turn Card sounds off first to rule it out.
+
 - **Safari audio.** iOS records mp4, not webm. Recording and playback have only
   been exercised in Chrome, with a synthetic tone standing in for the mic.
 - **The locked screen.** Lock the phone mid-round: the timer should recompute

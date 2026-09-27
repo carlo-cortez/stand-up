@@ -187,6 +187,8 @@ Long topics wrap to four lines at 34px within the 342px content width; the artbo
 
 Desktop moves the structure hint out of the vertical stack and into a 340px card to the right of the centre column, so opening it no longer costs the topic any size — the topic sits at 52px and the ring at 168px. On desktop the hint is open by default, because the space is free; on mobile it stays closed by default, because it is not.
 
+**Sound.** The draw is the only place the app makes a sound: a riffle for each of the two shuffles, a soft slide as the fan spreads, and a flip as the picked card turns — generated in the browser from filtered noise, not loaded from files, and timed to the keyframes in `Round.css` (retime `playShuffle` and `playFlip` in `src/lib/sounds.ts` if those move). Recording starts with Speaking, so none of it can reach a recording. A Card sounds switch in Settings turns it off, on by default; switched off, the app never creates an audio context at all. Reduced motion drops the riffle and slide, since there is no shuffle on screen to match, and keeps the flip as feedback for the tap. On an iPhone the ring/silent switch silences it, which is correct for decorative sound.
+
 ### 4.4 Speaking
 
 The timer is the only large element. Everything else recedes.
@@ -363,7 +365,7 @@ This is a web app, not a native one wearing a browser costume. These behaviours 
 | `/round/review` | Review of the round just finished | |
 | `/history` | History | |
 | `/history/:sessionId` | Review of a past round | Same component as `/round/review`, loaded from storage |
-| `/settings` | Settings | Theme, the account section when signed in, a line saying what is stored, the two delete-everything actions, and a link to `/privacy` |
+| `/settings` | Settings | Theme, the Card sounds switch, the account section when signed in, a line saying what is stored, the two delete-everything actions, and a link to `/privacy` |
 | `/privacy` | Your data | Where a recording goes, in plain words. Linked from Settings. Google sign-in cannot be published without a page here |
 | `/signin` | Sign in | Email magic link. Optional: the app works signed out, and says so here |
 

@@ -4,11 +4,13 @@ import { Button } from '../components/Button';
 import { BackIcon } from '../components/Icon';
 import { SegmentedControl } from '../components/SegmentedControl';
 import { Sheet } from '../components/Sheet';
+import { Toggle } from '../components/Toggle';
 import { useAccount, signOut } from '../lib/account';
 import { announce } from '../lib/announce';
 import { deleteAllRecordings } from '../lib/audioStore';
 import { forgetAllRecordings, loadSessions } from '../lib/sessions';
 import { applyTheme, clearAllLocalData, loadSettings, saveSettings, type Theme } from '../lib/settings';
+import { unlockSounds } from '../lib/sounds';
 import { cloudConfigured } from '../lib/supabase';
 import { deleteEverythingRemote, lastSyncedAt, removeRemoteRecording, syncNow } from '../lib/sync';
 import './Setup.css';
@@ -27,6 +29,7 @@ export default function Settings() {
   const navigate = useNavigate();
   const { user, loading } = useAccount();
   const [theme, setTheme] = useState<Theme>(() => loadSettings().theme);
+  const [sounds, setSounds] = useState(() => loadSettings().sounds);
   const [askRecordings, setAskRecordings] = useState(false);
   const [askEverything, setAskEverything] = useState(false);
 
@@ -37,6 +40,13 @@ export default function Settings() {
     setTheme(next);
     saveSettings({ theme: next });
     applyTheme(next);
+  };
+
+  const changeSounds = (on: boolean) => {
+    setSounds(on);
+    saveSettings({ sounds: on });
+    // This tap is a gesture, so it can wake audio for the next draw.
+    if (on) unlockSounds();
   };
 
   const deleteRecordings = async () => {
@@ -71,6 +81,14 @@ export default function Settings() {
 
         <main className="setup__form">
           <SegmentedControl legend="Theme" name="theme" options={THEME_OPTIONS} value={theme} onChange={change} />
+
+          <Toggle
+            id="sounds-toggle"
+            label="Card sounds"
+            description="A riffle, a spread and a flip while you draw a card. Nothing else makes a sound, and they finish before the mic opens."
+            checked={sounds}
+            onChange={changeSounds}
+          />
 
           {cloudConfigured && (
             <div className="settings__account">
