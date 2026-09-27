@@ -180,7 +180,7 @@ Show a new pose to someone else before it ships. The first draft's problem was i
 
 Two states on the canvas: returning and first run.
 
-Returning shows the wordmark and a settings button — a cog, eight teeth around a small circle. (The artboard drew a sun under that label; it reads as a brightness toggle, and Settings now holds the account and the delete-everything actions, so the app uses a cog and the canvas should follow.) Then the headline "The floor is yours.", a one-line summary of recent activity, the dominant "Start practicing" button at 68px, directly under it a quiet line naming the round that button will play — "Surprise me · Medium · 30s, 2 min" — with a Change link to Setup beside it, then a "Same as last time" button that repeats the last settings verbatim (label it with those settings, e.g. "Same as last time · Surprise me, 30s, 2 min", and hide it entirely when those settings match the line above, since it would then do exactly what Start does), a Topic of the day card that jumps straight into Prep with that topic, and a History row at the bottom showing the round count and the date of the last round.
+Returning shows the wordmark and a settings button — a cog, eight teeth around a small circle. (The artboard drew a sun under that label; it reads as a brightness toggle, and Settings now holds the account and the delete-everything actions, so the app uses a cog and the canvas should follow.) Then the headline "The floor is yours.", a one-line summary of recent activity, the dominant "Start practicing" button at 68px, directly under it a quiet line naming the round that button will play — "Surprise me · Medium · 60s, 2 min" — with a Change link to Setup beside it, then a "Same as last time" button that repeats the last settings verbatim (label it with those settings, e.g. "Same as last time · Surprise me, 60s, 2 min", and hide it entirely when those settings match the line above, since it would then do exactly what Start does), a Topic of the day card that jumps straight into Prep with that topic, and a History row at the bottom showing the round count and the date of the last round.
 
 First run replaces the activity line and the Topic of the day card with a three-step explainer and a quiet "No rounds yet" row where History would be. The Start button is identical in both — its position must not move between states.
 
@@ -192,7 +192,7 @@ Desktop splits into two columns: the headline, Start and "Same as last time" on 
 
 Skippable by design — Home's Start button uses the stored defaults and goes straight to Prep. This screen is reached from the Change link beside Home's round line, or by editing settings.
 
-Fields: category (7 categories plus "Surprise me", which mixes all of them, as the default), difficulty (Easy / **Medium** / Hard), prep time (15 / **30** / 60 seconds), speaking time (1 / **2** / 3 minutes), and a recording toggle (on by default).
+Fields: category (7 categories plus "Surprise me", which mixes all of them, as the default), difficulty (Easy / **Medium** / Hard), prep time (15 / 30 / **60** seconds), speaking time (1 / **2** / 3 minutes), and a recording toggle (on by default).
 
 Desktop keeps a single 880px card with the three time-and-difficulty groups side by side in a 3-column grid, categories wrapping above them, and the recording toggle below. A line beside the Start button states what the phone version leaves implicit: these choices become the defaults, and Home's big button skips this screen next time.
 
