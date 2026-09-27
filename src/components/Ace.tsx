@@ -30,19 +30,17 @@ export function Ace({ pose, className }: { pose: Pose; className?: string }) {
         // Leaning on the line, waiting.
         <g transform="rotate(-9 60 143)">
           <rect className="ace__card" x="36" y="75" width="48" height="68" rx="7" />
-          <circle className="ace__dot" cx="60" cy="88" r="3.6" />
-          <circle className="ace__eye" cx="52.5" cy="106" r="2.5" />
-          <circle className="ace__eye" cx="67.5" cy="106" r="2.5" />
-          <path className="ace__line" d="M55.5 113 Q60 116.5 64.5 113" />
+          <circle className="ace__eye" cx="52.5" cy="104" r="2.5" />
+          <circle className="ace__eye" cx="67.5" cy="104" r="2.5" />
+          <path className="ace__line" d="M55.5 111 Q60 114.5 64.5 111" />
         </g>
       ) : (
         // Upright, eyes smiling, and one small hop on arrival.
         <g className="ace__body">
           <rect className="ace__card" x="36" y="75" width="48" height="68" rx="7" />
-          <circle className="ace__dot" cx="60" cy="88" r="3.6" />
-          <path className="ace__line" d="M49.5 107 Q52.5 103.5 55.5 107" />
-          <path className="ace__line" d="M64.5 107 Q67.5 103.5 70.5 107" />
-          <path className="ace__line" d="M55 112.5 Q60 117 65 112.5" />
+          <path className="ace__line" d="M49.5 105 Q52.5 101.5 55.5 105" />
+          <path className="ace__line" d="M64.5 105 Q67.5 101.5 70.5 105" />
+          <path className="ace__line" d="M55 110.5 Q60 115 65 110.5" />
         </g>
       )}
     </svg>

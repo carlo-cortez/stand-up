@@ -151,7 +151,7 @@ Focus moves into the sheet on open, is trapped while it is open, and returns to 
 
 ### Ace, the mascot
 
-A playing card with a face — two dot eyes, a small smile, and the rust dot where a card's pip would be — standing on the same sage line as the logo. `src/components/Ace.tsx`, two poses: `lean` (tilted against the line, waiting) and `hop` (upright, eyes smiling, one small squash-and-hop on arrival).
+A plain white playing card with a face — two dot eyes and a small smile, nothing else — standing on the same sage line as the logo. `src/components/Ace.tsx`, two poses: `lean` (tilted against the line, waiting) and `hop` (upright, eyes smiling, one small squash-and-hop on arrival).
 
 Rules, each learned the hard way or written in from the start:
 
