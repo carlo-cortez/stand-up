@@ -146,7 +146,16 @@ async function pull(userId: string): Promise<void> {
     const local = allSessions().find((s) => s.id === remote.id);
     // The newer change wins; a local edit still waiting to go up is newer.
     if (local && (local.updatedAt ?? local.startedAt) > remote.updatedAt!) continue;
-    putSessionFromCloud({ ...remote, recordingId: local?.recordingId });
+    // Feedback never goes to the server, so a newer copy from another device
+    // arrives without it. Keep this device's, or rating a round on the laptop
+    // would wipe the feedback the phone fetched for it.
+    putSessionFromCloud({
+      ...remote,
+      recordingId: local?.recordingId,
+      transcript: local?.transcript,
+      metrics: local?.metrics,
+      written: local?.written,
+    });
     write(CURSOR_KEY, row.updated_at);
   }
 }

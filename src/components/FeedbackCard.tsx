@@ -1,7 +1,7 @@
 import { Button } from './Button';
 import { Card } from './Card';
 import { deltaAgainstAverage, fillerHistory, MIN_WORDS, wordCount } from '../lib/feedback';
-import type { Session } from '../lib/sessions';
+import type { Criteria, Mark, Session } from '../lib/sessions';
 
 /*
  * The feedback card (handoff §4.5), in one of six states. The counted half —
@@ -19,6 +19,48 @@ type Props = {
   state: 'idle' | 'loading' | 'offline' | 'thin' | 'ready';
   error?: string | null;
 };
+
+/** Point, Reason, Example, Point — the order the prep hint teaches — then the topic. */
+const CRITERIA: { key: keyof Criteria; label: string }[] = [
+  { key: 'point', label: 'Made a clear point' },
+  { key: 'reason', label: 'Backed it with a reason' },
+  { key: 'example', label: 'Gave an example' },
+  { key: 'landed', label: 'Landed it at the end' },
+  { key: 'answered', label: 'Answered the question' },
+];
+
+const MARK_LABEL: Record<Mark, string> = { there: 'There', partly: 'Partly', 'not-yet': 'Not yet' };
+
+/*
+ * Marks, not numbers (handoff §4.5): a checklist to see across rounds, never a
+ * grade. It follows What went well, and its notes describe rather than
+ * instruct — the one thing to change stays in Try next time.
+ */
+function Checklist({ criteria }: { criteria: Criteria }) {
+  return (
+    <div className="feedback__block">
+      <h2 className="section-label">What the coach noticed</h2>
+      <ul className="feedback__checklist">
+        {CRITERIA.map(({ key, label }) => {
+          const { mark, note } = criteria[key];
+          return (
+            <li key={key} className={`feedback__check feedback__check--${mark}`}>
+              <span className="feedback__mark" aria-hidden="true" />
+              <span className="feedback__check-text">
+                <span className="feedback__check-head">
+                  <span className="feedback__check-label">{label}</span>
+                  <span className="feedback__check-mark">{MARK_LABEL[mark]}</span>
+                </span>
+                <span className="feedback__check-note">{note}</span>
+              </span>
+            </li>
+          );
+        })}
+      </ul>
+      <p className="feedback__note">Confidence and delivery aren't marked — the coach only reads your words.</p>
+    </div>
+  );
+}
 
 function Delta({ value, better }: { value: number | null; better: 'lower' | 'either' }) {
   if (value === null) return null;
@@ -135,6 +177,8 @@ export function FeedbackCard({ session, history, onRun, state, error }: Props) {
           <p className="feedback__prose">{written.wentWell}</p>
         </div>
       )}
+
+      {written?.criteria && <Checklist criteria={written.criteria} />}
 
       <div className="feedback__tiles">
         <div className="feedback__tile">

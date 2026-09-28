@@ -111,10 +111,11 @@ async function explain(response: Response): Promise<string> {
  * never be in the browser. Returns the transcript, and the written half when
  * the model obliged; the counted half is derived here either way.
  */
-export async function requestFeedback(blob: Blob, targetSeconds: number): Promise<FeedbackResult> {
+export async function requestFeedback(blob: Blob, targetSeconds: number, topic: string): Promise<FeedbackResult> {
   const body = new FormData();
   body.append('audio', blob, 'round.webm');
   body.append('targetSeconds', String(targetSeconds));
+  body.append('topic', topic);
 
   const response = await fetch('/api/feedback', { method: 'POST', body });
   if (!response.ok) throw new Error(await explain(response));

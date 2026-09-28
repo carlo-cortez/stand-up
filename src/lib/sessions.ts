@@ -26,12 +26,23 @@ export type Metrics = {
   flagged: Flagged[];
 };
 
+export type Mark = 'there' | 'partly' | 'not-yet';
+
+/**
+ * What the coach noticed, against the Point–Reason–Example–Point shape the
+ * prep hint teaches, plus whether the topic was answered. Marks, never
+ * numbers; the notes describe, and the one thing to change stays in
+ * tryNextTime. Absent on rounds written before it existed.
+ */
+export type Criteria = Record<'point' | 'reason' | 'example' | 'landed' | 'answered', { mark: Mark; note: string }>;
+
 export type Written = {
   wentWell: string;
   /** The user's own sentence, verbatim, so the rewrite has something to sit against. */
   quoted: string;
   sharper: string;
   tryNextTime: string;
+  criteria?: Criteria;
 };
 
 export type Session = {
