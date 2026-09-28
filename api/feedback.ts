@@ -17,9 +17,12 @@ export const config = { maxDuration: 60 };
 
 const GROQ = 'https://api.groq.com/openai/v1';
 
-// Model ids move; both are overridable without a code change.
+// Model ids move; both are overridable without a code change. The text model
+// was llama-3.3-70b-versatile until September 2026, when it turned out this
+// project's key had no Llama text model at all: every written half came back
+// 404 model_not_found, and the card hid it. gpt-oss-120b is on the key's list.
 const STT_MODEL = process.env.GROQ_STT_MODEL || 'whisper-large-v3-turbo';
-const TEXT_MODEL = process.env.GROQ_TEXT_MODEL || 'llama-3.3-70b-versatile';
+const TEXT_MODEL = process.env.GROQ_TEXT_MODEL || 'openai/gpt-oss-120b';
 
 /**
  * A two-minute round is well under 1MB as webm/opus, and about 1.4MB as the
@@ -89,7 +92,10 @@ async function write(transcript: string, targetSeconds: number, key: string): Pr
     body: JSON.stringify({
       model: TEXT_MODEL,
       temperature: 0.4,
-      max_tokens: 500,
+      // A reasoning model: its thinking counts against max_tokens, so keep the
+      // thinking short and leave room for the four fields after it.
+      reasoning_effort: 'low',
+      max_tokens: 2000,
       response_format: { type: 'json_object' },
       messages: [
         { role: 'system', content: SYSTEM_PROMPT },
