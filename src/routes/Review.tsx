@@ -167,7 +167,7 @@ function ReviewScreen({
     setFeedbackState('loading');
     setFeedbackError(null);
     try {
-      const { transcript, written } = await requestFeedback(blob, session.targetSeconds);
+      const { transcript, written } = await requestFeedback(blob, session.targetSeconds, session.topicText);
       // The counted half is derived here, from the transcript: no model, and
       // nothing to go wrong that would cost the round its numbers.
       if (!enoughSpeech(transcript)) {
