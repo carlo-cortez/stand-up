@@ -1,6 +1,6 @@
 # Stand Up
 
-A practice app for impromptu speaking. You get a topic, half a minute to think,
+A practice app for impromptu speaking. You get a topic, a minute to think,
 then a timer while you talk. Afterwards you can play yourself back, rate the
 round and write one note. Phone-first, works offline, installs to a home screen.
 

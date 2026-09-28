@@ -27,7 +27,7 @@ export type RoundSettings = Pick<Settings, 'category' | 'difficulty' | 'prepSeco
 export const DEFAULT_SETTINGS: Settings = {
   category: 'surprise',
   difficulty: 'medium',
-  prepSeconds: 30,
+  prepSeconds: 60,
   targetSeconds: 120,
   recordAudio: true,
   micBlocked: false,
@@ -83,7 +83,7 @@ export function roundSettingsOf(s: Settings): RoundSettings {
   };
 }
 
-/** "Surprise me · Medium · 30s, 2 min" — what the next round will be. */
+/** "Surprise me · Medium · 60s, 2 min" — what the next round will be. */
 export function roundSummary(s: RoundSettings): string {
   return `${categoryLabel(s.category)} · ${difficultyLabel(s.difficulty)} · ${s.prepSeconds}s, ${minutes(s.targetSeconds)}`;
 }
