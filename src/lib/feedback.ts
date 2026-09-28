@@ -20,6 +20,22 @@ export function wordCount(transcript: string): number {
   return (transcript.trim().match(/[\p{L}'’-]+/gu) ?? []).length;
 }
 
+/**
+ * Below this there is nothing to give feedback on: about ten seconds of
+ * talking. A four-second round of breath came back as zero words, three
+ * zeros and "Your lowest so far" — praise for saying nothing.
+ */
+export const MIN_WORDS = 20;
+
+export function enoughSpeech(transcript: string | undefined): boolean {
+  return wordCount(transcript ?? '') >= MIN_WORDS;
+}
+
+/** A round whose numbers mean something: measured, and long enough to measure. */
+function counts(s: Session): boolean {
+  return s.metrics !== undefined && enoughSpeech(s.transcript);
+}
+
 export function measure(transcript: string, spokenSeconds: number): Metrics {
   const flagged: Flagged[] = [];
   let fillerWords = 0;
@@ -61,7 +77,7 @@ export function deltaAgainstAverage(
   key: 'wordsPerMinute' | 'fillerWords' | 'vagueWords',
 ): number | null {
   const earlier = history
-    .filter((s) => s.id !== current.id && s.metrics && Date.parse(s.startedAt) < Date.parse(current.startedAt))
+    .filter((s) => s.id !== current.id && counts(s) && Date.parse(s.startedAt) < Date.parse(current.startedAt))
     .map((s) => s.metrics![key]);
   if (earlier.length < 3) return null;
   const average = earlier.reduce((a, b) => a + b, 0) / earlier.length;
@@ -71,7 +87,7 @@ export function deltaAgainstAverage(
 /** Filler counts across the last few rounds, oldest first, for the small bar strip. */
 export function fillerHistory(history: Session[], current: Session, span = 5): number[] {
   return history
-    .filter((s) => s.metrics && Date.parse(s.startedAt) <= Date.parse(current.startedAt))
+    .filter((s) => counts(s) && Date.parse(s.startedAt) <= Date.parse(current.startedAt))
     .slice(-span)
     .map((s) => s.metrics!.fillerWords);
 }

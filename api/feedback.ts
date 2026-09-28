@@ -17,9 +17,12 @@ export const config = { maxDuration: 60 };
 
 const GROQ = 'https://api.groq.com/openai/v1';
 
-// Model ids move; both are overridable without a code change.
+// Model ids move; both are overridable without a code change. The text model
+// was llama-3.3-70b-versatile until September 2026, when it turned out this
+// project's key had no Llama text model at all: every written half came back
+// 404 model_not_found, and the card hid it. gpt-oss-120b is on the key's list.
 const STT_MODEL = process.env.GROQ_STT_MODEL || 'whisper-large-v3-turbo';
-const TEXT_MODEL = process.env.GROQ_TEXT_MODEL || 'llama-3.3-70b-versatile';
+const TEXT_MODEL = process.env.GROQ_TEXT_MODEL || 'openai/gpt-oss-120b';
 
 /**
  * A two-minute round is well under 1MB as webm/opus, and about 1.4MB as the
@@ -67,14 +70,32 @@ async function transcribe(audio: Blob, key: string): Promise<string> {
   return (data.text ?? '').trim();
 }
 
+/*
+ * Why the written half didn't come back, for the function logs. Never the
+ * transcript or the model's reply: those are the speaker's words, and Groq's
+ * error bodies can quote the generation back.
+ */
+function unwritten(reason: string): null {
+  console.error(`feedback: written half missing (${reason})`);
+  return null;
+}
+
+/** Mirrors MIN_WORDS in src/lib/feedback.ts: below it the app shows no feedback. */
+const MIN_WORDS = 20;
+
 async function write(transcript: string, targetSeconds: number, key: string): Promise<Written | null> {
+  if ((transcript.match(/[\p{L}'’-]+/gu) ?? []).length < MIN_WORDS) return null;
+
   const response = await fetch(`${GROQ}/chat/completions`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
       model: TEXT_MODEL,
       temperature: 0.4,
-      max_tokens: 500,
+      // A reasoning model: its thinking counts against max_tokens, so keep the
+      // thinking short and leave room for the four fields after it.
+      reasoning_effort: 'low',
+      max_tokens: 2000,
       response_format: { type: 'json_object' },
       messages: [
         { role: 'system', content: SYSTEM_PROMPT },
@@ -87,14 +108,20 @@ async function write(transcript: string, targetSeconds: number, key: string): Pr
   });
   // The counted half is the part that must not fail; if the writing does not
   // come back, the card still has something true to show.
-  if (!response.ok) return null;
+  if (!response.ok) {
+    const code = await response
+      .json()
+      .then((body: { error?: { code?: string; type?: string } }) => body.error?.code ?? body.error?.type ?? '')
+      .catch(() => '');
+    return unwritten(`model replied ${response.status}${code ? ` ${code}` : ''}`);
+  }
 
   const data = (await response.json()) as { choices?: { message?: { content?: string } }[] };
   const content = data.choices?.[0]?.message?.content;
-  if (!content) return null;
+  if (!content) return unwritten('empty reply');
   try {
     const parsed = JSON.parse(content) as Partial<Written>;
-    if (!parsed.wentWell || !parsed.tryNextTime) return null;
+    if (!parsed.wentWell || !parsed.tryNextTime) return unwritten('reply missing fields');
     return {
       wentWell: parsed.wentWell,
       quoted: parsed.quoted ?? '',
@@ -102,7 +129,7 @@ async function write(transcript: string, targetSeconds: number, key: string): Pr
       tryNextTime: parsed.tryNextTime,
     };
   } catch {
-    return null;
+    return unwritten('reply was not JSON');
   }
 }
 

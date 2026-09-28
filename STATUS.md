@@ -76,6 +76,15 @@ Open:
 6. **Consider Git-based deploys** rather than `npx vercel` from the laptop:
    every push deploys, and every PR gets a preview URL to open on the phone.
 
+## Fixed, 28 September
+
+- **The AI-written feedback had never worked in production.** The Groq key
+  has no Llama text model, so every request for the written half came back
+  `404 model_not_found`, and the card hid the gap. Found by logging the reason
+  on a preview; the key's model list has `openai/gpt-oss-120b`, which is now
+  the default. If feedback goes quiet again, the function logs say why:
+  `vercel logs <deployment>` and look for `feedback:`.
+
 ## Untested, and worth distrusting until tried
 
 - **Card sounds on a real phone.** Verified only by instrumenting the audio

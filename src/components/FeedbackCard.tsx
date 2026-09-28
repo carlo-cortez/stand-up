@@ -1,14 +1,14 @@
 import { Button } from './Button';
 import { Card } from './Card';
-import { deltaAgainstAverage, fillerHistory } from '../lib/feedback';
+import { deltaAgainstAverage, fillerHistory, MIN_WORDS, wordCount } from '../lib/feedback';
 import type { Session } from '../lib/sessions';
 
 /*
- * The feedback card (handoff §4.5), in one of five states. The counted half —
+ * The feedback card (handoff §4.5), in one of six states. The counted half —
  * the three tiles, the chips, the five-round strip — is derived from the
  * transcript with no model involved. The written half is the three prose
- * blocks, and when it is missing the card simply does without: the same
- * component with those blocks unrendered, never a placeholder for them.
+ * blocks. When it is missing the card says so and offers to try again,
+ * rather than leaving a gap that looks like the whole of the feedback.
  */
 
 type Props = {
@@ -16,7 +16,7 @@ type Props = {
   history: Session[];
   /** Absent when the round has no audio to send. */
   onRun?: () => void;
-  state: 'idle' | 'loading' | 'offline' | 'ready';
+  state: 'idle' | 'loading' | 'offline' | 'thin' | 'ready';
   error?: string | null;
 };
 
@@ -57,6 +57,25 @@ export function FeedbackCard({ session, history, onRun, state, error }: Props) {
             : 'This round has no recording, so there is nothing to listen back to.'}
         </p>
         {error && <p className="feedback__error">{error}</p>}
+      </Card>
+    );
+  }
+
+  if (state === 'thin') {
+    const heard = session.transcript?.trim() ?? '';
+    const words = wordCount(heard);
+    return (
+      <Card muted className="feedback">
+        <div className="feedback__head">
+          <h2 className="feedback__title">Not enough to go on</h2>
+        </div>
+        <p className="feedback__lede">
+          {words === 0
+            ? "This round didn't have any words in it that could be picked out, so there's nothing to give feedback on."
+            : `This round had ${words} ${words === 1 ? 'word' : 'words'} in it — feedback needs about ${MIN_WORDS}, so there's nothing fair to say yet.`}{' '}
+          Talk for half a minute or more next time and it will have something to work with.
+        </p>
+        {words > 0 && <TranscriptDetails transcript={heard} />}
       </Card>
     );
   }
@@ -181,6 +200,22 @@ export function FeedbackCard({ session, history, onRun, state, error }: Props) {
         <div className="feedback__block feedback__block--tight">
           <h2 className="section-label">Try next time</h2>
           <p className="feedback__prose">{written.tryNextTime}</p>
+        </div>
+      )}
+
+      {!written && (
+        <div className="feedback__block feedback__block--tight">
+          <h2 className="section-label">The written part</h2>
+          <p className="feedback__prose">
+            It didn't come back this time — the numbers above are still right.
+            {onRun ? ' Trying again sends the recording once more.' : ''}
+          </p>
+          {onRun && (
+            <Button variant="secondary" onClick={onRun}>
+              Try again
+            </Button>
+          )}
+          {error && <p className="feedback__error">{error}</p>}
         </div>
       )}
 
