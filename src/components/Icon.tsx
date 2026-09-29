@@ -74,3 +74,14 @@ export function MicOffIcon() {
     </svg>
   );
 }
+
+/** iOS's Share glyph — a box with an arrow out of the top — for install steps. */
+export function ShareIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" strokeWidth="1.5" {...common}>
+      <path d="M8 1.5 V10" />
+      <path d="M5 4.5 L8 1.5 L11 4.5" />
+      <path d="M5.5 6.5 H4 A1 1 0 0 0 3 7.5 V13.5 A1 1 0 0 0 4 14.5 H12 A1 1 0 0 0 13 13.5 V7.5 A1 1 0 0 0 12 6.5 H10.5" />
+    </svg>
+  );
+}

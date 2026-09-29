@@ -8,6 +8,7 @@ import App from './App';
 import { clearLiveRound, isResumable, loadLiveRound, setFlash } from './lib/liveRound';
 import { addSession, sessionFor } from './lib/sessions';
 import { applyTheme, loadSettings } from './lib/settings';
+import './lib/install';
 import { unlockSoundsOnFirstGesture } from './lib/sounds';
 import { syncNow } from './lib/sync';
 

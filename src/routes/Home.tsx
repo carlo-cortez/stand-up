@@ -2,9 +2,11 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
+import { InstallCard } from '../components/InstallCard';
 import { ChevronRightIcon, ClockIcon, SettingsIcon } from '../components/Icon';
 import { activityLine, dayLabel, historyLine, loadRounds } from '../lib/activity';
 import { minutes } from '../lib/format';
+import { dismissInstall, installDismissed } from '../lib/install';
 import { clearFlash, newIntent, peekFlash } from '../lib/liveRound';
 import {
   loadLastRoundSettings,
@@ -41,6 +43,8 @@ export default function Home() {
   // Read the "interrupted" line once and clear it after paint, so it shows on
   // this visit only. Peek-then-clear keeps StrictMode's double render safe.
   const [flash] = useState(peekFlash);
+  // After the first round, never on the first visit: the explainer has that space.
+  const [offerInstall, setOfferInstall] = useState(() => !firstRun && !installDismissed());
   useEffect(clearFlash, []);
 
   // Fresh intents per visit to Home; each one starts a distinct round.
@@ -131,6 +135,15 @@ export default function Home() {
     </Card>
   );
 
+  const install = offerInstall && (
+    <InstallCard
+      onDismiss={() => {
+        dismissInstall();
+        setOfferInstall(false);
+      }}
+    />
+  );
+
   const historyRow = firstRun ? (
     <div className="home__empty-history">
       <ClockIcon />
@@ -167,6 +180,7 @@ export default function Home() {
           </div>
           <div className="home__right">
             {firstRun ? explainer : topicCard}
+            {install}
             {historyRow}
           </div>
         </main>
@@ -189,6 +203,7 @@ export default function Home() {
             <>
               {actions}
               {topicCard}
+              {install}
             </>
           )}
         </main>

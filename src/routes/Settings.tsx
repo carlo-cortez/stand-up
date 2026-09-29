@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../components/Button';
+import { InstallCard } from '../components/InstallCard';
 import { BackIcon } from '../components/Icon';
 import { SegmentedControl } from '../components/SegmentedControl';
 import { Sheet } from '../components/Sheet';
@@ -125,6 +126,8 @@ export default function Settings() {
               )}
             </div>
           )}
+
+          <InstallCard />
 
           <div className="settings__data">
             <h2 className="section-label">Your data</h2>

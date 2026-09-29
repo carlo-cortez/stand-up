@@ -184,6 +184,8 @@ Returning shows the wordmark and a settings button — a cog, eight teeth around
 
 First run replaces the activity line and the Topic of the day card with a three-step explainer and a quiet "No rounds yet" row where History would be. The Start button is identical in both — its position must not move between states.
 
+**Add to home screen.** The app has been installable since M4; this card says so. It appears on Home only once there's at least one round (the first-run explainer owns that space), after the Topic of the day card so Start never moves, and "Not now" puts it away for good. Settings always carries the same card until the app is installed. Two behaviours: where the browser offers an install (Chromium's `beforeinstallprompt`, held and fired from our own button) the card has an "Add to home screen" button; on iPhone and iPad, where Safari never offers one, it explains: "In Safari, tap Share, then Add to Home Screen." Declining the browser's prompt leaves the card for that visit with "It's here in Settings whenever you want it," and Home doesn't ask again. Nothing shows once installed, or where there's nothing useful to offer (Firefox, desktop Safari). `src/lib/install.ts`, `src/components/InstallCard.tsx`.
+
 Home must grow into a Phase 4 dashboard without a redesign: keep the Start button anchored in the vertical centre band and let cards accumulate below it.
 
 Desktop splits into two columns: the headline, Start and "Same as last time" on the left at a 76px headline; Topic of the day and a richer History summary on the right. History moves up into the header as a text link as well, since a desktop header has room for navigation that a phone header does not.
