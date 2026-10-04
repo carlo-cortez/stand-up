@@ -392,7 +392,7 @@ function LiveRoundScreen({ initial, resumed }: { initial: LiveRound; resumed: bo
             <CardDraw
               count={round.skipUsed ? 6 : 7}
               picked={picked}
-              face={{ category: categoryLabel(topic.category), difficulty: difficultyLabel(topic.difficulty) }}
+              topic={topic}
               onPick={draw}
             />
           </main>
