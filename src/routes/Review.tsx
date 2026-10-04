@@ -324,6 +324,7 @@ function ReviewScreen({
       state={feedbackState}
       error={feedbackError}
       onRun={blob ? () => void runFeedback() : undefined}
+      audio={blob === undefined ? 'loading' : blob === null ? 'missing' : undefined}
     />
   );
 
