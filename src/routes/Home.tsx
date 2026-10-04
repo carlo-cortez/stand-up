@@ -4,7 +4,7 @@ import { Button } from '../components/Button';
 import { Card } from '../components/Card';
 import { InstallCard } from '../components/InstallCard';
 import { ChevronRightIcon, ClockIcon, SettingsIcon } from '../components/Icon';
-import { activityLine, dayLabel, historyLine, loadRounds } from '../lib/activity';
+import { activityLine, answeredBefore, dayLabel, historyLine, loadRounds, whenLabel } from '../lib/activity';
 import { minutes } from '../lib/format';
 import { dismissInstall, installDismissed } from '../lib/install';
 import { clearFlash, newIntent, peekFlash } from '../lib/liveRound';
@@ -38,6 +38,7 @@ export default function Home() {
   const [settings] = useState(loadSettings);
   const [lastRound] = useState(loadLastRoundSettings);
   const [topic] = useState(() => topicOfTheDay());
+  const [topicAnswered] = useState(() => answeredBefore(topic.id));
   const firstRun = rounds.length === 0;
 
   // Read the "interrupted" line once and clear it after paint, so it shows on
@@ -126,6 +127,7 @@ export default function Home() {
       <div className="home__topic-label">
         <span className="home__dot" aria-hidden="true" />
         <span className="section-label">Topic of the day</span>
+        {topicAnswered && <span className="home__answered">Answered {whenLabel(topicAnswered.last)}</span>}
       </div>
       <p className="home__topic-text">{topic.text}</p>
       <Link to="/round" state={topicIntent} className="home__topic-link">
