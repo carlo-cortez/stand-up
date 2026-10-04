@@ -1,7 +1,8 @@
 import { Button } from './Button';
 import { Card } from './Card';
 import { deltaAgainstAverage, fillerHistory, MIN_WORDS, wordCount } from '../lib/feedback';
-import type { Criteria, Mark, Metrics, Session } from '../lib/sessions';
+import type { Check, Criteria, Mark, Metrics, Session } from '../lib/sessions';
+import type { Structure } from '../lib/topics';
 
 /*
  * The feedback card (handoff §4.5), in one of six states. The counted half —
@@ -22,14 +23,27 @@ type Props = {
   error?: string | null;
 };
 
-/** Point, Reason, Example, Point — the order the prep hint teaches — then the topic. */
-const CRITERIA: { key: keyof Criteria; label: string }[] = [
-  { key: 'point', label: 'Made a clear point' },
-  { key: 'reason', label: 'Backed it with a reason' },
-  { key: 'example', label: 'Gave an example' },
-  { key: 'landed', label: 'Landed it at the end' },
-  { key: 'answered', label: 'Answered the question' },
-];
+/**
+ * In the order the prep hint taught them, then the topic: Point, Reason,
+ * Example, Point for most topics; Situation, Task, Action, Result for a
+ * question about a time you did something.
+ */
+const CRITERIA: Record<Structure, { key: string; label: string }[]> = {
+  prep: [
+    { key: 'point', label: 'Made a clear point' },
+    { key: 'reason', label: 'Backed it with a reason' },
+    { key: 'example', label: 'Gave an example' },
+    { key: 'landed', label: 'Landed it at the end' },
+    { key: 'answered', label: 'Answered the question' },
+  ],
+  star: [
+    { key: 'situation', label: 'Set the scene' },
+    { key: 'task', label: 'Said what was on you' },
+    { key: 'action', label: 'Walked through what you did' },
+    { key: 'result', label: 'Gave the result' },
+    { key: 'answered', label: 'Answered the question' },
+  ],
+};
 
 const MARK_LABEL: Record<Mark, string> = { there: 'There', partly: 'Partly', 'not-yet': 'Not yet' };
 
@@ -38,13 +52,15 @@ const MARK_LABEL: Record<Mark, string> = { there: 'There', partly: 'Partly', 'no
  * grade. It follows What went well, and its notes describe rather than
  * instruct — the one thing to change stays in Try next time.
  */
-function Checklist({ criteria }: { criteria: Criteria }) {
+function Checklist({ criteria, structure }: { criteria: Criteria; structure: Structure }) {
   return (
     <div className="feedback__block">
       <h2 className="section-label">What the coach noticed</h2>
       <ul className="feedback__checklist">
-        {CRITERIA.map(({ key, label }) => {
-          const { mark, note } = criteria[key];
+        {CRITERIA[structure].map(({ key, label }) => {
+          const check = (criteria as Record<string, Check | undefined>)[key];
+          if (!check) return null;
+          const { mark, note } = check;
           return (
             <li key={key} className={`feedback__check feedback__check--${mark}`}>
               <span className="feedback__mark" aria-hidden="true" />
@@ -264,7 +280,7 @@ export function FeedbackCard({ session, history, onRun, audio, state, error }: P
         </div>
       )}
 
-      {written?.criteria && <Checklist criteria={written.criteria} />}
+      {written?.criteria && <Checklist criteria={written.criteria} structure={written.structure ?? 'prep'} />}
 
       <div className="feedback__tiles">
         <div className="feedback__tile">

@@ -121,6 +121,14 @@
   font-size: 14px;
 }
 
+/* Why the steps are STAR rather than PREP, on a question about a time you did something. */
+.hint__why {
+  margin: -4px 0 0;
+  font-size: 14px;
+  line-height: 1.35;
+  color: var(--text-muted);
+}
+
 .hint__steps {
   margin: 0;
   padding: 0;

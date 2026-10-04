@@ -5,7 +5,7 @@
  */
 
 import type { LiveRound } from './liveRound';
-import { topicById, type Category, type Difficulty } from './topics';
+import { topicById, type Category, type Difficulty, type Structure } from './topics';
 
 export type Rating = 1 | 2 | 3 | 4 | 5;
 
@@ -63,13 +63,18 @@ export type Metrics = {
 
 export type Mark = 'there' | 'partly' | 'not-yet';
 
+export type Check = { mark: Mark; note: string };
+
 /**
- * What the coach noticed, against the Point–Reason–Example–Point shape the
- * prep hint teaches, plus whether the topic was answered. Marks, never
- * numbers; the notes describe, and the one thing to change stays in
- * tryNextTime. Absent on rounds written before it existed.
+ * What the coach noticed, against the shape the prep hint taught for that
+ * topic, plus whether it was answered: Point–Reason–Example–Point for most,
+ * Situation–Task–Action–Result for a question about a time you did something.
+ * Marks, never numbers; the notes describe, and the one thing to change stays
+ * in tryNextTime. Absent on rounds written before it existed.
  */
-export type Criteria = Record<'point' | 'reason' | 'example' | 'landed' | 'answered', { mark: Mark; note: string }>;
+export type PrepCriteria = Record<'point' | 'reason' | 'example' | 'landed' | 'answered', Check>;
+export type StarCriteria = Record<'situation' | 'task' | 'action' | 'result' | 'answered', Check>;
+export type Criteria = PrepCriteria | StarCriteria;
 
 export type Written = {
   wentWell: string;
@@ -77,6 +82,8 @@ export type Written = {
   quoted: string;
   sharper: string;
   tryNextTime: string;
+  /** Which shape the criteria follow; absent means PREP, as every round was before STAR. */
+  structure?: Structure;
   criteria?: Criteria;
 };
 

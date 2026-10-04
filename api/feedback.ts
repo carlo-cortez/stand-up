@@ -49,36 +49,65 @@ Rules, which matter more than completeness:
 - Two sentences at most per field. Plain English, no jargon, no exclamation marks.
 
 Also mark five criteria, judging only from the words (you cannot hear tone, pace or confidence, so never comment on them):
-- point: did they state a clear main point early?
-- reason: did they back it with a reason?
-- example: did they give a concrete example, story or number?
-- landed: did they close by returning to the point?
-- answered: did they actually answer the topic they were given?
+{criteria}
 Each gets a mark — "there", "partly" or "not-yet" — and a note of at most 12 words. For "there", say what worked, quoting a few of their words if you can. For "partly" or "not-yet", describe what happened, not what to do: the single thing to do differently belongs only in tryNextTime. Be fair rather than generous; a mark is only useful if it's honest.
 
-Reply with JSON only: {"wentWell": string, "quoted": string, "sharper": string, "tryNextTime": string, "criteria": {"point": {"mark": string, "note": string}, "reason": {...}, "example": {...}, "landed": {...}, "answered": {...}}}`;
+Reply with JSON only: {"wentWell": string, "quoted": string, "sharper": string, "tryNextTime": string, "criteria": {{shape}}}`;
 
+type Structure = 'prep' | 'star';
 type Mark = 'there' | 'partly' | 'not-yet';
-type Criteria = Record<'point' | 'reason' | 'example' | 'landed' | 'answered', { mark: Mark; note: string }>;
-type Written = { wentWell: string; quoted: string; sharper: string; tryNextTime: string; criteria?: Criteria };
+type Check = { mark: Mark; note: string };
+type Criteria = Record<string, Check>;
+type Written = { wentWell: string; quoted: string; sharper: string; tryNextTime: string; structure?: Structure; criteria?: Criteria };
 
-const CRITERIA = ['point', 'reason', 'example', 'landed', 'answered'] as const;
+/*
+ * What the coach marks, in the shape the prep hint taught for the topic. Most
+ * topics ask for a view (PREP); a question about a time you did something
+ * asks for a story (STAR), and is judged as one.
+ */
+const CRITERIA: Record<Structure, [key: string, question: string][]> = {
+  prep: [
+    ['point', 'did they state a clear main point early?'],
+    ['reason', 'did they back it with a reason?'],
+    ['example', 'did they give a concrete example, story or number?'],
+    ['landed', 'did they close by returning to the point?'],
+    ['answered', 'did they actually answer the topic they were given?'],
+  ],
+  star: [
+    ['situation', 'did they briefly set the scene: where, when, who?'],
+    ['task', 'did they say what was on them: their responsibility or the challenge?'],
+    ['action', 'did they walk through what they themselves did, in specific steps? This should be most of the answer.'],
+    ['result', 'did they say how it turned out, with an outcome or what they learned?'],
+    ['answered', 'did they actually answer the question they were asked?'],
+  ],
+};
+
+function systemPrompt(structure: Structure): string {
+  const list = CRITERIA[structure].map(([key, question]) => `- ${key}: ${question}`).join('\n');
+  const shape = CRITERIA[structure].map(([key]) => `"${key}": {"mark": string, "note": string}`).join(', ');
+  const lead =
+    structure === 'star'
+      ? 'This topic asks about a time the speaker did something, so a strong answer is a story told as Situation, Task, Action, Result.\n\n'
+      : '';
+  return lead + SYSTEM_PROMPT.replace('{criteria}', list).replace('{shape}', shape);
+}
+
 const MARKS: readonly string[] = ['there', 'partly', 'not-yet'];
 
 /**
  * All five, each with a known mark and a note, or nothing: a checklist with
  * gaps would read as though the missing rows were passed over.
  */
-function criteriaFrom(raw: unknown): Criteria | undefined {
+function criteriaFrom(raw: unknown, structure: Structure): Criteria | undefined {
   if (!raw || typeof raw !== 'object') return undefined;
-  const out: Partial<Criteria> = {};
-  for (const key of CRITERIA) {
+  const out: Criteria = {};
+  for (const [key] of CRITERIA[structure]) {
     const item = (raw as Record<string, { mark?: unknown; note?: unknown }>)[key];
     const mark = typeof item?.mark === 'string' ? item.mark.toLowerCase().replace(/[\s_]+/g, '-') : '';
     if (!MARKS.includes(mark) || typeof item?.note !== 'string' || !item.note.trim()) return undefined;
     out[key] = { mark: mark as Mark, note: item.note.trim().slice(0, 160) };
   }
-  return out as Criteria;
+  return out;
 }
 
 /** A word and when it was said, in seconds from the start of the recording. */
@@ -144,7 +173,13 @@ function unwritten(reason: string): null {
 /** Mirrors MIN_WORDS in src/lib/feedback.ts: below it the app shows no feedback. */
 const MIN_WORDS = 20;
 
-async function write(transcript: string, targetSeconds: number, topic: string, key: string): Promise<Written | null> {
+async function write(
+  transcript: string,
+  targetSeconds: number,
+  topic: string,
+  structure: Structure,
+  key: string,
+): Promise<Written | null> {
   if ((transcript.match(/[\p{L}'’-]+/gu) ?? []).length < MIN_WORDS) return null;
 
   const response = await fetch(`${GROQ}/chat/completions`, {
@@ -159,7 +194,7 @@ async function write(transcript: string, targetSeconds: number, topic: string, k
       max_tokens: 2000,
       response_format: { type: 'json_object' },
       messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
+        { role: 'system', content: systemPrompt(structure) },
         {
           role: 'user',
           content: `The topic was: "${topic || 'not given'}"\nThe speaker had a target of ${Math.round(targetSeconds / 60)} minute(s). Here is what they said:\n\n${transcript}`,
@@ -183,7 +218,7 @@ async function write(transcript: string, targetSeconds: number, topic: string, k
   try {
     const parsed = JSON.parse(content) as Partial<Written> & { criteria?: unknown };
     if (!parsed.wentWell || !parsed.tryNextTime) return unwritten('reply missing fields');
-    const criteria = criteriaFrom(parsed.criteria);
+    const criteria = criteriaFrom(parsed.criteria, structure);
     // The prose stands without the checklist; log it, keep the rest.
     if (!criteria) console.error('feedback: checklist missing or malformed');
     return {
@@ -191,6 +226,8 @@ async function write(transcript: string, targetSeconds: number, topic: string, k
       quoted: parsed.quoted ?? '',
       sharper: parsed.sharper ?? '',
       tryNextTime: parsed.tryNextTime,
+      // Only STAR is named; a round without it reads as PREP, as rounds always did.
+      ...(structure === 'star' ? { structure } : {}),
       criteria,
     };
   } catch {
@@ -257,11 +294,13 @@ export default async function handler(request: NodeRequest, response: NodeRespon
   const targetSeconds = Number(form.get('targetSeconds') ?? 120);
   // The topic as the app showed it, so "answered the question" can be judged.
   const topic = String(form.get('topic') ?? '').slice(0, 300);
+  // Which shape to judge against; anything unexpected is judged as PREP.
+  const structure: Structure = form.get('structure') === 'star' ? 'star' : 'prep';
 
   try {
     const { text: transcript, words, segments } = await transcribe(audio, key);
     if (!transcript) return send(response, 422, 'Nothing was said, or nothing could be heard.');
-    const written = await write(transcript, targetSeconds, topic, key);
+    const written = await write(transcript, targetSeconds, topic, structure, key);
     response.statusCode = 200;
     response.setHeader('Content-Type', 'application/json');
     // The transcript belongs to the speaker; no caching anywhere in between.
