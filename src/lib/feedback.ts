@@ -1,4 +1,4 @@
-import type { Flagged, Metrics, Session, Written } from './sessions';
+import type { Delivery, Flagged, Metrics, Session, Written } from './sessions';
 
 /*
  * The counted half of the feedback card (handoff §4.5). Everything here is
@@ -9,6 +9,11 @@ import type { Flagged, Metrics, Session, Written } from './sessions';
 /** From the design brief. Kept in sync with it deliberately — it is the spec. */
 const FILLERS = ['um', 'uh', 'erm', 'mm', 'like', 'you know', 'i mean'];
 const VAGUE = ['stuff', 'things', 'thing', 'kind of', 'sort of', 'basically', 'whatever'];
+/**
+ * Softeners that undercut a point. "I feel like" is left out because "like"
+ * already counts as a filler, and "sort of" because it's already vague.
+ */
+const HEDGES = ['i think', 'maybe', 'probably', 'i guess', 'perhaps', 'i suppose'];
 
 const countPhrase = (text: string, phrase: string): number => {
   // Whole words only: "like" must not match "likely", and "thing" not "things".
@@ -36,7 +41,7 @@ function counts(s: Session): boolean {
   return s.metrics !== undefined && enoughSpeech(s.transcript);
 }
 
-export function measure(transcript: string, spokenSeconds: number): Metrics {
+export function measure(transcript: string, spokenSeconds: number, timing?: Timing): Metrics {
   const flagged: Flagged[] = [];
   let fillerWords = 0;
   let vagueWords = 0;
@@ -55,15 +60,93 @@ export function measure(transcript: string, spokenSeconds: number): Metrics {
       vagueWords += count;
     }
   }
+  let hedges = 0;
+  for (const word of HEDGES) {
+    const count = countPhrase(transcript, word);
+    if (count > 0) {
+      flagged.push({ word, kind: 'hedge', count });
+      hedges += count;
+    }
+  }
 
   const minutes = Math.max(spokenSeconds, 1) / 60;
   return {
     wordsPerMinute: Math.round(wordCount(transcript) / minutes),
     fillerWords,
     vagueWords,
+    hedges,
     // Most-said first: the ones worth noticing lead.
     flagged: flagged.sort((a, b) => b.count - a.count),
+    delivery: timing && timing.words.length > 1 ? delivery(timing) : undefined,
   };
+}
+
+/*
+ * ---- Delivery, from Groq's timings. Every threshold below is a first guess,
+ * to be tuned against real rounds (handoff §4.5), like the filler count was.
+ */
+
+const WINDOW = 15; // seconds per pace window
+const PAUSE = 1.0; // a gap this long between words is a pause
+const HESITATION = 1.5; // …and this long, mid-sentence, a hesitation
+
+const round1 = (n: number) => Math.round(n * 10) / 10;
+
+export function delivery({ words, segments }: Timing): Delivery {
+  const first = words[0].start;
+  const last = words[words.length - 1].end;
+
+  // Words per minute in each 15-second stretch. A short last stretch counts
+  // only if it's at least half a window, scaled up to a full one.
+  const paceWindows: number[] = [];
+  for (let from = first; from < last; from += WINDOW) {
+    const length = Math.min(WINDOW, last - from);
+    if (length < WINDOW / 2) break;
+    const count = words.filter((w) => w.start >= from && w.start < from + length).length;
+    paceWindows.push(Math.round((count / length) * 60));
+  }
+  const mean = paceWindows.reduce((a, b) => a + b, 0) / (paceWindows.length || 1);
+  const spread =
+    paceWindows.length > 1
+      ? Math.sqrt(paceWindows.reduce((a, b) => a + (b - mean) ** 2, 0) / paceWindows.length) / (mean || 1)
+      : 0;
+
+  // Gaps between words. A gap inside one segment is mid-sentence; between
+  // segments it's usually the natural breath between thoughts.
+  const segmentOf = (t: number) => segments.findIndex((s) => t >= s.start && t <= s.end);
+  let pauses = 0;
+  let hesitations = 0;
+  let longestPause = 0;
+  for (let i = 1; i < words.length; i++) {
+    const gap = words[i].start - words[i - 1].end;
+    if (gap < PAUSE) continue;
+    pauses++;
+    longestPause = Math.max(longestPause, gap);
+    const seg = segmentOf(words[i - 1].end);
+    if (gap >= HESITATION && seg !== -1 && seg === segmentOf(words[i].start)) hesitations++;
+  }
+
+  return {
+    paceWindows,
+    paceSpread: Math.round(spread * 100),
+    pauses,
+    hesitations,
+    longestPause: round1(longestPause),
+    clarity: clarity(segments),
+  };
+}
+
+/**
+ * How sure the transcriber was, weighted by how long each segment ran, over
+ * the segments that were speech. avg_logprob near -0.15 is crisp; near -1 the
+ * transcriber was guessing. Mapped to 0–100.
+ */
+function clarity(segments: Segment[]): number | null {
+  const speech = segments.filter((s) => s.no_speech_prob < 0.5 && s.end > s.start);
+  const total = speech.reduce((a, s) => a + (s.end - s.start), 0);
+  if (total === 0) return null;
+  const avg = speech.reduce((a, s) => a + s.avg_logprob * (s.end - s.start), 0) / total;
+  return Math.round(Math.max(0, Math.min(1, (avg + 1) / 0.85)) * 100);
 }
 
 /**
@@ -92,7 +175,14 @@ export function fillerHistory(history: Session[], current: Session, span = 5): n
     .map((s) => s.metrics!.fillerWords);
 }
 
-export type FeedbackResult = { transcript: string; written: Written | null };
+/** A word and when it was said, in seconds from the start of the recording. */
+export type Word = { word: string; start: number; end: number };
+/** Roughly a sentence; avg_logprob is how sure the transcriber was of it. */
+export type Segment = { start: number; end: number; avg_logprob: number; no_speech_prob: number };
+export type Timing = { words: Word[]; segments: Segment[] };
+
+/** words and segments are absent from a function deployed before they existed. */
+export type FeedbackResult = { transcript: string; written: Written | null; words?: Word[]; segments?: Segment[] };
 
 /** Something a person can act on, never a status code. */
 async function explain(response: Response): Promise<string> {

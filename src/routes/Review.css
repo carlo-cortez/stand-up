@@ -514,6 +514,52 @@
   color: #55604F;
 }
 
+/* Hedges in soft sage: a habit to notice, like the others, not a fault. */
+.feedback__chip--hedge {
+  background: #E7EEE6;
+  color: #35503E;
+}
+
+:root[data-theme='dark'] .feedback__chip--hedge {
+  background: #223127;
+  color: #B5D2BB;
+}
+
+/* How it sounded: label and plain-words value, one per row. */
+.feedback__sounded {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0;
+}
+
+.feedback__sounded-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding: 9px 0;
+  border-top: 1px solid var(--border);
+}
+
+.feedback__sounded-row:first-child {
+  border-top: 0;
+}
+
+.feedback__sounded dt {
+  flex: none;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.feedback__sounded dd {
+  margin: 0;
+  font-size: 15px;
+  color: var(--text);
+  text-align: right;
+  text-wrap: pretty;
+}
+
 :root[data-theme='dark'] .feedback__chip--vague {
   background: #332B17;
   color: #EBD9A6;

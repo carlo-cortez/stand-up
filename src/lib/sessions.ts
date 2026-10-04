@@ -16,7 +16,37 @@ export type Ratings = {
   fillers?: Rating;
 };
 
-export type Flagged = { word: string; kind: 'filler' | 'vague'; count: number };
+export type Flagged = { word: string; kind: 'filler' | 'vague' | 'hedge'; count: number };
+
+/** From Groq's word and segment timings (PR B). Absent on rounds measured before. */
+export type Delivery = {
+  /** Words per minute in each 15-second stretch, in order. */
+  paceWindows: number[];
+  /** How much the pace wandered: the windows' spread as a % of their average. */
+  paceSpread: number;
+  /** Gaps of a second or more between words. */
+  pauses: number;
+  /** Gaps of 1.5 s or more in the middle of a sentence. */
+  hesitations: number;
+  /** The longest gap, in seconds. */
+  longestPause: number;
+  /** 0–100: how sure the transcriber was of what it heard. Not a pronunciation test. */
+  clarity: number | null;
+};
+
+/** Measured on the phone from the recording itself; the audio never leaves for this. */
+export type Voice = {
+  /** Spread of the voice's pitch, in semitones: low is level, high is lively. */
+  pitchVariety: number;
+  /** Spread of loudness while speaking, in decibels. */
+  loudnessSpread: number;
+  /** Sentences whose ends dropped noticeably in volume. */
+  trailingOff: number;
+  /** Sentences that ended on a rising pitch. */
+  upspeak: number;
+  /** Sentences long enough to judge, which the two counts above are out of. */
+  sentences: number;
+};
 
 export type Metrics = {
   wordsPerMinute: number;
@@ -24,6 +54,11 @@ export type Metrics = {
   fillerWords: number;
   vagueWords: number;
   flagged: Flagged[];
+  /** "I think", "maybe", "probably"… Absent on rounds measured before. */
+  hedges?: number;
+  delivery?: Delivery;
+  /** Null when the phone couldn't analyse the recording; feedback carries on without it. */
+  voice?: Voice | null;
 };
 
 export type Mark = 'there' | 'partly' | 'not-yet';

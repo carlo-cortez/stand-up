@@ -81,12 +81,26 @@ function criteriaFrom(raw: unknown): Criteria | undefined {
   return out as Criteria;
 }
 
-async function transcribe(audio: Blob, key: string): Promise<string> {
+/** A word and when it was said, in seconds from the start of the recording. */
+type Word = { word: string; start: number; end: number };
+/**
+ * A stretch of speech, roughly a sentence. avg_logprob is how sure Whisper
+ * was of it, which the app reads as Clarity; no_speech_prob flags silence.
+ */
+type Segment = { start: number; end: number; avg_logprob: number; no_speech_prob: number };
+type Transcription = { text: string; words: Word[]; segments: Segment[] };
+
+const round2 = (n: number) => Math.round(n * 100) / 100;
+
+async function transcribe(audio: Blob, key: string): Promise<Transcription> {
   const form = new FormData();
   form.append('file', audio, 'round.webm');
   form.append('model', STT_MODEL);
   form.append('prompt', STT_PROMPT);
-  form.append('response_format', 'json');
+  // Timings per word and per segment: pace over time, pauses, and Clarity.
+  form.append('response_format', 'verbose_json');
+  form.append('timestamp_granularities[]', 'word');
+  form.append('timestamp_granularities[]', 'segment');
   form.append('temperature', '0');
 
   const response = await fetch(`${GROQ}/audio/transcriptions`, {
@@ -95,8 +109,18 @@ async function transcribe(audio: Blob, key: string): Promise<string> {
     body: form,
   });
   if (!response.ok) throw new Error(`Transcription failed: ${await response.text()}`);
-  const data = (await response.json()) as { text?: string };
-  return (data.text ?? '').trim();
+  const data = (await response.json()) as { text?: string; words?: Word[]; segments?: Segment[] };
+  // Only what the app uses goes back to the browser, rounded to 10 ms.
+  return {
+    text: (data.text ?? '').trim(),
+    words: (data.words ?? []).map((w) => ({ word: w.word, start: round2(w.start), end: round2(w.end) })),
+    segments: (data.segments ?? []).map((s) => ({
+      start: round2(s.start),
+      end: round2(s.end),
+      avg_logprob: round2(s.avg_logprob),
+      no_speech_prob: round2(s.no_speech_prob),
+    })),
+  };
 }
 
 /*
@@ -227,14 +251,14 @@ export default async function handler(request: NodeRequest, response: NodeRespon
   const topic = String(form.get('topic') ?? '').slice(0, 300);
 
   try {
-    const transcript = await transcribe(audio, key);
+    const { text: transcript, words, segments } = await transcribe(audio, key);
     if (!transcript) return send(response, 422, 'Nothing was said, or nothing could be heard.');
     const written = await write(transcript, targetSeconds, topic, key);
     response.statusCode = 200;
     response.setHeader('Content-Type', 'application/json');
     // The transcript belongs to the speaker; no caching anywhere in between.
     response.setHeader('Cache-Control', 'no-store');
-    response.end(JSON.stringify({ transcript, written }));
+    response.end(JSON.stringify({ transcript, written, words, segments }));
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Feedback failed.';
     return send(response, 502, message);
