@@ -61,8 +61,20 @@ function ready(): AudioContext | null {
 }
 
 /**
+ * How long a sound takes from being played to being heard: the browser's
+ * own buffer plus the device's output, which on phones can be 50–150ms, and
+ * more over Bluetooth. Not every browser reports it (Safari often doesn't);
+ * then it counts as none.
+ */
+function lag(ctx: AudioContext): number {
+  const reported = (ctx.baseLatency || 0) + (ctx.outputLatency || 0);
+  return Number.isFinite(reported) ? Math.min(Math.max(reported, 0), 0.4) : 0;
+}
+
+/**
  * One burst of filtered noise: the building block of every sound here.
- * `at` is seconds from now; `length` the burst's duration in seconds.
+ * `at` is seconds from now, when it should be heard, so it is played that
+ * much earlier to land on the animation; `length` is its duration in seconds.
  */
 function burst(
   ctx: AudioContext,
@@ -70,7 +82,7 @@ function burst(
   length: number,
   { frequency, q = 1, gain, type = 'bandpass' }: { frequency: number; q?: number; gain: number; type?: BiquadFilterType },
 ): AudioBufferSourceNode {
-  const start = ctx.currentTime + at;
+  const start = ctx.currentTime + Math.max(0, at - lag(ctx));
   const source = ctx.createBufferSource();
   source.buffer = noise;
   const filter = ctx.createBiquadFilter();
