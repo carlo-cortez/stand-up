@@ -123,3 +123,37 @@ export function trendSentence(
 
   return busiest ? `${ratingPart}, and ${busiest}.` : `${ratingPart}.`;
 }
+
+/*
+ * Topics come round again: there are 35, and a category on one difficulty can
+ * hold a single topic. When one does, say so on Prep, while there's still time
+ * to take a new angle or draw another.
+ */
+
+/** Shorter than this was a false start, not an answer. */
+const ANSWERED_SECONDS = 10;
+
+export type Answered = { times: number; last: number };
+
+/** How often this topic has been answered before, and when last. Null if never. */
+export function answeredBefore(topicId: string): Answered | null {
+  const times = loadSessions()
+    .filter((s) => s.topicId === topicId && s.spokenSeconds >= ANSWERED_SECONDS)
+    .map((s) => Date.parse(s.startedAt));
+  if (times.length === 0) return null;
+  return { times: times.length, last: Math.max(...times) };
+}
+
+/** "earlier today", "on Tuesday", "on 12 Sept" — for a sentence about when. */
+export function whenLabel(at: number, now = new Date()): string {
+  const day = dayLabel(at, now);
+  return day === 'today' ? 'earlier today' : `on ${day}`;
+}
+
+/** Prep's line: "You've answered this one before, on Tuesday." */
+export function answeredLine(answered: Answered, now = new Date()): string {
+  const when = whenLabel(answered.last, now);
+  return answered.times === 1
+    ? `You've answered this one before, ${when}.`
+    : `You've answered this one ${countWord(answered.times)} times, most recently ${when}.`;
+}

@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Link, useBlocker, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
@@ -8,6 +8,7 @@ import { ChevronDownIcon, CloseIcon, MicOffIcon } from '../components/Icon';
 import { ProgressBar } from '../components/ProgressBar';
 import { Sheet } from '../components/Sheet';
 import { TimingChip } from '../components/TimingChip';
+import { answeredBefore, answeredLine } from '../lib/activity';
 import { saveRecording } from '../lib/audioStore';
 import { checkMic, micPermission, startRecording, type Recording } from '../lib/recorder';
 import { addSession, sessionFor, type Session } from '../lib/sessions';
@@ -122,6 +123,8 @@ function LiveRoundScreen({ initial, resumed }: { initial: LiveRound; resumed: bo
 
   const topic = topicById(round.topicId) as Topic;
   const { prepSeconds, targetSeconds } = round.settings;
+  // Counted before this round is saved, so it's only ever about earlier ones.
+  const answered = useMemo(() => answeredBefore(round.topicId), [round.topicId]);
 
   const now = useRoundTimer(true, () => saveLiveRound(roundRef.current));
 
@@ -453,6 +456,12 @@ function LiveRoundScreen({ initial, resumed }: { initial: LiveRound; resumed: bo
                 />
               </div>
               <h1 className="prep__topic">{topic.text}</h1>
+              {answered && (
+                <p className="prep__seen">
+                  {answeredLine(answered)}{' '}
+                  {round.skipUsed ? 'Try a different angle.' : 'Try a different angle, or draw another.'}
+                </p>
+              )}
               {desktop ? (
                 <>
                   {actions}
