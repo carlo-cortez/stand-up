@@ -14,7 +14,7 @@ import './Privacy.css';
  */
 
 /** Kept here rather than built at render time, so the page states one date. */
-const UPDATED = '20 September 2026';
+const UPDATED = '4 October 2026';
 
 export default function Privacy() {
   return (
@@ -66,9 +66,13 @@ export default function Privacy() {
             <h2 className="section-label">When you ask for feedback</h2>
             <p>
               Feedback is something you press, never something that happens on its own. When you press it, that one
-              recording is sent to <strong>Groq</strong>, which turns it into text and writes the feedback you read.
-              Nothing about the round is stored on the way through — this app keeps no copy of the audio or the
-              transcript on its server.
+              recording is sent to <strong>Groq</strong>, which turns it into text, with the time each word was said,
+              and writes the feedback you read. Nothing about the round is stored on the way through — this app keeps
+              no copy of the audio or the transcript on its server.
+            </p>
+            <p>
+              How your voice moved — pitch, volume, how sentences ended — is measured on your phone, from the recording
+              already there. That part never leaves it.
             </p>
             <p>
               What Groq keeps at their end is their decision rather than ours, and it is covered by{' '}

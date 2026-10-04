@@ -12,6 +12,7 @@ import { answeredRounds, collectedTopicIds, dayLabel } from '../lib/activity';
 import { announce } from '../lib/announce';
 import { deleteRecording, loadRecording } from '../lib/audioStore';
 import { enoughSpeech, measure, requestFeedback } from '../lib/feedback';
+import { analyseVoice } from '../lib/voice';
 import { mmss, plusMmss } from '../lib/format';
 import { newIntent } from '../lib/liveRound';
 import {
@@ -20,6 +21,7 @@ import {
   loadSessions,
   roundNumber,
   updateSession,
+  type Metrics,
   type Rating,
   type Ratings,
   type Session,
@@ -175,7 +177,11 @@ function ReviewScreen({
     setFeedbackState('loading');
     setFeedbackError(null);
     try {
-      const { transcript, written } = await requestFeedback(blob, session.targetSeconds, session.topicText);
+      const { transcript, written, words, segments } = await requestFeedback(
+        blob,
+        session.targetSeconds,
+        session.topicText,
+      );
       // The counted half is derived here, from the transcript: no model, and
       // nothing to go wrong that would cost the round its numbers.
       if (!enoughSpeech(transcript)) {
@@ -188,7 +194,16 @@ function ReviewScreen({
         announce('Not enough speech in this round for feedback');
         return;
       }
-      const metrics = measure(transcript, session.spokenSeconds);
+      // The new measurements ride on top of the old ones, and never cost the
+      // round its feedback: if the timings can't be read, measure without
+      // them; if the voice can't be analysed, it comes back null.
+      let metrics: Metrics;
+      try {
+        metrics = measure(transcript, session.spokenSeconds, words && segments ? { words, segments } : undefined);
+      } catch {
+        metrics = measure(transcript, session.spokenSeconds);
+      }
+      metrics = { ...metrics, voice: await analyseVoice(blob, segments ?? []) };
       const next = updateSession(session.id, { transcript, metrics, written: written ?? undefined });
       if (next) setSession(next);
       setFeedbackState('ready');

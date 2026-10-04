@@ -1,7 +1,7 @@
 import { Button } from './Button';
 import { Card } from './Card';
 import { deltaAgainstAverage, fillerHistory, MIN_WORDS, wordCount } from '../lib/feedback';
-import type { Criteria, Mark, Session } from '../lib/sessions';
+import type { Criteria, Mark, Metrics, Session } from '../lib/sessions';
 
 /*
  * The feedback card (handoff §4.5), in one of six states. The counted half —
@@ -58,6 +58,88 @@ function Checklist({ criteria }: { criteria: Criteria }) {
         })}
       </ul>
       <p className="feedback__note">Confidence and delivery aren't marked — the coach only reads your words.</p>
+    </div>
+  );
+}
+
+/*
+ * "How it sounded" (PR B): pace over time, pauses, hedging, Clarity and the
+ * voice. Described in plain words, never scored here; every band is a first
+ * guess to tune against real rounds. Rows appear only for what was measured,
+ * so rounds from before this existed simply show fewer.
+ */
+function Sounded({ metrics }: { metrics: Metrics }) {
+  const { delivery: d, voice: v, hedges } = metrics;
+  const rows: [string, string][] = [];
+
+  if (d && d.paceWindows.length > 0) {
+    const low = Math.min(...d.paceWindows);
+    const high = Math.max(...d.paceWindows);
+    rows.push([
+      'Pace',
+      d.paceSpread < 15
+        ? `${metrics.wordsPerMinute} words a minute, and steady`
+        : d.paceSpread < 30
+          ? `${metrics.wordsPerMinute} words a minute, a little uneven`
+          : `Varied, from ${low} to ${high} words a minute`,
+    ]);
+  }
+  if (d) {
+    rows.push([
+      'Pauses',
+      d.pauses === 0
+        ? 'No long pauses'
+        : `${d.pauses} ${d.pauses === 1 ? 'pause' : 'pauses'}` +
+            (d.hesitations > 0 ? `, ${d.hesitations} mid-sentence` : '') +
+            ` · longest ${d.longestPause}s`,
+    ]);
+  }
+  if (hedges !== undefined) {
+    rows.push(['Hedging', hedges === 0 ? 'None — you said it straight' : `${hedges} softener${hedges === 1 ? '' : 's'}, like "I think" or "maybe"`]);
+  }
+  if (d && d.clarity !== null) {
+    rows.push([
+      'Clarity',
+      d.clarity >= 80 ? 'Clear throughout' : d.clarity >= 60 ? 'Mostly clear' : 'Hard to make out in places',
+    ]);
+  }
+  if (v) {
+    rows.push([
+      'Pitch',
+      v.pitchVariety < 1.5 ? 'Mostly level' : v.pitchVariety < 3 ? 'Some variety' : 'Lively, with plenty of movement',
+    ]);
+    rows.push(['Volume', v.loudnessSpread < 6 ? 'Even' : v.loudnessSpread < 10 ? 'Some ups and downs' : 'Uneven']);
+    if (v.sentences > 0) {
+      rows.push([
+        'Endings',
+        v.trailingOff === 0
+          ? 'No trailing off'
+          : `${v.trailingOff} of ${v.sentences} ${v.sentences === 1 ? 'sentence' : 'sentences'} trailed off`,
+      ]);
+      if (v.upspeak > 0) {
+        rows.push(['Rising endings', `${v.upspeak} of ${v.sentences} ended on a rise, like a question`]);
+      }
+    }
+  }
+  if (rows.length === 0) return null;
+
+  return (
+    <div className="feedback__block">
+      <h2 className="section-label">How it sounded</h2>
+      <dl className="feedback__sounded">
+        {rows.map(([label, value]) => (
+          <div key={label} className="feedback__sounded-row">
+            <dt>{label}</dt>
+            <dd>{value}</dd>
+          </div>
+        ))}
+      </dl>
+      {d && d.clarity !== null && (
+        <p className="feedback__note">
+          Clarity is how clearly the transcriber could follow you, not a pronunciation test. Pitch, volume and endings
+          are measured on your phone; the recording doesn't leave it for those.
+        </p>
+      )}
     </div>
   );
 }
@@ -211,6 +293,8 @@ export function FeedbackCard({ session, history, onRun, state, error }: Props) {
           </div>
         </div>
       )}
+
+      <Sounded metrics={metrics} />
 
       {fillers.length > 1 && (
         <div className="feedback__strip">
