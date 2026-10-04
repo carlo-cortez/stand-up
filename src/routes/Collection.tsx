@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '../components/Button';
 import { BackIcon } from '../components/Icon';
 import { Sheet } from '../components/Sheet';
+import { TopicCard } from '../components/TopicCard';
 import { answeredRounds, dayLabel } from '../lib/activity';
 import { mmss } from '../lib/format';
 import type { Session } from '../lib/sessions';
@@ -19,7 +20,6 @@ import './Collection.css';
  * rarity but not the topic, so finding one is still a small surprise.
  */
 
-const PIPS: Record<Difficulty, string> = { easy: '◆', medium: '◆◆', hard: '◆◆◆' };
 const ORDER: Record<Difficulty, number> = { easy: 0, medium: 1, hard: 2 };
 
 type Filter = Category | 'all';
@@ -105,36 +105,15 @@ export default function Collection() {
                     return (
                       <li key={t.id}>
                         {rounds ? (
-                          <button
-                            type="button"
-                            className={`ccard ccard--face ccard--${t.difficulty}${t.category === 'wildcard' ? ' ccard--wild' : ''}`}
+                          <TopicCard
+                            topic={t}
+                            side="face"
                             onClick={() => setOpen(t)}
-                            aria-label={`${t.text} Answered ${rounds.length} ${rounds.length === 1 ? 'time' : 'times'}.`}
-                          >
-                            <span className="ccard__pips" aria-hidden="true">
-                              {PIPS[t.difficulty]}
-                            </span>
-                            <span className="ccard__topic">{t.text}</span>
-                            <span className="ccard__foot" aria-hidden="true">
-                              {rounds.length > 1 ? `×${rounds.length} · ` : ''}
-                              {dayLabel(Date.parse(rounds[0].startedAt))}
-                            </span>
-                          </button>
+                            label={`${t.text} Answered ${rounds.length} ${rounds.length === 1 ? 'time' : 'times'}.`}
+                            foot={`${rounds.length > 1 ? `×${rounds.length} · ` : ''}${dayLabel(Date.parse(rounds[0].startedAt))}`}
+                          />
                         ) : (
-                          <div
-                            className={`ccard ccard--back ccard--${t.difficulty}`}
-                            role="img"
-                            aria-label={`Not collected yet: a ${t.difficulty} ${c.label} card`}
-                          >
-                            <span className="ccard__pips" aria-hidden="true">
-                              {PIPS[t.difficulty]}
-                            </span>
-                            <svg className="ccard__mark" viewBox="0 0 64 64" aria-hidden="true">
-                              <rect x="14" y="10" width="36" height="46" rx="6" fill="none" stroke="currentColor" strokeWidth="3" transform="rotate(-9 32 56)" />
-                              <circle cx="27" cy="33" r="2.4" fill="currentColor" />
-                              <circle cx="37" cy="32" r="2.4" fill="currentColor" />
-                            </svg>
-                          </div>
+                          <TopicCard topic={t} side="back" label={`Not collected yet: a ${t.difficulty} ${c.label} card`} />
                         )}
                       </li>
                     );

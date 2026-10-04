@@ -16,6 +16,8 @@ type Props = {
   history: Session[];
   /** Absent when the round has no audio to send. */
   onRun?: () => void;
+  /** Why there's nothing to send: still loading, or no recording at all. */
+  audio?: 'loading' | 'missing';
   state: 'idle' | 'loading' | 'offline' | 'thin' | 'ready';
   error?: string | null;
 };
@@ -155,7 +157,7 @@ function Delta({ value, better }: { value: number | null; better: 'lower' | 'eit
   );
 }
 
-export function FeedbackCard({ session, history, onRun, state, error }: Props) {
+export function FeedbackCard({ session, history, onRun, audio, state, error }: Props) {
   if (state === 'idle') {
     return (
       <Card className="feedback">
@@ -178,7 +180,9 @@ export function FeedbackCard({ session, history, onRun, state, error }: Props) {
         <p className="feedback__note">
           {onRun
             ? 'About ten seconds. Your recording leaves the device to be turned into text, and is not kept once that is done.'
-            : 'This round has no recording, so there is nothing to listen back to.'}
+            : audio === 'loading'
+              ? 'Getting the recording ready…'
+              : 'This round has no recording, so there is nothing to listen back to.'}
         </p>
         {error && <p className="feedback__error">{error}</p>}
       </Card>

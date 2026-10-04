@@ -184,6 +184,18 @@ export type Timing = { words: Word[]; segments: Segment[] };
 /** words and segments are absent from a function deployed before they existed. */
 export type FeedbackResult = { transcript: string; written: Written | null; words?: Word[]; segments?: Segment[] };
 
+/**
+ * The transcriber reads the file by its name, so the name has to match what
+ * the browser recorded: webm on Chrome and Firefox, mp4 on Safari and iPhones.
+ */
+function extensionOf(type: string): string {
+  if (/mp4|m4a|aac/.test(type)) return 'mp4';
+  if (/ogg/.test(type)) return 'ogg';
+  if (/wav/.test(type)) return 'wav';
+  if (/mpeg|mp3/.test(type)) return 'mp3';
+  return 'webm';
+}
+
 /** Something a person can act on, never a status code. */
 async function explain(response: Response): Promise<string> {
   if (response.status === 404 || response.status === 503) {
@@ -203,7 +215,7 @@ async function explain(response: Response): Promise<string> {
  */
 export async function requestFeedback(blob: Blob, targetSeconds: number, topic: string): Promise<FeedbackResult> {
   const body = new FormData();
-  body.append('audio', blob, 'round.webm');
+  body.append('audio', blob, `round.${extensionOf(blob.type)}`);
   body.append('targetSeconds', String(targetSeconds));
   body.append('topic', topic);
 

@@ -576,54 +576,28 @@
 .draw__face {
   position: absolute;
   inset: 0;
-  border-radius: 12px;
+  display: block;
+  border-radius: 10px;
   backface-visibility: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.draw__back {
-  background: var(--accent-strong);
-  color: var(--on-accent-strong);
-  /* An inset rule, like the border printed on a playing card. */
-  box-shadow: inset 0 0 0 6px var(--accent-strong), inset 0 0 0 7px color-mix(in srgb, var(--on-accent-strong) 35%, transparent);
-}
-
-.draw__back svg {
-  opacity: 0.7;
 }
 
 .draw__face {
   transform: rotateY(180deg);
-  gap: 6px;
-  padding: 10px;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  text-align: center;
 }
 
-.draw__dot {
-  width: 8px;
-  height: 8px;
-  border-radius: var(--radius-pill);
-  background: var(--accent);
+/*
+ * The face is the collection card, set a touch smaller to fit the draw's
+ * cards: every topic fits whole. The category is in the pill by now, so the
+ * card has no foot.
+ */
+.draw__face .tcard {
+  padding: 8px 7px 7px;
 }
 
-.draw__category {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  line-height: 1.25;
-  text-transform: uppercase;
-  color: var(--text);
-}
-
-.draw__difficulty {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-muted);
+.draw__face .tcard__topic {
+  font-size: 10.5px;
+  line-height: 1.2;
+  -webkit-line-clamp: 9;
 }
 
 /*
@@ -793,14 +767,16 @@
     --fan-step: 8deg;
   }
 
-  .draw__back svg {
-    width: 40px;
-    height: 40px;
+  .draw__face .tcard {
+    padding: 11px 11px 9px;
   }
 
-  .draw__category,
-  .draw__difficulty {
-    font-size: 14px;
+  .draw__face .tcard__pips {
+    font-size: 11px;
+  }
+
+  .draw__face .tcard__topic {
+    font-size: 15px;
   }
 }
 

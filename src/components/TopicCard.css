@@ -1,0 +1,98 @@
+/* A topic card, face or back, in the draw and the collection. Sized by its container. */
+.tcard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding: 8px 8px 7px;
+  border-radius: 10px;
+  overflow: hidden;
+  text-align: left;
+}
+
+.tcard--face {
+  border: 1px solid var(--border);
+  background: #ffffff;
+  color: #22302a;
+  font: inherit;
+  box-shadow: 0 1px 2px rgb(34 48 42 / 0.12);
+}
+
+button.tcard--face {
+  cursor: pointer;
+}
+
+.tcard--face:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.tcard--back {
+  align-items: center;
+  justify-content: center;
+  background: #2f4636;
+  color: rgb(250 248 243 / 0.55);
+}
+
+/* The printed rule inside a card back. */
+.tcard--back::before {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border: 1px solid rgb(250 248 243 / 0.22);
+  border-radius: 6px;
+}
+
+.tcard__pips {
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  color: #7d8a80;
+}
+
+.tcard--back .tcard__pips {
+  position: absolute;
+  top: 9px;
+  left: 10px;
+  color: inherit;
+}
+
+.tcard__mark {
+  width: 38%;
+}
+
+.tcard__topic {
+  flex: 1;
+  display: -webkit-box;
+  margin-top: 4px;
+  font-family: var(--font-display);
+  font-size: 12.5px;
+  line-height: 1.22;
+  overflow: hidden;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+}
+
+.tcard__foot {
+  font-size: 10px;
+  color: #7d8a80;
+}
+
+/* Rarity, printed: a gold rule for hard, a dotted frame for Wildcard. */
+.tcard--face.tcard--hard {
+  box-shadow: inset 0 0 0 3px #ffffff, inset 0 0 0 4px #b8964f, 0 1px 2px rgb(34 48 42 / 0.12);
+}
+
+.tcard--hard .tcard__pips {
+  color: #b8964f;
+}
+
+.tcard--face.tcard--wild {
+  outline: 1px dotted #3f5a48;
+  outline-offset: -5px;
+}
+
+.tcard--face.tcard--wild:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}

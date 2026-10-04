@@ -92,9 +92,17 @@ type Transcription = { text: string; words: Word[]; segments: Segment[] };
 
 const round2 = (n: number) => Math.round(n * 100) / 100;
 
+/** Formats the transcriber takes, read from the file name, so Safari's mp4 isn't sent as webm. */
+const FORMATS = ['webm', 'mp4', 'm4a', 'ogg', 'wav', 'mp3'];
+
+function fileName(audio: Blob): string {
+  const sent = audio instanceof File ? audio.name.split('.').pop()?.toLowerCase() : undefined;
+  return `round.${sent && FORMATS.includes(sent) ? sent : 'webm'}`;
+}
+
 async function transcribe(audio: Blob, key: string): Promise<Transcription> {
   const form = new FormData();
-  form.append('file', audio, 'round.webm');
+  form.append('file', audio, fileName(audio));
   form.append('model', STT_MODEL);
   form.append('prompt', STT_PROMPT);
   // Timings per word and per segment: pace over time, pauses, and Clarity.
