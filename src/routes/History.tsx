@@ -65,7 +65,9 @@ export default function History() {
         <BackIcon />
       </Link>
       <h1 className="history__title">History</h1>
-      <span className="history__spacer" aria-hidden="true" />
+      <Link to="/collection" className="history__collection">
+        Collection
+      </Link>
     </header>
   );
 

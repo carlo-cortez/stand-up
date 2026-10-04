@@ -4,7 +4,7 @@ import { Button } from '../components/Button';
 import { Card } from '../components/Card';
 import { InstallCard } from '../components/InstallCard';
 import { ChevronRightIcon, ClockIcon, SettingsIcon } from '../components/Icon';
-import { activityLine, answeredBefore, dayLabel, historyLine, loadRounds, whenLabel } from '../lib/activity';
+import { activityLine, answeredBefore, collectedTopicIds, dayLabel, historyLine, loadRounds, whenLabel } from '../lib/activity';
 import { minutes } from '../lib/format';
 import { dismissInstall, installDismissed } from '../lib/install';
 import { clearFlash, newIntent, peekFlash } from '../lib/liveRound';
@@ -16,7 +16,7 @@ import {
   sameRound,
   type RoundSettings,
 } from '../lib/settings';
-import { categoryLabel, topicOfTheDay } from '../lib/topics';
+import { categoryLabel, TOPICS, topicOfTheDay } from '../lib/topics';
 import { useDesktop } from '../lib/useMediaQuery';
 import './Home.css';
 
@@ -39,6 +39,7 @@ export default function Home() {
   const [lastRound] = useState(loadLastRoundSettings);
   const [topic] = useState(() => topicOfTheDay());
   const [topicAnswered] = useState(() => answeredBefore(topic.id));
+  const [collected] = useState(() => collectedTopicIds().size);
   const firstRun = rounds.length === 0;
 
   // Read the "interrupted" line once and clear it after paint, so it shows on
@@ -171,6 +172,19 @@ export default function Home() {
     </Link>
   );
 
+  // Absent on the first run, when there's nothing in it yet; History says enough.
+  const collectionRow = !firstRun && (
+    <Link to="/collection" className={`home__history${desktop ? ' home__history--card' : ''}`}>
+      <span className="home__history-text">
+        <span className="home__history-title">Collection</span>
+        <span className="home__history-meta">
+          {collected} of {TOPICS.length} cards
+        </span>
+      </span>
+      <ChevronRightIcon size={desktop ? 20 : 18} />
+    </Link>
+  );
+
   if (desktop) {
     return (
       <div className="screen home">
@@ -184,6 +198,7 @@ export default function Home() {
             {firstRun ? explainer : topicCard}
             {install}
             {historyRow}
+            {collectionRow}
           </div>
         </main>
       </div>
@@ -209,7 +224,10 @@ export default function Home() {
             </>
           )}
         </main>
-        {historyRow}
+        <div className="home__rows">
+          {collectionRow}
+          {historyRow}
+        </div>
       </div>
     </div>
   );

@@ -41,6 +41,61 @@
   margin-bottom: -4px;
 }
 
+.review__newcard {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+}
+
+/* A tiny face-up card, the shape of the ones in the collection. */
+.review__newcard-card {
+  flex: none;
+  display: flex;
+  width: 34px;
+  height: 48px;
+  padding: 4px 5px;
+  border: 1px solid #d5dace;
+  border-radius: 6px;
+  background: #ffffff;
+  transform: rotate(-6deg);
+}
+
+.review__newcard-pips {
+  font-size: 6px;
+  letter-spacing: 1px;
+  color: #7d8a80;
+}
+
+.review__newcard-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.review__newcard-title {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.review__newcard-meta {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+@media (min-width: 1180px) {
+  .review__newcard {
+    width: 100%;
+    max-width: 1200px;
+    margin-inline: auto;
+  }
+}
+
 .review__missing {
   gap: 16px;
 }

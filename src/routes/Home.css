@@ -186,6 +186,12 @@
   text-decoration: none;
 }
 
+.home__rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .home__history,
 .home__empty-history {
   display: flex;

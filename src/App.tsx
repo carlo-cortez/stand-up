@@ -1,4 +1,5 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import Collection from './routes/Collection';
 import History from './routes/History';
 import Home from './routes/Home';
 import Privacy from './routes/Privacy';
@@ -16,6 +17,7 @@ const router = createBrowserRouter([
   { path: '/round/review', element: <Review /> },
   { path: '/history', element: <History /> },
   { path: '/history/:sessionId', element: <Review /> },
+  { path: '/collection', element: <Collection /> },
   { path: '/settings', element: <Settings /> },
   { path: '/privacy', element: <Privacy /> },
   { path: '/signin', element: <SignIn /> },

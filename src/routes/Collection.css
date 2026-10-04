@@ -1,0 +1,255 @@
+.collection__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.collection__title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.collection__spacer {
+  width: 44px;
+}
+
+.collection__summary {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 18px;
+}
+
+.collection__count {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: var(--text-muted);
+}
+
+.collection__number {
+  font-size: 44px;
+  line-height: 1;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.collection__lede {
+  margin: 0;
+  font-size: 15px;
+  color: var(--text-muted);
+}
+
+.collection__bar {
+  height: 6px;
+  margin-top: 8px;
+  border-radius: 3px;
+  background: var(--ring-track);
+  overflow: hidden;
+}
+
+.collection__bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--accent);
+}
+
+/* One scrolling row of categories; the page itself never scrolls sideways. */
+.collection__filters {
+  display: flex;
+  gap: 8px;
+  margin: 20px -24px 0;
+  padding: 0 24px 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.collection__filters::-webkit-scrollbar {
+  display: none;
+}
+
+.collection__filter {
+  flex: none;
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.collection__filter[aria-pressed='true'] {
+  border-color: var(--accent-strong);
+  background: var(--accent-strong);
+  color: var(--on-accent-strong);
+}
+
+.collection__sections {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  margin-top: 22px;
+  padding-bottom: 24px;
+}
+
+.collection__section-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 0 0 12px;
+  font-family: var(--font-display);
+  font-size: 21px;
+  font-weight: 400;
+}
+
+.collection__section-count {
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.collection__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ---------- a card, face or back ---------- */
+.ccard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  aspect-ratio: 0.7;
+  padding: 8px 8px 7px;
+  border-radius: 10px;
+  overflow: hidden;
+  text-align: left;
+}
+
+.ccard--face {
+  border: 1px solid var(--border);
+  background: #ffffff;
+  color: #22302a;
+  font: inherit;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgb(34 48 42 / 0.12);
+}
+
+.ccard--face:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.ccard--back {
+  align-items: center;
+  justify-content: center;
+  background: #2f4636;
+  color: rgb(250 248 243 / 0.55);
+}
+
+/* The printed rule inside a card back, like the backs in the draw. */
+.ccard--back::before {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border: 1px solid rgb(250 248 243 / 0.22);
+  border-radius: 6px;
+}
+
+.ccard__pips {
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  color: #7d8a80;
+}
+
+.ccard--back .ccard__pips {
+  position: absolute;
+  top: 9px;
+  left: 10px;
+  color: inherit;
+}
+
+.ccard__mark {
+  width: 38%;
+}
+
+.ccard__topic {
+  flex: 1;
+  display: -webkit-box;
+  margin-top: 4px;
+  font-family: var(--font-display);
+  font-size: 12.5px;
+  line-height: 1.22;
+  overflow: hidden;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+}
+
+.ccard__foot {
+  font-size: 10px;
+  color: #7d8a80;
+}
+
+/* Rarity, printed: a gold rule for hard, a dotted frame for Wildcard. */
+.ccard--face.ccard--hard {
+  box-shadow: inset 0 0 0 3px #ffffff, inset 0 0 0 4px #b8964f, 0 1px 2px rgb(34 48 42 / 0.12);
+}
+
+.ccard--face.ccard--hard .ccard__pips,
+.ccard--back.ccard--hard .ccard__pips {
+  color: #b8964f;
+}
+
+.ccard--face.ccard--wild {
+  outline: 1px dotted #3f5a48;
+  outline-offset: -5px;
+}
+
+/* ---------- rounds on one topic, in the sheet ---------- */
+.collection__rounds {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.collection__round {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.collection__round-time {
+  color: var(--text-muted);
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (min-width: 900px) {
+  .collection__grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 14px;
+  }
+
+  .ccard__topic {
+    font-size: 14px;
+  }
+}

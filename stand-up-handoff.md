@@ -277,6 +277,16 @@ Empty state: Ace leaning on the stage line (§3), "Nothing here yet.", a sentenc
 
 ---
 
+### 4.7 Collection
+
+Every topic is a card, and answering it collects it: a saved round of 10 seconds or more, the same rule as Prep's "You've answered this one before" (§4.3). There are 210 topics, 30 per category (10 easy, 12 medium, 8 hard), so the header reads "47 of 210", with a thin progress bar and one scrolling row of category filters.
+
+Cards are laid out by category, easy to hard, in fixed positions like an album. A collected card shows its face: the topic in Newsreader, difficulty as pips (◆ / ◆◆ / ◆◆◆), how many times it's been answered and when. Hard cards carry a thin gold rule and Wildcards a dotted frame, the same print language as the card draw. An uncollected card shows its back, with category and pips visible but the topic hidden, so finding one is still a small surprise. Tapping a collected card opens a sheet listing your rounds on it, each linking to its Review.
+
+Nothing is stored for the collection: it's read from saved rounds, so it follows the account between devices. The picker deals unanswered topics first — same difficulty and new, then same difficulty, then today's fallbacks — so the collection keeps growing. Ways in: a Collection row on Home (absent on the first run, with nothing in it yet), and a link in History's header.
+
+Straight after a round that collects a new card, Review shows "New card for your collection · 48 of 210" under the headline. Like Ace's hop, it's only on arrival from a round, never when a past round is reopened from History.
+
 ## 5. Round state machine
 
 ```
@@ -397,6 +407,7 @@ This is a web app, not a native one wearing a browser costume. These behaviours 
 | `/round/review` | Review of the round just finished | |
 | `/history` | History | |
 | `/history/:sessionId` | Review of a past round | Same component as `/round/review`, loaded from storage |
+| `/collection` | Collection | Every topic as a card; collected by answering it (§4.7) |
 | `/settings` | Settings | Theme, the Card sounds switch, the account section when signed in, a line saying what is stored, the two delete-everything actions, and a link to `/privacy` |
 | `/privacy` | Your data | Where a recording goes, in plain words. Linked from Settings. Google sign-in cannot be published without a page here |
 | `/signin` | Sign in | Email magic link. Optional: the app works signed out, and says so here |
