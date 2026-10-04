@@ -8,7 +8,7 @@ import { FeedbackCard } from '../components/FeedbackCard';
 import { CloseIcon } from '../components/Icon';
 import { SegmentedControl } from '../components/SegmentedControl';
 import { Sheet } from '../components/Sheet';
-import { dayLabel } from '../lib/activity';
+import { answeredRounds, collectedTopicIds, dayLabel } from '../lib/activity';
 import { announce } from '../lib/announce';
 import { deleteRecording, loadRecording } from '../lib/audioStore';
 import { enoughSpeech, measure, requestFeedback } from '../lib/feedback';
@@ -26,7 +26,7 @@ import {
 } from '../lib/sessions';
 import { loadLastRoundSettings, loadSettings, roundSettingsOf } from '../lib/settings';
 import { fetchRecording, removeRemoteRecording, syncNow } from '../lib/sync';
-import { topicById } from '../lib/topics';
+import { TOPICS, topicById } from '../lib/topics';
 import { useDesktop } from '../lib/useMediaQuery';
 import './Review.css';
 
@@ -88,6 +88,14 @@ function ReviewScreen({
 }) {
   const navigate = useNavigate();
   const desktop = useDesktop();
+  // A first answer to this topic, long enough to count, just finished: a new
+  // card. Worked out once, on arrival, so it can't flicker as the round updates.
+  const [newCard] = useState(() =>
+    fromRound && session.spokenSeconds >= 10 &&
+    !answeredRounds().some((s) => s.topicId === session.topicId && s.id !== session.id)
+      ? collectedTopicIds().size
+      : null,
+  );
 
   // ---- Audio, loaded from IndexedDB. undefined while loading, null if gone.
   const hasAudio = Boolean(session.recordingId || session.recordingPath);
@@ -334,6 +342,22 @@ function ReviewScreen({
           <h1 className="review__headline">Nice — that's the hard part done.</h1>
           {fromRound && <Ace pose="hop" className="review__ace" />}
         </div>
+
+        {newCard !== null && (
+          <Link to="/collection" className="review__newcard">
+            <span className="review__newcard-card" aria-hidden="true">
+              <span className="review__newcard-pips">
+                {session.difficulty === 'hard' ? '◆◆◆' : session.difficulty === 'medium' ? '◆◆' : '◆'}
+              </span>
+            </span>
+            <span className="review__newcard-text">
+              <span className="review__newcard-title">New card for your collection</span>
+              <span className="review__newcard-meta">
+                {newCard} of {TOPICS.length} · See your collection
+              </span>
+            </span>
+          </Link>
+        )}
 
         <main className="review__body">
         {desktop ? (

@@ -8,7 +8,7 @@ import { ChevronDownIcon, CloseIcon, MicOffIcon } from '../components/Icon';
 import { ProgressBar } from '../components/ProgressBar';
 import { Sheet } from '../components/Sheet';
 import { TimingChip } from '../components/TimingChip';
-import { answeredBefore, answeredLine } from '../lib/activity';
+import { answeredBefore, answeredLine, collectedTopicIds } from '../lib/activity';
 import { saveRecording } from '../lib/audioStore';
 import { checkMic, micPermission, startRecording, type Recording } from '../lib/recorder';
 import { addSession, sessionFor, type Session } from '../lib/sessions';
@@ -65,7 +65,9 @@ function resolveStart(intent: RoundIntent | null): Start {
   }
 
   const { startId, settings, topicId } = intent ?? newIntent(roundSettingsOf(loadSettings()));
-  const topic = (topicId && topicById(topicId)) || pickTopic({ ...settings, exclude: loadRecentTopics() });
+  const topic =
+    (topicId && topicById(topicId)) ||
+    pickTopic({ ...settings, exclude: loadRecentTopics(), answered: collectedTopicIds() });
   return {
     resumed: false,
     round: {
@@ -278,6 +280,7 @@ function LiveRoundScreen({ initial, resumed }: { initial: LiveRound; resumed: bo
     const next = pickTopic({
       ...round.settings,
       exclude: [round.topicId, ...loadRecentTopics()],
+      answered: collectedTopicIds(),
     });
     setPicked(null);
     setRound((r) => ({ ...r, topicId: next.id, phase: 'draw', phaseStartedAt: clockNow(), skipUsed: true }));

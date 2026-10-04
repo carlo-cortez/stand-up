@@ -18,6 +18,15 @@
   width: 44px;
 }
 
+.history__collection {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  color: var(--accent-strong);
+  font-size: 15px;
+  text-decoration: none;
+}
+
 /* ---------- Trend card ---------- */
 
 .history__trend {

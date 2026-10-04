@@ -6,7 +6,7 @@
  */
 
 import { countWord, capitalise } from './format';
-import { loadLegacyRounds, loadSessions } from './sessions';
+import { loadLegacyRounds, loadSessions, type Session } from './sessions';
 
 export type FinishedRound = { at: number; spokenSeconds: number };
 
@@ -135,13 +135,23 @@ const ANSWERED_SECONDS = 10;
 
 export type Answered = { times: number; last: number };
 
+/** Every saved round long enough to count as answering its topic. */
+export function answeredRounds(): Session[] {
+  return loadSessions().filter((s) => s.spokenSeconds >= ANSWERED_SECONDS);
+}
+
 /** How often this topic has been answered before, and when last. Null if never. */
 export function answeredBefore(topicId: string): Answered | null {
-  const times = loadSessions()
-    .filter((s) => s.topicId === topicId && s.spokenSeconds >= ANSWERED_SECONDS)
+  const times = answeredRounds()
+    .filter((s) => s.topicId === topicId)
     .map((s) => Date.parse(s.startedAt));
   if (times.length === 0) return null;
   return { times: times.length, last: Math.max(...times) };
+}
+
+/** Every topic answered at least once: the card collection. Same rule as answeredBefore. */
+export function collectedTopicIds(): Set<string> {
+  return new Set(answeredRounds().map((s) => s.topicId));
 }
 
 /** "earlier today", "on Tuesday", "on 12 Sept" — for a sentence about when. */
