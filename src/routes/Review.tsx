@@ -181,6 +181,8 @@ function ReviewScreen({
         blob,
         session.targetSeconds,
         session.topicText,
+        // Judged in the shape the prep hint taught; a topic since removed is PREP.
+        topicById(session.topicId)?.structure ?? 'prep',
       );
       // The counted half is derived here, from the transcript: no model, and
       // nothing to go wrong that would cost the round its numbers.

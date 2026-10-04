@@ -33,7 +33,7 @@ import {
   saveLastRoundSettings,
   saveSettings,
 } from '../lib/settings';
-import { categoryLabel, difficultyLabel, pickTopic, topicById, type Topic } from '../lib/topics';
+import { categoryLabel, difficultyLabel, pickTopic, topicById, type Structure, type Topic } from '../lib/topics';
 import { useDesktop, useReducedMotion } from '../lib/useMediaQuery';
 import { clockNow, timingLight, useRoundTimer } from '../lib/useRoundTimer';
 import './Round.css';
@@ -417,7 +417,7 @@ function LiveRoundScreen({ initial, resumed }: { initial: LiveRound; resumed: bo
 
   if (round.phase === 'prep') {
     const hint = hintOpen ? (
-      <StructureHint onHide={() => setHint(false)} />
+      <StructureHint structure={topic.structure} onHide={() => setHint(false)} />
     ) : (
       <Button variant="pill" onClick={() => setHint(true)} className="prep__hint-toggle">
         <ChevronDownIcon />
@@ -548,14 +548,27 @@ function LiveRoundScreen({ initial, resumed }: { initial: LiveRound; resumed: bo
   );
 }
 
-const PREP_STEPS = [
-  { letter: 'P', name: 'Point', text: 'Answer in one sentence.' },
-  { letter: 'R', name: 'Reason', text: 'Why you land there.' },
-  { letter: 'E', name: 'Example', text: 'One story, case, or number.' },
-  { letter: 'P', name: 'Point', text: 'Say it again, shorter.' },
-];
+/*
+ * The shape to answer in. PREP for a topic that asks what you think; STAR for
+ * one that asks about a time you did something — only those, chosen topic by
+ * topic in topics.ts.
+ */
+const STEPS: Record<Structure, { letter: string; name: string; text: string }[]> = {
+  prep: [
+    { letter: 'P', name: 'Point', text: 'Answer in one sentence.' },
+    { letter: 'R', name: 'Reason', text: 'Why you land there.' },
+    { letter: 'E', name: 'Example', text: 'One story, case, or number.' },
+    { letter: 'P', name: 'Point', text: 'Say it again, shorter.' },
+  ],
+  star: [
+    { letter: 'S', name: 'Situation', text: 'Where and when, in a sentence or two.' },
+    { letter: 'T', name: 'Task', text: 'What was on you.' },
+    { letter: 'A', name: 'Action', text: 'What you did. Most of your answer.' },
+    { letter: 'R', name: 'Result', text: 'How it turned out, and what you learned.' },
+  ],
+};
 
-function StructureHint({ onHide }: { onHide: () => void }) {
+function StructureHint({ structure, onHide }: { structure: Structure; onHide: () => void }) {
   return (
     <Card className="hint">
       <div className="hint__header">
@@ -564,8 +577,11 @@ function StructureHint({ onHide }: { onHide: () => void }) {
           Hide
         </Button>
       </div>
+      {structure === 'star' && (
+        <p className="hint__why">This one asks about a time you did something, so tell it as a story.</p>
+      )}
       <ol className="hint__steps">
-        {PREP_STEPS.map((step, i) => (
+        {STEPS[structure].map((step, i) => (
           <li key={i}>
             <span className="hint__letter" aria-hidden="true">
               {step.letter}

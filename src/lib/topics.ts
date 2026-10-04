@@ -9,11 +9,19 @@ export type Category =
 
 export type Difficulty = 'easy' | 'medium' | 'hard';
 
+/**
+ * How an answer is shaped. Most topics ask for a view, so PREP: Point, Reason,
+ * Example, Point. A question about a time you did something asks for a story,
+ * so STAR: Situation, Task, Action, Result.
+ */
+export type Structure = 'prep' | 'star';
+
 export type Topic = {
   id: string;
   text: string;
   category: Category;
   difficulty: Difficulty;
+  structure: Structure;
 };
 
 export const CATEGORIES: { value: Category; label: string }[] = [
@@ -44,11 +52,34 @@ export function difficultyLabel(d: Difficulty): string {
 // The first five per category were seeded from stand-up-design-brief.md; the rest
 // were added for the card collection, to 10 easy, 12 medium and 8 hard each.
 // Ids are stable: History, the collection and the recent-topics list refer to them.
+/*
+ * The questions STAR is meant for: behavioural ones, about something you
+ * did — "Tell me about a time you…". Chosen one by one rather than matched on
+ * wording: "Describe a movie that made you cry" isn't one, and "What are you
+ * most proud of?" is. Questions about how you would act, or what you think,
+ * stay PREP.
+ */
+const STAR = new Set([
+  'tech-3', // a bug that taught you something
+  'int-2', // disagreed with a teammate
+  'int-7', // most proud of
+  'int-15', // a time you failed
+  'int-16', // learn something fast
+  'int-18', // led without being in charge
+  'int-20', // a project you'd do differently
+  'int-22', // a difficult customer or colleague
+  'int-24', // changed someone's mind
+  'int-25', // a decision with incomplete information
+  'int-26', // the biggest risk you've taken
+  'int-27', // delivered bad news
+]);
+
 const T = (id: string, category: Category, difficulty: Difficulty, text: string): Topic => ({
   id,
   category,
   difficulty,
   text,
+  structure: STAR.has(id) ? 'star' : 'prep',
 });
 
 export const TOPICS: Topic[] = [

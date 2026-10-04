@@ -1,4 +1,5 @@
 import type { Delivery, Flagged, Metrics, Session, Written } from './sessions';
+import type { Structure } from './topics';
 
 /*
  * The counted half of the feedback card (handoff §4.5). Everything here is
@@ -213,11 +214,17 @@ async function explain(response: Response): Promise<string> {
  * never be in the browser. Returns the transcript, and the written half when
  * the model obliged; the counted half is derived here either way.
  */
-export async function requestFeedback(blob: Blob, targetSeconds: number, topic: string): Promise<FeedbackResult> {
+export async function requestFeedback(
+  blob: Blob,
+  targetSeconds: number,
+  topic: string,
+  structure: Structure,
+): Promise<FeedbackResult> {
   const body = new FormData();
   body.append('audio', blob, `round.${extensionOf(blob.type)}`);
   body.append('targetSeconds', String(targetSeconds));
   body.append('topic', topic);
+  body.append('structure', structure);
 
   const response = await fetch('/api/feedback', { method: 'POST', body });
   if (!response.ok) throw new Error(await explain(response));
