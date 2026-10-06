@@ -1,5 +1,6 @@
 import { Button } from './Button';
 import { Card } from './Card';
+import { CRITERIA } from '../lib/criteria';
 import { deltaAgainstAverage, fillerHistory, MIN_WORDS, wordCount } from '../lib/feedback';
 import type { Check, Criteria, Mark, Metrics, Session } from '../lib/sessions';
 import type { Structure } from '../lib/topics';
@@ -21,28 +22,6 @@ type Props = {
   audio?: 'loading' | 'missing';
   state: 'idle' | 'loading' | 'offline' | 'thin' | 'ready';
   error?: string | null;
-};
-
-/**
- * In the order the prep hint taught them, then the topic: Point, Reason,
- * Example, Point for most topics; Situation, Task, Action, Result for a
- * question about a time you did something.
- */
-const CRITERIA: Record<Structure, { key: string; label: string }[]> = {
-  prep: [
-    { key: 'point', label: 'Made a clear point' },
-    { key: 'reason', label: 'Backed it with a reason' },
-    { key: 'example', label: 'Gave an example' },
-    { key: 'landed', label: 'Landed it at the end' },
-    { key: 'answered', label: 'Answered the question' },
-  ],
-  star: [
-    { key: 'situation', label: 'Set the scene' },
-    { key: 'task', label: 'Said what was on you' },
-    { key: 'action', label: 'Walked through what you did' },
-    { key: 'result', label: 'Gave the result' },
-    { key: 'answered', label: 'Answered the question' },
-  ],
 };
 
 const MARK_LABEL: Record<Mark, string> = { there: 'There', partly: 'Partly', 'not-yet': 'Not yet' };

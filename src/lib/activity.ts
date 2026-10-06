@@ -17,7 +17,8 @@ export function loadRounds(): FinishedRound[] {
 
 const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-function startOfWeek(now: Date): number {
+/** Monday, midnight, local time. */
+export function startOfWeek(now: Date): number {
   const d = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const sinceMonday = (d.getDay() + 6) % 7;
   d.setDate(d.getDate() - sinceMonday);

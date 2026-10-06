@@ -3,6 +3,7 @@ import Collection from './routes/Collection';
 import History from './routes/History';
 import Home from './routes/Home';
 import Privacy from './routes/Privacy';
+import Progress from './routes/Progress';
 import Review from './routes/Review';
 import Round from './routes/Round';
 import Settings from './routes/Settings';
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
   { path: '/history', element: <History /> },
   { path: '/history/:sessionId', element: <Review /> },
   { path: '/collection', element: <Collection /> },
+  { path: '/progress', element: <Progress /> },
   { path: '/settings', element: <Settings /> },
   { path: '/privacy', element: <Privacy /> },
   { path: '/signin', element: <SignIn /> },

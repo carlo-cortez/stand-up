@@ -1,0 +1,293 @@
+.trends .screen__column {
+  gap: 16px;
+}
+
+.trends__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.trends__title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.trends__spacer {
+  width: 44px;
+}
+
+.trends__lede {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+.trends__grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.trends__card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.trends__note {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+/* ---------- today and this week: one measure per row ---------- */
+.trends__rows {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+
+.trends__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 11px 0;
+  border-top: 1px solid var(--border);
+}
+
+.trends__row:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.trends__row:last-child {
+  padding-bottom: 0;
+}
+
+.trends__row dt {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.trends__row dd {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  margin: 0;
+  text-align: right;
+}
+
+.trends__now {
+  font-size: 15px;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+/* A change the way a measure aims is in the accent; any other is plain. Never red. */
+.trends__change {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.trends__change.is-wanted {
+  font-weight: 600;
+  color: var(--accent-strong);
+}
+
+/* ---------- round by round ---------- */
+.trends__line {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.trends__line-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 15px;
+}
+
+.trends__line-label {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.trends__line-now {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.trends__chart {
+  display: block;
+  width: 100%;
+  height: 44px;
+  overflow: visible;
+}
+
+.trends__chart polyline {
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---------- checklist: how often each item was there ---------- */
+.trends__rates {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trends__rate {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.trends__rate-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 15px;
+  color: var(--text);
+}
+
+.trends__rate-count {
+  flex-shrink: 0;
+  font-size: 13px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.trends__rate-bar {
+  display: flex;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--ring-track);
+  overflow: hidden;
+}
+
+.trends__rate-bar span {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+}
+
+.trends__rate-bar .is-partly {
+  opacity: 0.4;
+}
+
+/* ---------- the words said most: the feedback card's chips ---------- */
+.trends__said {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trends__word {
+  padding: 8px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.trends__word-count {
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+
+.trends__word--filler {
+  background: #F1F0E8;
+  color: #55604F;
+}
+
+.trends__word--vague {
+  background: #F4EFE2;
+  color: #5E4A17;
+}
+
+.trends__word--hedge {
+  background: #E7EEE6;
+  color: #35503E;
+}
+
+:root[data-theme='dark'] .trends__word--filler {
+  background: #262B25;
+  color: #C3CDC4;
+}
+
+:root[data-theme='dark'] .trends__word--vague {
+  background: #332B17;
+  color: #EBD9A6;
+}
+
+:root[data-theme='dark'] .trends__word--hedge {
+  background: #223127;
+  color: #B5D2BB;
+}
+
+/* ---------- too few rounds to compare ---------- */
+.trends__empty {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  text-align: center;
+}
+
+.trends__empty-text {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.trends__empty-headline {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 1.25;
+}
+
+.trends__empty-body {
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text-muted);
+  text-wrap: pretty;
+}
+
+@media (min-width: 1180px) {
+  .trends .screen__column {
+    max-width: 1200px;
+    margin-inline: auto;
+  }
+
+  .trends__title {
+    font-size: 20px;
+  }
+
+  .trends__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+}

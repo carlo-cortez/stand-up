@@ -288,6 +288,19 @@ Nothing is stored for the collection: it's read from saved rounds, so it follows
 
 Straight after a round that collects a new card, Review shows "New card for your collection · 48 of 210" under the headline. Like Ace's hop, it's only on arrival from a round, never when a past round is reopened from History.
 
+### 4.8 Progress
+
+`/progress`, reached from a row in History under the four-week card. The row carries one line: the first change this week that went the way it aims ("Filler words down this week: 2.2 a minute, from 3.5."), or "See how this week compares with last." when none did.
+
+Everything is read from rounds that have had feedback and enough speech to measure (`src/lib/progress.ts`); nothing new is stored, and nothing leaves the device. Because feedback isn't synced, it covers the rounds measured on this device, and the page says so. With fewer than three such rounds it shows Ace and "Not enough to compare yet."
+
+- **Today** and **This week**: one row per measure — Filler words and Hedging (a minute), Pace (words a minute), Mid-sentence pauses (a round), Clarity (of 100) — with the figure now and "Down from 3.4", "Up from 138" or "About the same". Today is today's rounds against the ten before today (needs three). This week runs from Monday, against last week's rounds, or against the ten before this week when last week has none. A period's figure is pooled — all its fillers over all its minutes — so a short round can't skew it. A line under each says what was compared ("3 rounds this week, against 4 rounds last week.").
+- **Round by round**: a line each for Filler words, Pace and Clarity over the last 20 measured rounds, oldest on the left. Needs four points.
+- **What the coach noticed**: how often each checklist item was There over the last ten marked rounds, as "There in 4 of 10" and a bar (solid for There, lighter for Partly). STAR rounds are counted apart, under "On story questions", since they mark different things. Each needs three rounds.
+- **Said most, last 30 days**: the five most-said filler words, vague words and hedges, in the feedback card's chips, with counts.
+
+It follows §8: it compares you only with yourself, a change is "down from" or "up from" and never better or worse, and a change the way a measure aims is in `--accent-strong` while any other is plain muted text — nothing is red. Pace has no aim: faster isn't better. Every threshold (what counts as "about the same", how many rounds are enough) is a first guess.
+
 ## 5. Round state machine
 
 ```
@@ -409,6 +422,7 @@ This is a web app, not a native one wearing a browser costume. These behaviours 
 | `/history` | History | |
 | `/history/:sessionId` | Review of a past round | Same component as `/round/review`, loaded from storage |
 | `/collection` | Collection | Every topic as a card; collected by answering it (§4.7) |
+| `/progress` | Progress | Today and this week against what came before, from rounds with feedback (§4.8) |
 | `/settings` | Settings | Theme, the Card sounds switch, the account section when signed in, a line saying what is stored, the two delete-everything actions, and a link to `/privacy` |
 | `/privacy` | Your data | Where a recording goes, in plain words. Linked from Settings. Google sign-in cannot be published without a page here |
 | `/signin` | Sign in | Email magic link. Optional: the app works signed out, and says so here |
