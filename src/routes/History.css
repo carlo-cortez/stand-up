@@ -90,6 +90,39 @@
   color: var(--text-muted);
 }
 
+/* The way in to Progress: a row, like Home's History and Collection rows. */
+.history__progress {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 60px;
+  padding: 10px 18px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface);
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.history__progress-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.history__progress-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.history__progress-meta {
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
 :root[data-theme='dark'] .history__bar-fill {
   background: #2E3B30;
 }

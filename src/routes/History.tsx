@@ -3,13 +3,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Ace } from '../components/Ace';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
-import { BackIcon } from '../components/Icon';
+import { BackIcon, ChevronRightIcon } from '../components/Icon';
 import { Sheet } from '../components/Sheet';
 import { averageRating, dayLabel, trendSentence, weeklyCounts } from '../lib/activity';
 import { announce } from '../lib/announce';
 import { deleteAllRecordings, deleteRecording } from '../lib/audioStore';
 import { mmss } from '../lib/format';
 import { newIntent } from '../lib/liveRound';
+import { headline } from '../lib/progress';
 import { deleteSession, forgetAllRecordings, loadSessions, updateSession, type Session } from '../lib/sessions';
 import { loadSettings, roundSettingsOf } from '../lib/settings';
 import { removeRemoteRecording, syncNow } from '../lib/sync';
@@ -130,6 +131,15 @@ export default function History() {
           </div>
           <p className="history__trend-text">{trend}</p>
         </Card>
+
+        {/* The way in to Progress, with this week's headline when there is one. */}
+        <Link to="/progress" className="history__progress">
+          <span className="history__progress-text">
+            <span className="history__progress-title">Progress</span>
+            <span className="history__progress-meta">{headline(sessions)}</span>
+          </span>
+          <ChevronRightIcon size={18} />
+        </Link>
 
         <ul className="history__list">
           {sessions.map((session) => {
